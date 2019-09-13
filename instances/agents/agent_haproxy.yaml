@@ -1,0 +1,36 @@
+---
+# *Required* The access token for the org that you wish to send metrics to.
+signalFxAccessToken: {"#from": "/etc/signalfx/token"}
+signalFxRealm: eu0
+ingestUrl: {"#from": "/etc/signalfx/ingest_url", default: "https://ingest.signalfx.com"}
+apiUrl: {"#from": "/etc/signalfx/api_url", default: "https://api.signalfx.com"}
+cluster: {"#from": "/etc/signalfx/cluster", optional: true}
+
+intervalSeconds: 1
+
+logging:
+  # Valid values are 'debug', 'info', 'warning', and 'error'
+  level: info
+
+# observers are what discover running services in the environment
+observers:
+  - type: host
+
+monitors:
+  - {"#from": "/etc/signalfx/monitors/*.yaml", flatten: true, optional: true}
+  - type: host-metadata
+  - type: collectd/cpu
+  - type: collectd/cpufreq
+  - type: collectd/df
+    reportByDevice: yes
+  - type: collectd/disk
+  - type: collectd/interface
+  - type: collectd/load
+  - type: collectd/memory
+  - type: collectd/signalfx-metadata
+  - type: collectd/vmem
+  - type: collectd/haproxy
+    host: /run/haproxy/admin.sock
+    enhancedMetrics: true
+
+enableBuiltInFiltering: true

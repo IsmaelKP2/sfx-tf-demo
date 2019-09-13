@@ -1,0 +1,29 @@
+# File should be referenced with either 
+# -var-file="variables.tfvars"
+# if running from the root folder
+# or
+# -var-file="../variables.tfvars" 
+# if running from a sub-directory such as dashboards or instances
+
+# Variables need to be defined first in the variables.tf file
+
+# this should NOT be stored in a public source control system as it contains sensitive information
+
+
+### AWS Variables ###
+profile = "<NAME>"
+region = "<REGION>"
+vpc_id = "<ID>"
+ami = "<ID>"
+instance_type = "<NAME>"
+
+nginx_server_count = "2"
+wordpress_server_count = "2"
+haproxy_server_count = "2"
+mysql_server_count = "2"
+
+
+### SignalFX Authentication Variables ###
+signalfx_auth_token = "<AUTH_TOKEN>"
+api_url = "https://api.eu0.signalfx.com"
+

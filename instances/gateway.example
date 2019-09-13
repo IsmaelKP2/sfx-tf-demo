@@ -1,0 +1,25 @@
+{
+  "ServerName": "${self.tags.Name}",
+  "ClusterName": "demo",
+  "StatsDelay": "10s",
+  "LogDir": "/var/lib/gateway/logs",
+  "ListenFrom": [
+    {
+      "Type": "signalfx",
+      "ListenAddr": "0.0.0.0:8080"
+    }
+  ],
+  "ForwardTo": [
+    {
+      "Type": "signalfx",
+      "URL": "https://ingest.eu0.signalfx.com/v2/datapoint",
+      "EventURL": "https://ingest.eu0.signalfx.com/v2/event",
+      "TraceURL": "https://ingest.eu0.signalfx.com/v1/trace",
+      "DefaultAuthToken": "XXXXXXXXXX",
+      "Name": "smart-gateway-forwarder",
+      "TraceSample": {
+        "BackupLocation": "/var/lib/gateway/data"
+      }
+    }
+  ]
+}
