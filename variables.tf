@@ -19,6 +19,8 @@ variable "haproxy_server_count" {
 }
 variable "mysql_server_count" {
 }
+variable "smart_gateway_server_count" {
+}
 
 
 ### SignalFX Authentication Variables ###

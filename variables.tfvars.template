@@ -21,6 +21,7 @@ nginx_server_count = "2"
 wordpress_server_count = "2"
 haproxy_server_count = "2"
 mysql_server_count = "2"
+smart_gateway_server_count = "1"
 
 
 ### SignalFX Authentication Variables ###
