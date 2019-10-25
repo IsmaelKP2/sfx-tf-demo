@@ -22,7 +22,7 @@ wordpress_server_count = "2"
 haproxy_server_count = "2"
 mysql_server_count = "2"
 smart_gateway_server_count = "1"
-
+app_server_count = "1"
 
 ### SignalFX Authentication Variables ###
 signalfx_auth_token = "<AUTH_TOKEN>"

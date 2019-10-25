@@ -21,7 +21,8 @@ variable "mysql_server_count" {
 }
 variable "smart_gateway_server_count" {
 }
-
+variable "app_server_count" {
+}
 
 ### SignalFX Authentication Variables ###
 variable "signalfx_auth_token" {

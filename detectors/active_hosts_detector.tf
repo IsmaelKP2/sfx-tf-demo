@@ -11,6 +11,33 @@ resource "signalfx_detector" "active_host__detector" {
         severity = "Warning"
         detect_label = "Active Hosts Detector"
         notifications = ["Email,ghigginbottom@signalfx.com"]
+        parameterized_subject = "{{ruleSeverity}} Alert: {{{ruleName}}} ({{{detectorName}}})"
+        parameterized_body = <<EOF
+{{#if anomalous}}
+	Rule "{{{ruleName}}}" in detector "{{{detectorName}}}" triggered at {{timestamp}}.
+{{else}}
+	Rule "{{{ruleName}}}" in detector "{{{detectorName}}}" cleared at {{timestamp}}.
+{{/if}}
+
+{{#if anomalous}}
+Triggering condition: {{{readableRule}}}
+{{/if}}
+
+Minimum value of signal in the last {{event_annotations.current_window}}: {{inputs.recent_min.value}}
+{{#if anomalous}}Trigger threshold: {{inputs.f_top.value}}
+{{else}}Clear threshold: {{inputs.c_top.value}}
+{{/if}}
+
+{{#notEmpty dimensions}}
+Signal details:
+{{{dimensions}}}
+{{/notEmpty}}
+
+{{#if anomalous}}
+{{#if runbookUrl}}Runbook: {{{runbookUrl}}}{{/if}}
+{{#if tip}}Tip: {{{tip}}}{{/if}}
+{{/if}}
+EOF
     }
 
 }

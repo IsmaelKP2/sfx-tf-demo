@@ -27,3 +27,8 @@ output "allow_mysql_id" {
   value       = "${aws_security_group.allow_mysql.id}"
   description = "ID of the Allow mysql Security Group"
 }
+
+output "allow_sfx_mon_id" {
+  value       = "${aws_security_group.allow_sfx_mon.id}"
+  description = "ID of the Allow SFX Security Group"
+}
