@@ -29,7 +29,9 @@ monitors:
   - type: collectd/interface
   - type: collectd/load
   - type: collectd/memory
-  - type: collectd/signalfx-metadata
   - type: collectd/vmem
+  - type: collectd/signalfx-metadata
+  - type: trace-forwarder
+    listenAddress: 127.0.0.1:9080
 
 enableBuiltInFiltering: true
