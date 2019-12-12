@@ -15,13 +15,14 @@ profile = "<NAME>"
 region = "<REGION>"
 vpc_id = "<ID>"
 ami = "<ID>"
-instance_type = "<NAME>"
+instance_type = "t2.micro"
+smart_gateway_instance_type = "t2.small"
 
 nginx_server_count = "2"
 wordpress_server_count = "2"
 haproxy_server_count = "2"
 mysql_server_count = "2"
-smart_gateway_server_count = "1"
+smart_gateway_server_count = "2"
 app_server_count = "1"
 
 ### SignalFX Authentication Variables ###

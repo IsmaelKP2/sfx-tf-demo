@@ -1,4 +1,4 @@
-data "template_cloudinit_config" "user_data_smart_gateway" {
+data "template_cloudinit_config" "user_data_smart_gateway1" {
   gzip          = true
   base64_encode = true
 
@@ -16,33 +16,29 @@ data "template_cloudinit_config" "user_data_smart_gateway" {
 
 }
 
-resource "aws_instance" "smart-gateway" {
-  count         = "${var.smart_gateway_server_count}"
-  ami           = "${var.ami}"
-  instance_type = "${var.instance_type}"
+resource "aws_instance" "smart-gateway1" {
+  # count         = var.smart_gateway_server_count
+  ami           = var.ami
+  instance_type = var.smart_gateway_instance_type
   key_name      = "geoffh"
-  user_data     = "${data.template_cloudinit_config.user_data_smart_gateway.rendered}"
+  subnet_id     = var.subnet_id
+  private_ip    = var.smart_gateway1_ip
+  user_data     = data.template_cloudinit_config.user_data_smart_gateway1.rendered
   vpc_security_group_ids  = [
     "${data.terraform_remote_state.security_groups.outputs.allow_egress_id}",
     "${data.terraform_remote_state.security_groups.outputs.allow_tls_id}",
     "${data.terraform_remote_state.security_groups.outputs.allow_http_id}",
     "${data.terraform_remote_state.security_groups.outputs.allow_ssh_id}",
+    "${data.terraform_remote_state.security_groups.outputs.allow_all_id}",
     ]
 
   tags = {
-    Name = "Smart-Gateway${count.index + 1}"
+    # Name = "Smart-Gateway${count.index + 1}"
+    Name = "Smart-Gateway1"
   }
  
-  # provisioner "local-exec" {
-  #   command = "echo ${self.private_ip} > Smart-Gateway-Private-IP.txt"
-  # }
-
-  # provisioner "local-exec" {
-  #   command = "echo ${self.public_ip} > Smart-Gateway-Public-IP.txt"
-  # }
-
   provisioner "file" {
-    source      = "gateway.conf"
+    source      = "config_files/gateway1.conf"
     destination = "/tmp/gateway.conf"
   }
 
@@ -52,7 +48,7 @@ resource "aws_instance" "smart-gateway" {
   }
   
   provisioner "file" {
-    source      = "smart-gateway.service"
+    source      = "config_files/smart-gateway1.service"
     destination = "/tmp/smart-gateway.service"
   }
 
@@ -80,10 +76,10 @@ resource "aws_instance" "smart-gateway" {
   }
 
   connection {
-    host = "${self.public_ip}"
+    host = self.public_ip
     type = "ssh"
     user = "ubuntu"
-    private_key = "${file("~/.ssh/id_rsa")}"
+    private_key = file("~/.ssh/id_rsa")
     agent = "true"
   }
 }

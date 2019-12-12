@@ -1,11 +1,11 @@
-data "template_cloudinit_config" "user_data_mysql" {
+data "template_cloudinit_config" "user_data_nginx2" {
   gzip          = true
   base64_encode = true
 
-  # get install_mysql.sh
+  # get install_nginx.sh
   part {
     content_type = "text/x-shellscript"
-    content      = "${file("${path.module}/scripts/install_mysql.sh")}"
+    content      = "${file("${path.module}/scripts/install_nginx.sh")}"
   }
 
   # get install_sfx_agent.sh
@@ -16,29 +16,36 @@ data "template_cloudinit_config" "user_data_mysql" {
 
 }
 
-resource "aws_instance" "mysql" {
-  count         = var.mysql_server_count
+resource "aws_instance" "nginx2" {
+  count         = var.nginx_server_count
   ami           = var.ami
   instance_type = var.instance_type
   key_name      = "geoffh"
-  user_data     = data.template_cloudinit_config.user_data_mysql.rendered
+  user_data     = data.template_cloudinit_config.user_data_nginx2.rendered
   vpc_security_group_ids  = [
     "${data.terraform_remote_state.security_groups.outputs.allow_egress_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_mysql_id}",
+    "${data.terraform_remote_state.security_groups.outputs.allow_tls_id}",
+    "${data.terraform_remote_state.security_groups.outputs.allow_http_id}",
     "${data.terraform_remote_state.security_groups.outputs.allow_ssh_id}",
     ]
 
   tags = {
-    Name = "MySQL${count.index + 1}"
+    Name = "NginX${count.index + 1}"
   }
 
   provisioner "file" {
-    source      = "agents/agent_mysql.yaml"
+    source      = "config_files/nginx2.conf"
+    destination = "/tmp/nginx.conf"
+  }
+  
+  provisioner "file" {
+    source      = "agents/agent_nginx.yaml"
     destination = "/tmp/agent.yaml"
   }
 
   provisioner "remote-exec" {
     inline = [
+      "while [ ! -f /var/log/nginx/access.log ]; do sleep 2; done",
       "while [ ! -f /etc/signalfx/agent.yaml ]; do sleep 2; done",
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
@@ -47,6 +54,9 @@ resource "aws_instance" "mysql" {
 
   provisioner "remote-exec" {
     inline = [
+      "sudo mv /tmp/nginx.conf /etc/nginx/nginx.conf",
+      "sudo chown root:root /etc/nginx/nginx.conf",
+      "sudo service nginx restart",
       "sudo mv /tmp/agent.yaml /etc/signalfx/agent.yaml",
       "sudo chown root:root /etc/signalfx/agent.yaml",
     ]

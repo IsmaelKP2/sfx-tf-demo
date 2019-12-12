@@ -1,4 +1,4 @@
-data "template_cloudinit_config" "user_data_nginx" {
+data "template_cloudinit_config" "user_data_nginx1" {
   gzip          = true
   base64_encode = true
 
@@ -16,12 +16,12 @@ data "template_cloudinit_config" "user_data_nginx" {
 
 }
 
-resource "aws_instance" "nginx" {
-  count         = "${var.nginx_server_count}"
-  ami           = "${var.ami}"
-  instance_type = "${var.instance_type}"
+resource "aws_instance" "nginx1" {
+  count         = var.nginx_server_count
+  ami           = var.ami
+  instance_type = var.instance_type
   key_name      = "geoffh"
-  user_data     = "${data.template_cloudinit_config.user_data_nginx.rendered}"
+  user_data     = data.template_cloudinit_config.user_data_nginx1.rendered
   vpc_security_group_ids  = [
     "${data.terraform_remote_state.security_groups.outputs.allow_egress_id}",
     "${data.terraform_remote_state.security_groups.outputs.allow_tls_id}",
@@ -34,7 +34,7 @@ resource "aws_instance" "nginx" {
   }
 
   provisioner "file" {
-    source      = "config_files/nginx.conf"
+    source      = "config_files/nginx1.conf"
     destination = "/tmp/nginx.conf"
   }
   
@@ -63,10 +63,10 @@ resource "aws_instance" "nginx" {
   }
 
   connection {
-    host = "${self.public_ip}"
+    host = self.public_ip
     type = "ssh"
     user = "ubuntu"
-    private_key = "${file("~/.ssh/id_rsa")}"
+    private_key = file("~/.ssh/id_rsa")
     agent = "true"
   }
 }

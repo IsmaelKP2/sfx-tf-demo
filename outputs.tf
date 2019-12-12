@@ -3,6 +3,11 @@
 # https://blog.gruntwork.io/how-to-manage-terraform-state-28f5697e68fa
 
 
+output "allow_all_id" {
+  value       = "${aws_security_group.allow_all.id}"
+  description = "ID of the Allow All Security Group"
+}
+
 output "allow_egress_id" {
   value       = "${aws_security_group.allow_egress.id}"
   description = "ID of the Allow Egress Security Group"

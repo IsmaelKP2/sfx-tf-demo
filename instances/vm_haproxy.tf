@@ -17,11 +17,11 @@ data "template_cloudinit_config" "user_data_haproxy" {
 }
 
 resource "aws_instance" "haproxy" {
-  count         = "${var.haproxy_server_count}"
-  ami           = "${var.ami}"
-  instance_type = "${var.instance_type}"
+  count         = var.haproxy_server_count
+  ami           = var.ami
+  instance_type = var.instance_type
   key_name      = "geoffh"
-  user_data     = "${data.template_cloudinit_config.user_data_haproxy.rendered}"
+  user_data     = data.template_cloudinit_config.user_data_haproxy.rendered
   vpc_security_group_ids  = [
     "${data.terraform_remote_state.security_groups.outputs.allow_egress_id}",
     "${data.terraform_remote_state.security_groups.outputs.allow_tls_id}",
@@ -57,10 +57,10 @@ resource "aws_instance" "haproxy" {
   }
 
   connection {
-    host = "${self.public_ip}"
+    host = self.public_ip
     type = "ssh"
     user = "ubuntu"
-    private_key = "${file("~/.ssh/id_rsa")}"
+    private_key = file("~/.ssh/id_rsa")
     agent = "true"
   }
 }

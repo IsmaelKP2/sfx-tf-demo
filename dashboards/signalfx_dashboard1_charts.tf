@@ -50,7 +50,7 @@ resource "signalfx_time_chart" "cpu_used_chart_graph" {
     plot_type = "LineChart"
     show_data_markers = true
 
-    description = "CPU Idle Time as a Percentage"
+    description = "CPU utilisation as a Percentage"
 }
 
 
