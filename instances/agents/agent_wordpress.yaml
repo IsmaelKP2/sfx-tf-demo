@@ -33,7 +33,7 @@ monitors:
     processes:
       - apache2
   - type: collectd/systemd
-    intervalSeconds: 10
+    intervalSeconds: 1
     services:
       - apache2
   - type: collectd/apache

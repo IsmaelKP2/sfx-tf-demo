@@ -1,11 +1,11 @@
-data "template_cloudinit_config" "user_data_wordpress" {
+data "template_cloudinit_config" "user_data_mysql1" {
   gzip          = true
   base64_encode = true
 
-  # get install_apache.sh
+  # get install_mysql.sh
   part {
     content_type = "text/x-shellscript"
-    content      = "${file("${path.module}/scripts/install_apache.sh")}"
+    content      = "${file("${path.module}/scripts/install_mysql.sh")}"
   }
 
   # get install_sfx_agent.sh
@@ -16,25 +16,25 @@ data "template_cloudinit_config" "user_data_wordpress" {
 
 }
 
-resource "aws_instance" "wordpress" {
-  count         = var.wordpress_server_count
+resource "aws_instance" "mysql1" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name      = "geoffh"
-  user_data     = data.template_cloudinit_config.user_data_wordpress.rendered
+  subnet_id     = var.subnet_id
+  private_ip    = var.mysql1_ip
+  user_data     = data.template_cloudinit_config.user_data_mysql1.rendered
   vpc_security_group_ids  = [
-    "${data.terraform_remote_state.security_groups.outputs.allow_egress_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_tls_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_http_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_ssh_id}",
+    "${var.allow_egress_id}",
+    "${var.allow_mysql_id}",
+    "${var.allow_ssh_id}",
     ]
 
   tags = {
-    Name = "Wordpress${count.index + 1}"
+    Name = "MySQL1"
   }
 
   provisioner "file" {
-    source      = "agents/agent_wordpress.yaml"
+    source      = "${path.module}/agents/agent_mysql.yaml"
     destination = "/tmp/agent.yaml"
   }
 

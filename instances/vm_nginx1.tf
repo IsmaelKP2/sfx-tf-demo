@@ -17,29 +17,29 @@ data "template_cloudinit_config" "user_data_nginx1" {
 }
 
 resource "aws_instance" "nginx1" {
-  count         = var.nginx_server_count
   ami           = var.ami
   instance_type = var.instance_type
   key_name      = "geoffh"
+  subnet_id     = var.subnet_id
+  private_ip    = var.nginx1_ip
   user_data     = data.template_cloudinit_config.user_data_nginx1.rendered
   vpc_security_group_ids  = [
-    "${data.terraform_remote_state.security_groups.outputs.allow_egress_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_tls_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_http_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_ssh_id}",
+    "${var.allow_egress_id}",
+    "${var.allow_web_id}",
+    "${var.allow_ssh_id}",
     ]
 
   tags = {
-    Name = "NginX${count.index + 1}"
+    Name = "NginX1"
   }
 
   provisioner "file" {
-    source      = "config_files/nginx1.conf"
+    source      = "${path.module}/config_files/nginx1.conf"
     destination = "/tmp/nginx.conf"
   }
   
   provisioner "file" {
-    source      = "agents/agent_nginx.yaml"
+    source      = "${path.module}/agents/agent_nginx.yaml"
     destination = "/tmp/agent.yaml"
   }
 

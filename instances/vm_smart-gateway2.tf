@@ -17,7 +17,6 @@ data "template_cloudinit_config" "user_data_smart_gateway2" {
 }
 
 resource "aws_instance" "smart-gateway2" {
-  # count         = var.smart_gateway_server_count
   ami           = var.ami
   instance_type = var.smart_gateway_instance_type
   key_name      = "geoffh"
@@ -25,30 +24,28 @@ resource "aws_instance" "smart-gateway2" {
   private_ip    = var.smart_gateway2_ip
   user_data     = data.template_cloudinit_config.user_data_smart_gateway2.rendered
   vpc_security_group_ids  = [
-    "${data.terraform_remote_state.security_groups.outputs.allow_egress_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_tls_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_http_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_ssh_id}",
-    "${data.terraform_remote_state.security_groups.outputs.allow_all_id}",
+    "${var.allow_egress_id}",
+    "${var.allow_web_id}",
+    "${var.allow_ssh_id}",
+    "${var.allow_all_id}",
     ]
 
   tags = {
-    # Name = "Smart-Gateway${count.index + 1}"
     Name = "Smart-Gateway2"
   }
 
   provisioner "file" {
-    source      = "config_files/gateway2.conf"
+    source      = "${path.module}/config_files/gateway2.conf"
     destination = "/tmp/gateway.conf"
   }
 
   provisioner "file" {
-    source      = "agents/agent_smart-gateway.yaml"
+    source      = "${path.module}/agents/agent_smart-gateway.yaml"
     destination = "/tmp/agent.yaml"
   }
   
   provisioner "file" {
-    source      = "config_files/smart-gateway2.service"
+    source      = "${path.module}/config_files/smart-gateway2.service"
     destination = "/tmp/smart-gateway.service"
   }
 

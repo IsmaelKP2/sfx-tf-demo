@@ -13,14 +13,14 @@ output "allow_egress_id" {
   description = "ID of the Allow Egress Security Group"
 }
 
-output "allow_tls_id" {
-  value       = "${aws_security_group.allow_tls.id}"
-  description = "ID of the Allow TLS Security Group"
-}
+# output "allow_tls_id" {
+#   value       = "${aws_security_group.allow_tls.id}"
+#   description = "ID of the Allow TLS Security Group"
+# }
 
-output "allow_http_id" {
-  value       = "${aws_security_group.allow_http.id}"
-  description = "ID of the Allow HTTP Security Group"
+output "allow_web_id" {
+  value       = "${aws_security_group.allow_web.id}"
+  description = "ID of the Allow Web Security Group"
 }
 
 output "allow_ssh_id" {
@@ -33,7 +33,7 @@ output "allow_mysql_id" {
   description = "ID of the Allow mysql Security Group"
 }
 
-output "allow_sfx_mon_id" {
-  value       = "${aws_security_group.allow_sfx_mon.id}"
-  description = "ID of the Allow SFX Security Group"
-}
+# output "allow_sfx_mon_id" {
+#   value       = "${aws_security_group.allow_sfx_mon.id}"
+#   description = "ID of the Allow SFX Security Group"
+# }
