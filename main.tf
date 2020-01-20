@@ -22,6 +22,9 @@ module "dashboards" {
   source = "./dashboards"
 }
 
+module "detectors" {
+  source = "./detectors"
+}
 
 module "instances" {
   source = "./instances"
