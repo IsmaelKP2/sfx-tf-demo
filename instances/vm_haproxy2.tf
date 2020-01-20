@@ -21,7 +21,7 @@ resource "aws_instance" "haproxy2" {
   instance_type = var.instance_type
   subnet_id     = var.subnet_id
   private_ip    = var.haproxy2_ip
-  key_name      = "geoffh"
+  key_name      = var.key_name
   user_data     = data.template_cloudinit_config.user_data_haproxy2.rendered
   vpc_security_group_ids  = [
     "${var.allow_egress_id}",

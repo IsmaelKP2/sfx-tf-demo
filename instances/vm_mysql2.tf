@@ -19,7 +19,7 @@ data "template_cloudinit_config" "user_data_mysql2" {
 resource "aws_instance" "mysql2" {
   ami           = var.ami
   instance_type = var.instance_type
-  key_name      = "geoffh"
+  key_name      = var.key_name
   subnet_id     = var.subnet_id
   private_ip    = var.mysql2_ip
   user_data     = data.template_cloudinit_config.user_data_mysql2.rendered

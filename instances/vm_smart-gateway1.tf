@@ -19,7 +19,7 @@ data "template_cloudinit_config" "user_data_smart_gateway1" {
 resource "aws_instance" "smart-gateway1" {
   ami           = var.ami
   instance_type = var.smart_gateway_instance_type
-  key_name      = "geoffh"
+  key_name      = var.key_name
   subnet_id     = var.subnet_id
   private_ip    = var.smart_gateway1_ip
   user_data     = data.template_cloudinit_config.user_data_smart_gateway1.rendered

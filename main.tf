@@ -30,6 +30,7 @@ module "instances" {
   vpc_id = var.vpc_id
   subnet_id = var.subnet_id
   ami = var.ami
+  key_name = var.key_name
   instance_type = var.instance_type
   smart_gateway_instance_type = var.smart_gateway_instance_type
   

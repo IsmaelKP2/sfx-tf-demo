@@ -16,6 +16,9 @@ variable "subnet_id" {
 variable "ami" {
   default = []
 }
+variable "key_name" {
+  default = []
+}
 variable "instance_type" {
   default = []
 }

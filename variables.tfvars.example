@@ -11,6 +11,7 @@ region = "<REGION>"
 vpc_id = "<ID>"
 subnet_id = "<ID>"
 ami = "<ID>"
+key_name = "<NAME>"
 instance_type = "t2.micro"
 smart_gateway_instance_type = "t2.small"
 
