@@ -1,9 +1,7 @@
 # AWS Auth Configuration
 provider "aws" {
   profile    = var.profile
-  # profile = "geoff-sysops"
   region     = var.region
-  # region     = "us-east-1"
 }
 
 # SignalFx Provider
