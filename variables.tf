@@ -78,7 +78,7 @@ variable "app-server2_ip" {
 }
 
 ### SignalFX Authentication Variables ###
-variable "signalfx_auth_token" {
+variable "auth_token" {
   default = []
 }
 variable "api_url" {

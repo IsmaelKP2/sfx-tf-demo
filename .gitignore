@@ -10,3 +10,4 @@ gateway.conf
 /instances/scripts/install_sfx_agent.sh
 /instances/scripts/install_smart-gateway.sh
 *.DS_Store
+*.backup

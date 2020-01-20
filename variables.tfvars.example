@@ -1,4 +1,4 @@
-# File should be referenced with either 
+# File should be referenced with 
 # -var-file="variables.tfvars"
 
 # Variables need to be defined first in the variables.tf file
@@ -29,6 +29,6 @@ app-server1 = "172.31.37.10"
 app-server2 = "172.31.37.20"
 
 ### SignalFX Authentication Variables ###
-signalfx_auth_token = "<AUTH_TOKEN>"
+auth_token = "<AUTH_TOKEN>"
 api_url = "https://api.eu0.signalfx.com"
 

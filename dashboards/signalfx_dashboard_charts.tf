@@ -1,27 +1,5 @@
-# # Create CPU Used Chart
-# resource "signalfx_single_value_chart" "cpu_used_chart" {
-#   name = "CPU Used %"
-
-#     program_text = <<-EOF
-#         A = data('cpu.utilization', filter=filter('plugin', 'signalfx-metadata')).publish(label='A')
-#         EOF
-
-#     description = "CPU Idle Time as a Percentage"
-# }
-
-# # Create Memory Used Chart
-# resource "signalfx_single_value_chart" "memory_used_chart" {
-#   name = "Memory Used %"
-
-#     program_text = <<-EOF
-#         A = data('memory.utilization', filter=filter('plugin', 'signalfx-metadata')).publish(label='A')
-#         EOF
-
-#     description = "CPU Idle Time as a Percentage"
-# }
-
 # Create Memory Used Chart Graph
-resource "signalfx_time_chart" "mem_used_chart_graph" {
+resource "signalfx_time_chart" "mem_used_chart_graph0" {
   name = "Memory Used %"
 
     program_text = <<-EOF
@@ -40,7 +18,7 @@ resource "signalfx_time_chart" "mem_used_chart_graph" {
 }
 
 # Create CPU Used Chart Graph
-resource "signalfx_time_chart" "cpu_used_chart_graph" {
+resource "signalfx_time_chart" "cpu_used_chart_graph0" {
   name = "CPU Used %"
 
     program_text = <<-EOF
@@ -58,7 +36,7 @@ resource "signalfx_time_chart" "cpu_used_chart_graph" {
 ######################## Host Count Charts ########################
 
 # Create Active Hosts Chart
-resource "signalfx_single_value_chart" "active_hosts" {
+resource "signalfx_single_value_chart" "active_hosts0" {
   name = "Active Hosts"
 
     program_text = <<-EOF
@@ -69,7 +47,7 @@ resource "signalfx_single_value_chart" "active_hosts" {
 }
 
 # Create MySQL Servers Chart
-resource "signalfx_single_value_chart" "mysql_servers" {
+resource "signalfx_single_value_chart" "mysql_servers0" {
   name = "MySQL Servers"
 
     program_text = <<-EOF
@@ -80,7 +58,7 @@ resource "signalfx_single_value_chart" "mysql_servers" {
 }
 
 # Create Apache Servers Chart
-resource "signalfx_single_value_chart" "apache_servers" {
+resource "signalfx_single_value_chart" "apache_servers0" {
   name = "Apache Servers"
 
     program_text = <<-EOF
@@ -91,7 +69,7 @@ resource "signalfx_single_value_chart" "apache_servers" {
 }
 
 # Create Nginx Servers Chart
-resource "signalfx_single_value_chart" "nginx_servers" {
+resource "signalfx_single_value_chart" "nginx_servers0" {
   name = "Nginx Servers"
 
     program_text = <<-EOF
@@ -102,7 +80,7 @@ resource "signalfx_single_value_chart" "nginx_servers" {
 }
 
 # Create HAProxy Servers Chart
-resource "signalfx_single_value_chart" "haproxy_servers" {
+resource "signalfx_single_value_chart" "haproxy_servers0" {
   name = "HAProxy Servers"
 
     program_text = <<-EOF
@@ -118,7 +96,7 @@ resource "signalfx_single_value_chart" "haproxy_servers" {
 ######################## Disk Space Charts ########################
 
 # Create Disk Space XVDA1 Chart
-resource "signalfx_time_chart" "disk_space_xvda1" {
+resource "signalfx_time_chart" "disk_space_xvda10" {
   name = "Disk Space XVDA1"
 
     program_text = <<-EOF
@@ -129,7 +107,7 @@ resource "signalfx_time_chart" "disk_space_xvda1" {
 }
 
 # Create Disk Space XVDB1 Chart
-resource "signalfx_time_chart" "disk_space_xvdb1" {
+resource "signalfx_time_chart" "disk_space_xvdb10" {
   name = "Disk Space XVDB1"
 
     program_text = <<-EOF
@@ -141,7 +119,7 @@ resource "signalfx_time_chart" "disk_space_xvdb1" {
 
 
 # Create Write IO XVDA1 Chart
-resource "signalfx_time_chart" "write_io_xvda1" {
+resource "signalfx_time_chart" "write_io_xvda10" {
   name = "Write IO XVDA1"
 
     program_text = <<-EOF
@@ -152,7 +130,7 @@ resource "signalfx_time_chart" "write_io_xvda1" {
 }
 
 # Create Write IO XVDB1 Chart
-resource "signalfx_time_chart" "write_io_xvdb1" {
+resource "signalfx_time_chart" "write_io_xvdb10" {
   name = "Write IO XVDB1"
 
     program_text = <<-EOF
@@ -162,7 +140,7 @@ resource "signalfx_time_chart" "write_io_xvdb1" {
     description = "Write IO for XVDB1"
 }
 
-
+########################################################################
 # # Create xxxxx Chart
 # resource "xxxxxx" "xxxxxx" {
 #   name = "xxxxxx"

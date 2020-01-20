@@ -1,20 +1,25 @@
 # AWS Auth Configuration
 provider "aws" {
-  # profile    = var.profile
-  profile = "geoff-sysops"
-  # region     = var.region
-  region     = "us-east-1"
+  profile    = var.profile
+  # profile = "geoff-sysops"
+  region     = var.region
+  # region     = "us-east-1"
 }
 
-# data "aws_vpc" "default" {
-#   # id = var.vpc_id
-#   id = "vpc-aced7fd6"
-# }
+# SignalFx Provider
+provider "signalfx" {
+  auth_token = var.auth_token
+  api_url = var.api_url
+}
 
 module "security_groups" {
   source = "./security_groups"
 
   vpc_id = var.vpc_id
+}
+
+module "dashboards" {
+  source = "./dashboards"
 }
 
 
