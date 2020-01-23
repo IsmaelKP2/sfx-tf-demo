@@ -1,4 +1,0 @@
-#! /bin/bash
-
-curl -sSL https://dl.signalfx.com/signalfx-agent.sh > /tmp/signalfx-agent.sh
-sudo sh /tmp/signalfx-agent.sh --ingest-url https://ingest.eu0.signalfx.com --api-url https://api.eu0.signalfx.com <ACCESS TOKEN>

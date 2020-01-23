@@ -1,13 +1,10 @@
 variables.tfvars
 *Private-IP.txt
 *Public-IP.txt
-install_sfx_agent.example
 *.terraform*
 *.tfstate.backup
 *.tfstate
 gateway.conf
 *.ignore
-/instances/scripts/install_sfx_agent.sh
-/instances/scripts/install_smart-gateway.sh
 *.DS_Store
 *.backup

@@ -1,7 +1,6 @@
 ---
 # *Required* The access token for the org that you wish to send metrics to.
 signalFxAccessToken: {"#from": "/etc/signalfx/token"}
-signalFxRealm: eu0
 ingestUrl: {"#from": "/etc/signalfx/ingest_url", default: "https://ingest.signalfx.com"}
 apiUrl: {"#from": "/etc/signalfx/api_url", default: "https://api.signalfx.com"}
 cluster: {"#from": "/etc/signalfx/cluster", optional: true}
@@ -30,7 +29,7 @@ monitors:
   - type: collectd/signalfx-metadata
     extraDimensions:
       source: gateway
-      cluster: demo
+      cluster: {"#from": "/etc/signalfx/cluster", optional: true}
   - type: collectd/vmem
 
 metricsToExclude:

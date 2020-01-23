@@ -1,20 +1,7 @@
-data "template_cloudinit_config" "user_data_nginx1" {
-  gzip          = true
-  base64_encode = true
-
-  # get install_nginx.sh
-  part {
-    content_type = "text/x-shellscript"
-    content      = "${file("${path.module}/scripts/install_nginx.sh")}"
-  }
-
-  # get install_sfx_agent.sh
-  part {
-    content_type = "text/x-shellscript"
-    content      = "${file("${path.module}/scripts/install_sfx_agent.sh")}"
-  }
-
-}
+# data "template_cloudinit_config" "user_data_nginx1" {
+#   gzip          = true
+#   base64_encode = true
+# }
 
 resource "aws_instance" "nginx1" {
   ami           = var.ami
@@ -22,7 +9,7 @@ resource "aws_instance" "nginx1" {
   key_name      = var.key_name
   subnet_id     = var.subnet_id
   private_ip    = var.nginx1_ip
-  user_data     = data.template_cloudinit_config.user_data_nginx1.rendered
+  # user_data     = data.template_cloudinit_config.user_data_nginx1.rendered
   vpc_security_group_ids  = [
     "${var.allow_egress_id}",
     "${var.allow_web_id}",
@@ -31,6 +18,16 @@ resource "aws_instance" "nginx1" {
 
   tags = {
     Name = "NginX1"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/scripts/install_sfx_agent.sh"
+    destination = "/tmp/install_sfx_agent.sh"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/scripts/install_nginx.sh"
+    destination = "/tmp/install_nginx.sh"
   }
 
   provisioner "file" {
@@ -45,20 +42,28 @@ resource "aws_instance" "nginx1" {
 
   provisioner "remote-exec" {
     inline = [
-      "while [ ! -f /var/log/nginx/access.log ]; do sleep 2; done",
-      "while [ ! -f /etc/signalfx/agent.yaml ]; do sleep 2; done",
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
-    ]
-  }
+      "sudo apt-get update",
+      "sudo apt-get upgrade -y",
 
-  provisioner "remote-exec" {
-    inline = [
+      "TOKEN=${var.auth_token}",
+      "REALM=${var.realm}",
+      "HOSTNAME=${self.tags.Name}",
+      "CLUSTERNAME=${var.smart_gateway_cluster_name}",
+      "AGENTVERSION=${var.smart_agent_version}",
+
+      "sudo chmod +x /tmp/install_sfx_agent.sh",
+      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
+      "sudo mv /tmp/agent.yaml /etc/signalfx/agent.yaml",
+      "sudo chown root:root /etc/signalfx/agent.yaml",
+      "sudo apt-mark hold signalfx-agent",
+
+      "sudo chmod +x /tmp/install_nginx.sh",
+      "sudo /tmp/install_nginx.sh",
       "sudo mv /tmp/nginx.conf /etc/nginx/nginx.conf",
       "sudo chown root:root /etc/nginx/nginx.conf",
       "sudo service nginx restart",
-      "sudo mv /tmp/agent.yaml /etc/signalfx/agent.yaml",
-      "sudo chown root:root /etc/signalfx/agent.yaml",
     ]
   }
 

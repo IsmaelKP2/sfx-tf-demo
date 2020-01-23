@@ -4,14 +4,10 @@
 apt-get update
 apt-get upgrade -y
 
-# # Set the Server Timezone to CST
-# echo "America/Chicago" > /etc/timezone
-# dpkg-reconfigure -f noninteractive tzdata
-
 # Enable Ubuntu Firewall and allow SSH & MySQL Ports
-ufw enable
-ufw allow 22
-ufw allow 3306
+# ufw enable
+# ufw allow 22
+# ufw allow 3306
 
 # Install essential packages
 apt-get -y install zsh htop

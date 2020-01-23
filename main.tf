@@ -27,6 +27,13 @@ module "detectors" {
 module "instances" {
   source = "./instances"
 
+  auth_token = var.auth_token
+  api_url = var.api_url
+  realm = var.realm
+  smart_gateway_cluster_name = var.smart_gateway_cluster_name
+  smart_gateway_version = var.smart_gateway_version
+  smart_agent_version = var.smart_agent_version
+
   vpc_id = var.vpc_id
   subnet_id = var.subnet_id
   ami = var.ami
@@ -48,6 +55,7 @@ module "instances" {
   nginx2_ip = var.nginx2_ip
   smart_gateway1_ip = var.smart_gateway1_ip
   smart_gateway2_ip = var.smart_gateway2_ip
+  smart_gateway_ip = var.smart_gateway_ip
   mysql1_ip = var.mysql1_ip
   mysql2_ip = var.mysql2_ip
   haproxy1_ip = var.haproxy1_ip

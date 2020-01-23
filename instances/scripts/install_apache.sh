@@ -9,10 +9,10 @@ apt-get upgrade -y
 # dpkg-reconfigure -f noninteractive tzdata
 
 # Enable Ubuntu Firewall and allow SSH & HTTP/S Ports
-ufw enable
-ufw allow 22
-ufw allow 80
-ufw allow 443
+# ufw enable
+# ufw allow 22
+# ufw allow 80
+# ufw allow 443
 
 # Install Apache2
 apt-get install -y apache2

@@ -49,6 +49,9 @@ variable "smart_gateway1_ip" {
 variable "smart_gateway2_ip" {
   default = {}
 }
+variable "smart_gateway_ip" {
+  default = {}
+}
 variable "nginx1_ip" {
   default = {}
 }
@@ -80,10 +83,22 @@ variable "app-server2_ip" {
   default = {}
 }
 
-### SignalFX Authentication Variables ###
+### SignalFX Variables ###
 variable "auth_token" {
   default = []
 }
 variable "api_url" {
+  default = []
+}
+variable "realm" {
+  default = []
+}
+variable "smart_gateway_cluster_name" {
+  default = []
+}
+variable "smart_gateway_version" {
+  default = []
+}
+variable "smart_agent_version" {
   default = []
 }

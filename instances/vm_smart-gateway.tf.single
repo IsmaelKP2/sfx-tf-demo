@@ -1,28 +1,28 @@
-# data "template_cloudinit_config" "user_data_smart_gateway2" {
+# data "template_cloudinit_config" "user_data_smart_gateway" {
 #   gzip          = true
 #   base64_encode = true
 
-#   # get install_smart-gateway.sh
-#   part {
-#     content_type = "text/x-shellscript"
-#     content      = "${file("${path.module}/scripts/install_smart-gateway.sh")}"
-#   }
+#   # # get install_smart-gateway.sh
+#   # part {
+#   #   content_type = "text/x-shellscript"
+#   #   content      = "${file("${path.module}/scripts/install_smart-gateway.sh")}"
+#   # }
 
 #   # get install_sfx_agent.sh
-#   part {
-#     content_type = "text/x-shellscript"
-#     content      = "${file("${path.module}/scripts/install_sfx_agent.sh")}"
-#   }
+#   # part {
+#   #   content_type = "text/x-shellscript"
+#   #   content      = "${file("${path.module}/scripts/install_sfx_agent.sh")}"
+#   # }
 
 # }
 
-resource "aws_instance" "smart-gateway2" {
+resource "aws_instance" "smart-gateway" {
   ami           = var.ami
   instance_type = var.smart_gateway_instance_type
   key_name      = var.key_name
   subnet_id     = var.subnet_id
-  private_ip    = var.smart_gateway2_ip
-  # user_data     = data.template_cloudinit_config.user_data_smart_gateway2.rendered
+  private_ip    = var.smart_gateway_ip
+  # user_data     = data.template_cloudinit_config.user_data_smart_gateway.rendered
   vpc_security_group_ids  = [
     "${var.allow_egress_id}",
     "${var.allow_web_id}",
@@ -31,9 +31,9 @@ resource "aws_instance" "smart-gateway2" {
     ]
 
   tags = {
-    Name = "Smart-Gateway2"
+    Name = "Smart-Gateway"
   }
-
+ 
   provisioner "file" {
     source      = "${path.module}/scripts/install_sfx_agent.sh"
     destination = "/tmp/install_sfx_agent.sh"
@@ -50,7 +50,7 @@ resource "aws_instance" "smart-gateway2" {
   }
   
   provisioner "file" {
-    source      = "${path.module}/config_files/smart-gateway2.service"
+    source      = "${path.module}/config_files/smart-gateway.service"
     destination = "/tmp/smart-gateway.service"
   }
 
