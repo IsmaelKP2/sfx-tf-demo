@@ -97,4 +97,12 @@ resource "signalfx_dashboard" "mydashboard0" {
         row = 9
         column = 6
     }
+
+    chart {
+        chart_id = "${signalfx_single_value_chart.active_smartgateways0.id}"
+        width = 3
+        height = 1
+        row = 9
+        column = 9
+    }
 }

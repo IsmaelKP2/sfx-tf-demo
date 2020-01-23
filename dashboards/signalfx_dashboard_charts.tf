@@ -90,7 +90,16 @@ resource "signalfx_single_value_chart" "haproxy_servers0" {
     description = "Number of running HAProxy Servers"
 }
 
+# Create Active SmartGateway Chart
+resource "signalfx_single_value_chart" "active_smartgateways0" {
+  name = "Active SmartGateways"
 
+    program_text = <<-EOF
+        A = data('memory.used', filter=filter('plugin', 'memory') and (filter('host', 'Smart*')), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
+        EOF
+
+    description = "Number of active SmartGateways"
+}
 
 
 ######################## Disk Space Charts ########################
