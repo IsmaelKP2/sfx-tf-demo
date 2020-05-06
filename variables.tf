@@ -102,3 +102,6 @@ variable "smart_gateway_version" {
 variable "smart_agent_version" {
   default = []
 }
+variable "traceEndpointUrl" {
+  default = []
+}

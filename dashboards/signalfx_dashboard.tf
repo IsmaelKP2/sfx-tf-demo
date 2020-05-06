@@ -66,7 +66,7 @@ resource "signalfx_dashboard" "mydashboard0" {
     }
 
     chart {
-        chart_id = "${signalfx_time_chart.disk_space_xvdb10.id}"
+        chart_id = "${signalfx_time_chart.disk_space_xvdg10.id}"
         width = 3
         height = 1
         row = 6
@@ -83,7 +83,7 @@ resource "signalfx_dashboard" "mydashboard0" {
     }
 
     chart {
-        chart_id = "${signalfx_time_chart.write_io_xvdb10.id}"
+        chart_id = "${signalfx_time_chart.write_io_xvdg10.id}"
         width = 3
         height = 1
         row = 9

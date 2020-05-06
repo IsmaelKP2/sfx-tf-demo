@@ -33,6 +33,7 @@ module "instances" {
   smart_gateway_cluster_name = var.smart_gateway_cluster_name
   smart_gateway_version = var.smart_gateway_version
   smart_agent_version = var.smart_agent_version
+  traceEndpointUrl = var.traceEndpointUrl
 
   vpc_id = var.vpc_id
   subnet_id = var.subnet_id

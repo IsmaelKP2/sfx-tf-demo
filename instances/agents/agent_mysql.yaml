@@ -18,17 +18,19 @@ observers:
 monitors:
   - {"#from": "/etc/signalfx/monitors/*.yaml", flatten: true, optional: true}
   - type: host-metadata
+  - type: processlist
+  - type: cpu
+  - type: filesystems
+  - type: disk-io
+  - type: net-io
+  - type: load
+  - type: memory
+  - type: vmem
   - type: collectd/uptime
-  - type: collectd/cpu
   - type: collectd/cpufreq
-  - type: collectd/df
-    reportByDevice: yes
-  - type: collectd/disk
-  - type: collectd/interface
-  - type: collectd/load
-  - type: collectd/memory
+  #- type: collectd/df
+  #  reportByDevice: yes
   - type: collectd/signalfx-metadata
-  - type: collectd/vmem
   - type: collectd/mysql
     host: 127.0.0.1
     port: 3306

@@ -30,10 +30,13 @@ haproxy2_ip = "172.31.36.20"
 app-server1_ip = "172.31.37.10"
 app-server2_ip = "172.31.37.20"
 
-### SignalFX Authentication Variables ###
+### SignalFX Variables ###
 auth_token = "<AUTH_TOKEN>"
 api_url = "https://api.eu0.signalfx.com"
 realm = "eu0"
 smart_gateway_cluster_name = "demo"
 smart_gateway_version = "v2.1.5"
-smart_agent_version = "4.16.1-1"
+smart_agent_version = "" # Optional - If left blank, latest will be installed
+# traceEndpointUrl should be IP of Single Smart Gateway (172.31.32.30:8080), or IP of LB fronting Clustered Gateways (172.31.33.10:80)
+# traceEndpointUrl = "http://172.31.32.30:8080/v1/trace"
+traceEndpointUrl = "http://172.31.33.10:80/v1/trace"

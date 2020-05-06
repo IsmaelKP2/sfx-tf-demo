@@ -5,6 +5,9 @@ REALM=$2
 HOSTNAME=$3
 CLUSTERNAME=$4
 VERSION=$5
+MYLOCALIP=$6
+SGW1IP=$7
+SGW2IP=$8
 
 # Download and Install the Latest Updates for the OS
 apt-get update
@@ -34,7 +37,15 @@ cat << EOF > /var/lib/gateway/etc/gateway.conf
   "ServerName": "$HOSTNAME",
   "ClusterName": "$CLUSTERNAME",
   "EmitDebugMetrics": true,
-  "StatsDelay": "1s",
+  "ClusterDataDir": "/var/lib/gateway/etcd",
+  "ListenOnClientAddress": "0.0.0.0:2379",
+  "ListenOnPeerAddress": "0.0.0.0:2380",
+  "AdvertiseClientAddress": "$MYLOCALIP:2379",
+  "AdvertisePeerAddress": "$MYLOCALIP:2380",
+  "TargetClusterAddresses": [
+    "$SGW1IP:2379",
+    "$SGW2IP:2379"
+  ],
   "LogDir": "/var/lib/gateway/logs",
   "ListenFrom": [
     {
@@ -49,9 +60,13 @@ cat << EOF > /var/lib/gateway/etc/gateway.conf
       "EventURL": "https://ingest.$REALM.signalfx.com/v2/event",
       "TraceURL": "https://ingest.$REALM.signalfx.com/v1/trace",
       "DefaultAuthToken": "$TOKEN",
-      "Name": "smart-gateway",
+      "Name": "smart-gateway-forwarder",
       "TraceSample": {
-        "BackupLocation": "/var/lib/gateway/data"
+        "BackupLocation": "/var/lib/gateway/data",
+        "DebugLogging": true,
+        "IngestAddress": "http://$MYLOCALIP:8080",
+        "ListenRebalanceAddress": "0.0.0.0:2382",
+        "AdvertiseRebalanceAddress": "$MYLOCALIP:2382"
       }
     }
   ]

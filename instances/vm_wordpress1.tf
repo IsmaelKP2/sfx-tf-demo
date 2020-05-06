@@ -6,6 +6,15 @@
 resource "aws_instance" "wordpress1" {
   ami           = var.ami
   instance_type = var.instance_type
+  root_block_device {
+    volume_size = 16
+    volume_type = "gp2"
+  }
+  ebs_block_device {
+    device_name = "/dev/sdg"
+    volume_size = 8
+    volume_type = "gp2"
+  }
   key_name      = var.key_name
   subnet_id     = var.subnet_id
   private_ip    = var.wordpress1_ip
@@ -41,6 +50,10 @@ resource "aws_instance" "wordpress1" {
       "sudo hostnamectl set-hostname ${self.tags.Name}",
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
+      "sudo mkdir /media/data",
+      "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",
+      "sudo mkfs.ext4 /dev/xvdg1",
+      "sudo mount /dev/xvdg1 /media/data",
 
       "TOKEN=${var.auth_token}",
       "REALM=${var.realm}",

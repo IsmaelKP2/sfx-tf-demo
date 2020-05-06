@@ -1,19 +1,6 @@
 # data "template_cloudinit_config" "user_data_smart_gateway1" {
 #   gzip          = true
 #   base64_encode = true
-
-#   # get install_smart-gateway.sh
-#   part {
-#     content_type = "text/x-shellscript"
-#     content      = "${file("${path.module}/scripts/install_smart-gateway.sh")}"
-#   }
-
-#   # get install_sfx_agent.sh
-#   part {
-#     content_type = "text/x-shellscript"
-#     content      = "${file("${path.module}/scripts/install_sfx_agent.sh")}"
-#   }
-
 # }
 
 resource "aws_instance" "smart-gateway1" {
@@ -35,20 +22,15 @@ resource "aws_instance" "smart-gateway1" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/scripts/install_sfx_agent.sh"
+    source      = "${path.module}/scripts/install_sfx_agent_gateway.sh"
     destination = "/tmp/install_sfx_agent.sh"
   }
   
   provisioner "file" {
-    source      = "${path.module}/scripts/install_smart-gateway.sh"
+    source      = "${path.module}/scripts/install_clustered_smart-gateway.sh"
     destination = "/tmp/install_smart-gateway.sh"
   }
  
-  provisioner "file" {
-    source      = "${path.module}/agents/agent_smart-gateway.yaml"
-    destination = "/tmp/agent.yaml"
-  }
-  
   provisioner "file" {
     source      = "${path.module}/config_files/smart-gateway1.service"
     destination = "/tmp/smart-gateway.service"
@@ -69,13 +51,11 @@ resource "aws_instance" "smart-gateway1" {
       "AGENTVERSION=${var.smart_agent_version}",
       
       "sudo chmod +x /tmp/install_sfx_agent.sh",
-      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
-      "sudo mv /tmp/agent.yaml /etc/signalfx/agent.yaml",
-      "sudo chown root:root /etc/signalfx/agent.yaml",
+      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $HOSTNAME $AGENTVERSION",
       "sudo apt-mark hold signalfx-agent",
       
       "sudo chmod +x /tmp/install_smart-gateway.sh",
-      "sudo /tmp/install_smart-gateway.sh $TOKEN $REALM $HOSTNAME $CLUSTERNAME $GATEWAYVERSION",
+      "sudo /tmp/install_smart-gateway.sh $TOKEN $REALM $HOSTNAME $CLUSTERNAME $GATEWAYVERSION ${self.private_ip} ${var.smart_gateway1_ip} ${var.smart_gateway2_ip}",
       "sudo mv /tmp/smart-gateway.service /lib/systemd/system/smart-gateway.service",
       "sudo chown root:root /lib/systemd/system/smart-gateway.service",
       "sudo systemctl enable smart-gateway.service",

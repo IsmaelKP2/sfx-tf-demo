@@ -40,7 +40,7 @@ resource "signalfx_single_value_chart" "active_hosts0" {
   name = "Active Hosts"
 
     program_text = <<-EOF
-        A = data('memory.used', filter=filter('plugin', 'memory') and (not filter('agent', '*')), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
+        A = data('memory.utilization', extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
         EOF
 
     description = "Number of active Hosts"
@@ -115,15 +115,15 @@ resource "signalfx_time_chart" "disk_space_xvda10" {
     description = "Disk space of XVDA1"
 }
 
-# Create Disk Space XVDB1 Chart
-resource "signalfx_time_chart" "disk_space_xvdb10" {
-  name = "Disk Space XVDB1"
+# Create Disk Space XVDG1 Chart
+resource "signalfx_time_chart" "disk_space_xvdg10" {
+  name = "Disk Space XVDG1"
 
     program_text = <<-EOF
-        A = data('df_complex.free', filter=filter('plugin', 'df') and filter('plugin_instance', 'xvdb1')).publish(label='A')
+        A = data('df_complex.free', filter=filter('plugin', 'df') and filter('plugin_instance', 'xvdg1')).publish(label='A')
         EOF
 
-    description = "Disk space of XVDB1"
+    description = "Disk space of XVDG1"
 }
 
 
@@ -138,15 +138,15 @@ resource "signalfx_time_chart" "write_io_xvda10" {
     description = "Write IO for XVDA1"
 }
 
-# Create Write IO XVDB1 Chart
-resource "signalfx_time_chart" "write_io_xvdb10" {
-  name = "Write IO XVDB1"
+# Create Write IO XVDG1 Chart
+resource "signalfx_time_chart" "write_io_xvdg10" {
+  name = "Write IO XVDG1"
 
     program_text = <<-EOF
-        A = data('disk_ops.write', filter=filter('plugin_instance', 'xvdb1')).publish(label='A')
+        A = data('disk_ops.write', filter=filter('plugin_instance', 'xvdg1')).publish(label='A')
         EOF
 
-    description = "Write IO for XVDB1"
+    description = "Write IO for XVDG1"
 }
 
 ########################################################################
