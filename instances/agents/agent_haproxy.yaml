@@ -18,18 +18,17 @@ observers:
 monitors:
   - {"#from": "/etc/signalfx/monitors/*.yaml", flatten: true, optional: true}
   - type: host-metadata
-  - type: collectd/cpu
+  - type: processlist
+  - type: cpu
+  - type: filesystems
+  - type: disk-io
+  - type: net-io
+  - type: load
+  - type: memory
+  - type: vmem
+  - type: haproxy
+    url: "unix://var/run/haproxy/admin.sock"
+  - type: collectd/uptime
   - type: collectd/cpufreq
-  - type: collectd/df
-    reportByDevice: yes
-  - type: collectd/disk
-  - type: collectd/interface
-  - type: collectd/load
-  - type: collectd/memory
-  - type: collectd/signalfx-metadata
-  - type: collectd/vmem
-  - type: collectd/haproxy
-    host: /run/haproxy/admin.sock
-    enhancedMetrics: true
 
 enableBuiltInFiltering: true
