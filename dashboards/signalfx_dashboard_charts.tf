@@ -84,7 +84,7 @@ resource "signalfx_single_value_chart" "haproxy_servers0" {
   name = "HAProxy Servers"
 
     program_text = <<-EOF
-        A = data('gauge.request_rate', filter=filter('plugin', 'haproxy'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
+        A = data('haproxy_requests', filter=filter('plugin', 'haproxy')).count().publish(label='A')
         EOF
 
     description = "Number of running HAProxy Servers"
@@ -95,7 +95,7 @@ resource "signalfx_single_value_chart" "active_smartgateways0" {
   name = "Active SmartGateways"
 
     program_text = <<-EOF
-        A = data('memory.used', filter=filter('plugin', 'memory') and (filter('host', 'Smart*')), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
+        A = data('memory.used', filter('host', 'Smart*'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
         EOF
 
     description = "Number of active SmartGateways"
