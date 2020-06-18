@@ -10,7 +10,7 @@ resource "signalfx_detector" "active_host__detector" {
         description = "Active Hosts"
         severity = "Minor"
         detect_label = "Active Hosts Detector"
-        notifications = ["Email,ghigginbottom@signalfx.com", "VictorOps,ERI0R2GAIAA,GH_SRE"]
+        notifications = ["Email,ghigginbottom@splunk.com", "VictorOps,ERI0R2GAIAA,GH_PRI"]
         parameterized_subject = "{{ruleSeverity}} Alert: {{{ruleName}}} ({{{detectorName}}})"
         parameterized_body = <<EOF
 {{#if anomalous}}
