@@ -1,4 +1,5 @@
 variables.tfvars
+terraform.tfvars
 *Private-IP.txt
 *Public-IP.txt
 *.terraform*
