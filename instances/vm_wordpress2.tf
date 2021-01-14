@@ -1,15 +1,19 @@
-# data "template_cloudinit_config" "user_data_wordpress2" {
-#   gzip          = true
-#   base64_encode = true
-# }
 
 resource "aws_instance" "wordpress2" {
   ami           = var.ami
   instance_type = var.instance_type
+  root_block_device {
+    volume_size = 16
+    volume_type = "gp2"
+  }
+  ebs_block_device {
+    device_name = "/dev/xvdg"
+    volume_size = 8
+    volume_type = "gp2"
+  }
   key_name      = var.key_name
   subnet_id     = var.subnet_id
   private_ip    = var.wordpress2_ip
-  # user_data     = data.template_cloudinit_config.user_data_wordpress2.rendered
   vpc_security_group_ids  = [
     "${var.allow_egress_id}",
     "${var.allow_web_id}",
@@ -31,8 +35,13 @@ resource "aws_instance" "wordpress2" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/agents/agent_wordpress.yaml"
-    destination = "/tmp/agent.yaml"
+    source      = "${path.module}/agents/wordpress.yaml"
+    destination = "/tmp/wordpress.yaml"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/agents/free_disk.yaml"
+    destination = "/tmp/free_disk.yaml"
   }
 
     provisioner "remote-exec" {
@@ -42,6 +51,11 @@ resource "aws_instance" "wordpress2" {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
 
+      "sudo mkdir /media/data",
+      "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",
+      "sudo mkfs.ext4 /dev/xvdg1",
+      "sudo mount /dev/xvdg1 /media/data",
+
       "TOKEN=${var.auth_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
@@ -50,10 +64,15 @@ resource "aws_instance" "wordpress2" {
 
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
-      "sudo mv /tmp/agent.yaml /etc/signalfx/agent.yaml",
-      "sudo chown root:root /etc/signalfx/agent.yaml",
-      "sudo apt-mark hold signalfx-agent",
 
+      "sudo mkdir /etc/signalfx/monitors",
+      "sudo mv /tmp/wordpress.yaml /etc/signalfx/monitors/wordpress.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/wordpress.yaml",
+      "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
+
+      "sudo sed -i -e 's+intervalSeconds.*+intervalSeconds: 1+g' /etc/signalfx/agent.yaml",
+      
       "sudo chmod +x /tmp/install_apache.sh",
       "sudo /tmp/install_apache.sh",
     ]

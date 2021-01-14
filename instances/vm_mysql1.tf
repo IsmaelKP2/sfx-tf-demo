@@ -1,15 +1,9 @@
-# data "template_cloudinit_config" "user_data_mysql1" {
-#   gzip          = true
-#   base64_encode = true
-# }
-
 resource "aws_instance" "mysql1" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name      = var.key_name
   subnet_id     = var.subnet_id
   private_ip    = var.mysql1_ip
-  # user_data     = data.template_cloudinit_config.user_data_mysql1.rendered
   vpc_security_group_ids  = [
     "${var.allow_egress_id}",
     "${var.allow_mysql_id}",
@@ -31,11 +25,16 @@ resource "aws_instance" "mysql1" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/agents/agent_mysql.yaml"
-    destination = "/tmp/agent.yaml"
+    source      = "${path.module}/agents/mysql.yaml"
+    destination = "/tmp/mysql.yaml"
   }
 
-    provisioner "remote-exec" {
+  provisioner "file" {
+    source      = "${path.module}/agents/free_disk.yaml"
+    destination = "/tmp/free_disk.yaml"
+  }
+
+  provisioner "remote-exec" {
     inline = [
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
@@ -50,9 +49,14 @@ resource "aws_instance" "mysql1" {
 
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
-      "sudo mv /tmp/agent.yaml /etc/signalfx/agent.yaml",
-      "sudo chown root:root /etc/signalfx/agent.yaml",
-      "sudo apt-mark hold signalfx-agent",
+
+      "sudo mkdir /etc/signalfx/monitors",
+      "sudo mv /tmp/mysql.yaml /etc/signalfx/monitors/mysql.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/mysql.yaml",
+      "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
+
+      "sudo sed -i -e 's+intervalSeconds.*+intervalSeconds: 1+g' /etc/signalfx/agent.yaml",
 
       "sudo chmod +x /tmp/install_mysql.sh",
       "sudo /tmp/install_mysql.sh",

@@ -26,9 +26,7 @@ else
   printf "Clustername Variable Detected...\n"
 fi
 
-
 curl -sSL https://dl.signalfx.com/signalfx-agent.sh > /tmp/signalfx-agent.sh
-
 
 if [ -z "$4" ] ; then
   printf "Version not specified, installing Latest version ...\n"
@@ -38,16 +36,3 @@ else
   printf "Version Variable Detected - Installing SignalFX Version $VERSION ..\n"
   sudo sh /tmp/signalfx-agent.sh --ingest-url https://ingest.$REALM.signalfx.com --api-url https://api.$REALM.signalfx.com --cluster $CLUSTERNAME $TOKEN --package-version $VERSION
 fi
-
-
-
-
-
-# sudo wget https://splunk.jfrog.io/splunk/signalfx-agent-deb/pool/signalfx-agent_5.0.2-1_amd64.deb
-# sudo dpkg -i signalfx-agent_5.0.2-1_amd64.deb
-# sudo apt-get install -f
-# sudo echo https://api.$REALM.signalfx.com > /etc/signalfx/api.url
-# sudo echo $CLUSTERNAME > /etc/signalfx/cluster
-# sudo echo https://ingest.$REALM.signalfx.com > /etc/signalfx/ingest_url
-# sudo echo $TOKEN > /etc/signalfx/token
-# sudo service signalfx-agent restart

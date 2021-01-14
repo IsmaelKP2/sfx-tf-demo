@@ -1,0 +1,5 @@
+---
+  - type: haproxy
+    url: "unix://var/run/haproxy/admin.sock"
+  - type: collectd/uptime
+  - type: collectd/cpufreq

@@ -1,8 +1,3 @@
-# data "template_cloudinit_config" "user_data_nginx2" {
-#   gzip          = true
-#   base64_encode = true
-# }
-
 resource "aws_instance" "nginx2" {
   ami           = var.ami
   instance_type = var.instance_type
@@ -36,8 +31,13 @@ resource "aws_instance" "nginx2" {
   }
   
   provisioner "file" {
-    source      = "${path.module}/agents/agent_nginx.yaml"
-    destination = "/tmp/agent.yaml"
+    source      = "${path.module}/agents/nginx.yaml"
+    destination = "/tmp/nginx.yaml"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/agents/free_disk.yaml"
+    destination = "/tmp/free_disk.yaml"
   }
 
   provisioner "remote-exec" {
@@ -55,9 +55,14 @@ resource "aws_instance" "nginx2" {
 
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
-      "sudo mv /tmp/agent.yaml /etc/signalfx/agent.yaml",
-      "sudo chown root:root /etc/signalfx/agent.yaml",
-      "sudo apt-mark hold signalfx-agent",
+
+      "sudo mkdir /etc/signalfx/monitors",
+      "sudo mv /tmp/nginx.yaml /etc/signalfx/monitors/nginx.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/nginx.yaml",
+      "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
+
+      "sudo sed -i -e 's+intervalSeconds.*+intervalSeconds: 1+g' /etc/signalfx/agent.yaml",
 
       "sudo chmod +x /tmp/install_nginx.sh",
       "sudo /tmp/install_nginx.sh",
