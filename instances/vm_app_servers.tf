@@ -1,26 +1,27 @@
-# data "template_cloudinit_config" "user_data_app_server2" {
-#   gzip          = true
-#   base64_encode = true
-# }
-
-resource "aws_instance" "app-server2" {
-  ami           = var.ami
+resource "aws_instance" "app_server" {
+  count         = var.app_server_count
+  ami           = data.aws_ami.latest-ubuntu.id
   instance_type = var.instance_type
+  subnet_id               = element(var.subnet_ids, count.index)
+
   root_block_device {
-    volume_size           = 16
-    volume_type           = "gp2"
+    volume_size = 16
+    volume_type = "gp2"
+  }
+  ebs_block_device {
+    device_name = "/dev/xvdg"
+    volume_size = 8
+    volume_type = "gp2"
   }
   key_name      = var.key_name
-  subnet_id     = var.subnet_id
-  private_ip    = var.app-server2_ip
-  # user_data     = data.template_cloudinit_config.user_data_app_server2.rendered
   vpc_security_group_ids  = [
-    "${var.allow_egress_id}",
-    "${var.allow_ssh_id}",
+    var.allow_egress_id,
+    var.allow_ssh_id,
+    var.allow_web_id,
     ]
 
   tags = {
-    Name = "App-Server2"
+    Name  = lower(element(var.app_server_ids, count.index))
   }
 
   provisioner "file" {
@@ -29,8 +30,8 @@ resource "aws_instance" "app-server2" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/scripts/generate_app-server_agent-yaml.sh"
-    destination = "/tmp/generate_app-server_agent-yaml.sh"
+    source      = "${path.module}/scripts/update_signalfx_config.sh"
+    destination = "/tmp/update_signalfx_config.sh"
   }
 
   provisioner "file" {
@@ -48,6 +49,18 @@ resource "aws_instance" "app-server2" {
     destination = "/tmp/test-python-app.service"
   }
 
+  provisioner "file" {
+    source      = "${path.module}/agents/free_disk.yaml"
+    destination = "/tmp/free_disk.yaml"
+  }
+
+  #### TESTING ####
+  # provisioner "file" {
+  #   source      = "${path.module}/scripts/generate_load_vars.sh"
+  #   destination = "/tmp/generate_load_vars.sh"
+  # }
+  #### TESTING ####
+
   provisioner "remote-exec" {
     inline = [
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
@@ -55,18 +68,26 @@ resource "aws_instance" "app-server2" {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
 
+      "sudo mkdir /media/data",
+      "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",
+      "sudo mkfs.ext4 /dev/xvdg1",
+      "sudo mount /dev/xvdg1 /media/data",
+
       "TOKEN=${var.auth_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
-      "CLUSTERNAME=${var.smart_gateway_cluster_name}",
+      "CLUSTERNAME=${var.cluster_name}",
       "AGENTVERSION=${var.smart_agent_version}",
-      "ENDPOINT=${var.traceEndpointUrl}",
+      "LBURL=${aws_lb.collector-lb.dns_name}",
 
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
-      "sudo chmod +x /tmp/generate_app-server_agent-yaml.sh",
-      "sudo /tmp/generate_app-server_agent-yaml.sh $ENDPOINT $HOSTNAME",
-      "sudo apt-mark hold signalfx-agent",
+      "sudo chmod +x /tmp/update_signalfx_config.sh",
+      "sudo /tmp/update_signalfx_config.sh $LBURL",
+
+      "sudo mkdir /etc/signalfx/monitors",
+      "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
 
       "sudo apt-get install default-jre -y",
       "sudo apt-get install openjdk-11-jre-headless -y",
@@ -90,11 +111,11 @@ resource "aws_instance" "app-server2" {
       "sudo -H pip install flask requests signalfx-tracing",
       "sudo -H sfx-py-trace-bootstrap",
 
-      # "sudo mv /tmp/test-python-app.service /lib/systemd/system/test-python-app.service",
-      # "sudo chown root:root /lib/systemd/system/test-python-app.service",
-      # "sudo systemctl enable test-python-app.service",
-      # "sudo systemctl daemon-reload",
-      # "sudo systemctl restart test-python-app"
+      "sudo mv /tmp/test-python-app.service /etc/systemd/system/test-python-app.service",
+      "sudo chown root:root /etc/systemd/system/test-python-app.service",
+      "sudo systemctl enable test-python-app.service",
+      "sudo systemctl daemon-reload",
+      "sudo systemctl restart test-python-app"
     ]
   }
 
@@ -102,7 +123,15 @@ resource "aws_instance" "app-server2" {
     host = self.public_ip
     type = "ssh"
     user = "ubuntu"
-    private_key = file("~/.ssh/id_rsa")
+    private_key = file(var.private_key_path)
     agent = "true"
   }
+}
+
+output "app_server_details" {
+  value =  formatlist(
+    "%s, %s", 
+    aws_instance.app_server.*.tags.Name,
+    aws_instance.app_server.*.public_ip,
+  )
 }

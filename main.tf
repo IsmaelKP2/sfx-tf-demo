@@ -12,17 +12,28 @@ provider "signalfx" {
 
 module "security_groups" {
   source = "./security_groups"
-
-  vpc_id = var.vpc_id
+  vpc_id = module.vpc.vpc_id
+  # vpc_cidr = var.vpc_cidr
+  vpc_cidr_block = var.vpc_cidr_block
 }
 
-module "dashboards" {
-  source = "./dashboards"
+module "vpc" {
+  source = "./vpc"
+  vpc_name = var.vpc_name
+  vpc_cidr_block = var.vpc_cidr_block
+  subnet_count = var.subnet_count
+  subnet_cidrs = var.subnet_cidrs
+  subnet_names = var.subnet_names
+  subnet_availability_zones = var.subnet_availability_zones
 }
 
-module "detectors" {
-  source = "./detectors"
-}
+# module "dashboards" {
+#   source = "./dashboards"
+# }
+
+# module "detectors" {
+#   source = "./detectors"
+# }
 
 module "instances" {
   source = "./instances"
@@ -30,35 +41,59 @@ module "instances" {
   auth_token = var.auth_token
   api_url = var.api_url
   realm = var.realm
-  smart_gateway_cluster_name = var.smart_gateway_cluster_name
-  smart_gateway_version = var.smart_gateway_version
+  cluster_name = var.cluster_name
   smart_agent_version = var.smart_agent_version
-  traceEndpointUrl = var.traceEndpointUrl
+  otelcol_version = var.otelcol_version
+  ballast = var.ballast
 
-  vpc_id = var.vpc_id
-  subnet_id = var.subnet_id
-  ami = var.ami
-  key_name = var.key_name
-  instance_type = var.instance_type
-  smart_gateway_instance_type = var.smart_gateway_instance_type
+  vpc_id = module.vpc.vpc_id
+  vpc_cidr_block = var.vpc_cidr_block
+  subnet_ids = module.vpc.subnet_ids
   
+  key_name = var.key_name
+  private_key_path = var.private_key_path
+  instance_type = var.instance_type
+  collector_instance_type = var.collector_instance_type
+    
   allow_egress_id = module.security_groups.allow_egress_id
   allow_ssh_id = module.security_groups.allow_ssh_id
   allow_web_id = module.security_groups.allow_web_id
   allow_all_id = module.security_groups.allow_all_id
   allow_mysql_id = module.security_groups.allow_mysql_id
-  
-  app-server1_ip = var.app-server1_ip
-  app-server2_ip = var.app-server2_ip
-  wordpress1_ip = var.wordpress1_ip
-  wordpress2_ip = var.wordpress2_ip
-  nginx1_ip = var.nginx1_ip
-  nginx2_ip = var.nginx2_ip
-  smart_gateway1_ip = var.smart_gateway1_ip
-  smart_gateway2_ip = var.smart_gateway2_ip
-  smart_gateway_ip = var.smart_gateway_ip
-  mysql1_ip = var.mysql1_ip
-  mysql2_ip = var.mysql2_ip
-  haproxy1_ip = var.haproxy1_ip
-  haproxy2_ip = var.haproxy2_ip
+  allow_collectors_id = module.security_groups.allow_collectors_id
+
+  collector_count = var.collector_count
+  collector_ids = var.collector_ids
+  haproxy_count = var.haproxy_count
+  haproxy_ids = var.haproxy_ids
+  mysql_count = var.mysql_count
+  mysql_ids = var.mysql_ids
+  wordpress_count = var.wordpress_count
+  wordpress_ids = var.wordpress_ids
+  app_server_count = var.app_server_count
+  app_server_ids = var.app_server_ids
+  #xxx _count = var.xxx _count
+  #xxx _ids = var.xxx _ids
+}
+
+output "subnet_ids" {
+  value = module.vpc.subnet_ids
+}
+output "Collectors" {
+  value = module.instances.collector_details
+}
+output "HAProxies" {
+  value = module.instances.haproxy_details
+}
+output "MySQL_Servers" {
+  value = module.instances.mysql_details
+}
+output "WordPress_Servers" {
+  value = module.instances.wordpress_details
+}
+output "App_Servers" {
+  value = module.instances.app_server_details
+}
+output "collector_lb_dns" {
+  value = module.instances.collector_lb_int_dns
 }

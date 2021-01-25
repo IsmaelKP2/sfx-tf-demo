@@ -1,3 +1,8 @@
+output "collector_lb_int_dns" {
+  value = aws_lb.collector-lb.dns_name
+  description = "The Internal DNS address assigned to the Collector Internal Load Balancer"
+}
+
 # output "smart_gateway1_private_ip" {
 #   value = "${aws_instance.smart-gateway1.*.private_ip}"
 #   description = "The Private IP address assigned to Smart-Gateway1"

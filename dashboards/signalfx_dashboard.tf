@@ -16,7 +16,7 @@ resource "signalfx_dashboard" "mydashboard0" {
     }
 
     chart {
-        chart_id = signalfx_single_value_chart.active_hosts0.id
+        chart_id = signalfx_single_value_chart.active_hosts.id
         width = 3
         height = 1
         row = 0
@@ -24,7 +24,7 @@ resource "signalfx_dashboard" "mydashboard0" {
     }
 
     chart {
-        chart_id = signalfx_single_value_chart.apache_servers0.id
+        chart_id = signalfx_single_value_chart.active_collector_containers.id
         width = 3
         height = 1
         row = 0
@@ -41,7 +41,7 @@ resource "signalfx_dashboard" "mydashboard0" {
     }
 
     chart {
-        chart_id = signalfx_single_value_chart.mysql_servers0.id
+        chart_id = signalfx_single_value_chart.active_mysql_servers.id
         width = 3
         height = 1
         row = 3
@@ -49,12 +49,20 @@ resource "signalfx_dashboard" "mydashboard0" {
     }
 
     chart {
-        chart_id = signalfx_single_value_chart.nginx_servers0.id
+        chart_id = signalfx_single_value_chart.active_haproxy_servers.id
         width = 3
         height = 1
         row = 3
         column = 9
     }
+
+    # chart {
+    #     chart_id = signalfx_single_value_chart.nginx_servers0.id
+    #     width = 3
+    #     height = 1
+    #     row = 3
+    #     column = 9
+    # }
 
 ### Row 6 ###
     chart {
@@ -71,6 +79,14 @@ resource "signalfx_dashboard" "mydashboard0" {
         height = 1
         row = 6
         column = 3
+    }
+
+    chart {
+        chart_id = signalfx_single_value_chart.active_apache_servers.id
+        width = 3
+        height = 1
+        row = 6
+        column = 6
     }
 
 ### Row 9 ###
@@ -90,19 +106,13 @@ resource "signalfx_dashboard" "mydashboard0" {
         column = 3
     }
 
-    chart {
-        chart_id = signalfx_single_value_chart.haproxy_servers0.id
-        width = 3
-        height = 1
-        row = 9
-        column = 6
-    }
 
-    chart {
-        chart_id = signalfx_single_value_chart.active_smartgateways0.id
-        width = 3
-        height = 1
-        row = 9
-        column = 9
-    }
+
+    # chart {
+    #     chart_id = signalfx_single_value_chart.active_smartgateways0.id
+    #     width = 3
+    #     height = 1
+    #     row = 9
+    #     column = 9
+    # }
 }

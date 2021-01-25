@@ -11,19 +11,6 @@ resource "aws_security_group" "allow_egress" {
   }
 }
 
-# resource "aws_security_group" "allow_tls" {
-#   name        = "allow_tls"
-#   description = "Allow TLS inbound traffic"
-#   vpc_id      = var.vpc_id
-
-#   ingress {
-#     from_port   = 443
-#     to_port     = 443
-#     protocol    = "tcp"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-# }
-
 resource "aws_security_group" "allow_web" {
   name        = "allow_web"
   description = "Allow Web inbound traffic"
@@ -38,6 +25,12 @@ resource "aws_security_group" "allow_web" {
   ingress {
     from_port   = 8080
     to_port     = 8080
+    protocol    = "tcp"
+    self = true
+  }
+  ingress {
+    from_port   = 9080
+    to_port     = 9080
     protocol    = "tcp"
     self = true
   }
@@ -59,7 +52,7 @@ resource "aws_security_group" "allow_mysql" {
     to_port     = 3306
     protocol    = "tcp"
     self = true
-    security_groups = ["${aws_security_group.allow_web.id}"]
+    security_groups = [aws_security_group.allow_web.id]
   }
 }
 
@@ -76,19 +69,6 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
-# resource "aws_security_group" "allow_sfx_mon" {
-#   name        = "allow_sfx_mon"
-#   description = "Allow SFX monitoring traffic"
-#   vpc_id      = var.vpc_id
-
-#   ingress {
-#     from_port   = 8080
-#     to_port     = 8080
-#     protocol    = "tcp"
-#     self = true
-#   }
-# }
-
 resource "aws_security_group" "allow_all" {
   name        = "allow_all"
   description = "Allow all traffic between members"
@@ -102,9 +82,46 @@ resource "aws_security_group" "allow_all" {
   }
 
   egress {
-  from_port   = 0
-  to_port     = 0
-  protocol    = "-1"
-  cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
 }
+
+resource "aws_security_group" "allow_collectors" {
+  name        = "allow_collectors"
+  description = "Allow collector traffic between members"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 9943
+    to_port     = 9943
+    protocol    = "tcp"
+    cidr_blocks = [
+      var.vpc_cidr_block
+    ]
+  }
+  ingress {
+    from_port   = 13133
+    to_port     = 13133
+    protocol    = "tcp"
+    cidr_blocks = [
+      var.vpc_cidr_block
+    ]
+  }
+  egress {
+    from_port   = 9943
+    to_port     = 9943
+    protocol    = "tcp"
+    self = true
+  }
+  egress {
+    from_port   = 13133
+    to_port     = 13133
+    protocol    = "tcp"
+    self = true
+  }
 }

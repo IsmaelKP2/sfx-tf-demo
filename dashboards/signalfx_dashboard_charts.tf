@@ -3,12 +3,7 @@ resource "signalfx_time_chart" "mem_used_chart_graph0" {
   name = "Memory Used %"
 
     program_text = <<-EOF
-        A = data('memory.utilization', filter=filter('plugin', 'signalfx-metadata') and (not filter('agent', '*'))).publish(label='A', enable=False)
-        B = (A).min().publish(label='B')
-        C = (A).percentile(pct=10).publish(label='C')
-        D = (A).percentile(pct=50).publish(label='D')
-        E = (A).percentile(pct=90).publish(label='E')
-        F = (A).max().publish(label='F')
+        A = data('memory.utilization').publish(label='A')
         EOF
         
     plot_type = "LineChart"
@@ -22,7 +17,7 @@ resource "signalfx_time_chart" "cpu_used_chart_graph0" {
   name = "CPU Used %"
 
     program_text = <<-EOF
-        A = data('cpu.utilization', filter=filter('plugin', 'signalfx-metadata')).publish(label='A')
+        A = data('cpu.utilization').publish(label='A')
         EOF
         
     plot_type = "LineChart"
@@ -32,23 +27,32 @@ resource "signalfx_time_chart" "cpu_used_chart_graph0" {
 }
 
 
-
 ######################## Host Count Charts ########################
 
 # Create Active Hosts Chart
-resource "signalfx_single_value_chart" "active_hosts0" {
-  name = "Active Hosts"
+resource "signalfx_single_value_chart" "active_hosts" {
+  name = "Total Hosts"
 
     program_text = <<-EOF
         A = data('memory.utilization', extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
         EOF
 
-    description = "Number of active Hosts"
+    description = "Number of running Hosts"
+}
+
+# Active Collectors Chart
+resource "signalfx_single_value_chart" "active_collector_containers" {
+  name = "Active Collector Containers"
+
+    program_text = <<-EOF
+      A = data('network.usage.tx_bytes', filter=filter('plugin', 'docker') and filter('container_image', '*splunk-otel-collector*')).count().publish(label='A')
+      EOF
+    description = "Number of Active Collector Containers"
 }
 
 # Create MySQL Servers Chart
-resource "signalfx_single_value_chart" "mysql_servers0" {
-  name = "MySQL Servers"
+resource "signalfx_single_value_chart" "active_mysql_servers" {
+  name = "Active MySQL Servers"
 
     program_text = <<-EOF
         A = data('mysql_octets.rx', filter=filter('plugin', 'mysql'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
@@ -58,8 +62,8 @@ resource "signalfx_single_value_chart" "mysql_servers0" {
 }
 
 # Create Apache Servers Chart
-resource "signalfx_single_value_chart" "apache_servers0" {
-  name = "Apache Servers"
+resource "signalfx_single_value_chart" "active_apache_servers" {
+  name = "Active Apache Servers"
 
     program_text = <<-EOF
         A = data('apache_requests', filter=filter('plugin', 'apache'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
@@ -68,20 +72,20 @@ resource "signalfx_single_value_chart" "apache_servers0" {
     description = "Number of running Apache Servers"
 }
 
-# Create Nginx Servers Chart
-resource "signalfx_single_value_chart" "nginx_servers0" {
-  name = "Nginx Servers"
+# # Create Nginx Servers Chart
+# resource "signalfx_single_value_chart" "nginx_servers0" {
+#   name = "Nginx Servers"
 
-    program_text = <<-EOF
-        A = data('nginx_requests', filter=filter('plugin', 'nginx'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
-        EOF
+#     program_text = <<-EOF
+#         A = data('nginx_requests', filter=filter('plugin', 'nginx'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
+#         EOF
 
-    description = "Number of running Nginx Servers"
-}
+#     description = "Number of running Nginx Servers"
+# }
 
 # Create HAProxy Servers Chart
-resource "signalfx_single_value_chart" "haproxy_servers0" {
-  name = "HAProxy Servers"
+resource "signalfx_single_value_chart" "active_haproxy_servers" {
+  name = "Active HAProxy Servers"
 
     program_text = <<-EOF
         A = data('haproxy_requests', filter=filter('plugin', 'haproxy')).count().publish(label='A')
@@ -90,16 +94,16 @@ resource "signalfx_single_value_chart" "haproxy_servers0" {
     description = "Number of running HAProxy Servers"
 }
 
-# Create Active SmartGateway Chart
-resource "signalfx_single_value_chart" "active_smartgateways0" {
-  name = "Active SmartGateways"
+# # Create Active SmartGateway Chart
+# resource "signalfx_single_value_chart" "active_smartgateways0" {
+#   name = "Active SmartGateways"
 
-    program_text = <<-EOF
-        A = data('memory.used', filter('host', 'Smart*'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
-        EOF
+#     program_text = <<-EOF
+#         A = data('memory.used', filter('host', 'Smart*'), extrapolation='last_value', maxExtrapolations=5).count().publish(label='A')
+#         EOF
 
-    description = "Number of active SmartGateways"
-}
+#     description = "Number of active SmartGateways"
+# }
 
 
 ######################## Disk Space Charts ########################

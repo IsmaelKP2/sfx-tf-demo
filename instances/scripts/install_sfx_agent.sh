@@ -30,9 +30,9 @@ curl -sSL https://dl.signalfx.com/signalfx-agent.sh > /tmp/signalfx-agent.sh
 
 if [ -z "$4" ] ; then
   printf "Version not specified, installing Latest version ...\n"
-  sudo sh /tmp/signalfx-agent.sh --ingest-url https://ingest.$REALM.signalfx.com --api-url https://api.$REALM.signalfx.com --cluster $CLUSTERNAME $TOKEN
+  sudo sh /tmp/signalfx-agent.sh --trace-url https://ingest.$REALM.signalfx.com/v2/trace --ingest-url https://ingest.$REALM.signalfx.com --api-url https://api.$REALM.signalfx.com --cluster $CLUSTERNAME $TOKEN
   exit 1
 else
   printf "Version Variable Detected - Installing SignalFX Version $VERSION ..\n"
-  sudo sh /tmp/signalfx-agent.sh --ingest-url https://ingest.$REALM.signalfx.com --api-url https://api.$REALM.signalfx.com --cluster $CLUSTERNAME $TOKEN --package-version $VERSION
+  sudo sh /tmp/signalfx-agent.sh --trace-url https://ingest.$REALM.signalfx.com/v2/trace --ingest-url https://ingest.$REALM.signalfx.com --api-url https://api.$REALM.signalfx.com --cluster $CLUSTERNAME $TOKEN --package-version $VERSION
 fi

@@ -1,4 +1,0 @@
----
-  - type: collectd/nginx
-    host: localhost
-    port: 80

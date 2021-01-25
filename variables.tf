@@ -10,13 +10,37 @@ variable "region" {
 variable "vpc_id" {
   default = []
 }
-variable "subnet_id" {
+variable "vpc_name" {
   default = []
 }
+variable "vpc_cidr" {
+  default = []
+}
+variable "vpc_cidr_block" {
+  default = []
+}
+variable "subnet_ids" {
+  default = []
+}
+variable "subnet_availability_zones" {
+  default = []
+}
+# variable "subnet0_id" {
+#   default = []
+# }
+# variable "subnet1_id" {
+#   default = []
+# }
+# variable "subnet2_id" {
+#   default = []
+# }
 variable "ami" {
   default = []
 }
 variable "key_name" {
+  default = []
+}
+variable "private_key_path"{
   default = []
 }
 variable "instance_type" {
@@ -25,7 +49,9 @@ variable "instance_type" {
 variable "smart_gateway_instance_type" {
   default = []
 }
-
+variable "collector_instance_type" {
+  default = []
+}
 variable "allow_egress_id" {
   default = {}
 }
@@ -41,47 +67,86 @@ variable "allow_all_id" {
 variable "allow_mysql_id" {
   default = {}
 }
+variable "allow_collectors_id" {
+  default = {}
+}
 
-### Instance IP Addresses ###
-variable "smart_gateway1_ip" {
+## AMI ##
+data "aws_ami" "latest-ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # This is the owner id of Canonical who owns the official aws ubuntu images
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+### Instance Count Variables ###
+variable "subnet_count" {
   default = {}
 }
-variable "smart_gateway2_ip" {
+variable "subnet_cidrs" {
   default = {}
 }
-variable "smart_gateway_ip" {
+variable "subnet_names" {
   default = {}
 }
-variable "nginx1_ip" {
+variable "collector_count" {
   default = {}
 }
-variable "nginx2_ip" {
+variable "collector_ids" {
+  # type = list(string)
+  default = []
+}
+# variable "collector_subnets" {
+#   default = {}
+# }
+
+variable "haproxy_count" {
   default = {}
 }
-variable "wordpress1_ip" {
+variable "haproxy_ids" {
+  type = list(string)
+  default = []
+}
+
+variable "mysql_count" {
   default = {}
 }
-variable "wordpress2_ip" {
+variable "mysql_ids" {
+  type = list(string)
+  default = []
+}
+
+variable "wordpress_count" {
   default = {}
 }
-variable "mysql1_ip" {
+variable "wordpress_ids" {
+  type = list(string)
+  default = []
+}
+
+variable "app_server_count" {
   default = {}
 }
-variable "mysql2_ip" {
-  default = {}
+variable "app_server_ids" {
+  type = list(string)
+  default = []
 }
-variable "haproxy1_ip" {
-  default = {}
-}
-variable "haproxy2_ip" {
-  default = {}
-}
-variable "app-server1_ip" {
-  default = {}
-}
-variable "app-server2_ip" {
-  default = {}
-}
+
+# variable "xxx _count" {
+#   default = {}
+# }
+# variable "xxx _ids" {
+#   type = list(string)
+#   default = []
+# }
 
 ### SignalFX Variables ###
 variable "auth_token" {
@@ -93,16 +158,19 @@ variable "api_url" {
 variable "realm" {
   default = []
 }
-variable "smart_gateway_cluster_name" {
-  default = []
-}
-variable "smart_gateway_version" {
+variable "cluster_name" {
   default = []
 }
 variable "smart_agent_version" {
   default = []
 }
-variable "traceEndpointUrl" {
+variable "environment" {
+  default = "TF_Demo"
+}
+variable "otelcol_version" {
+  default = []
+}
+variable "ballast" {
   default = []
 }
 
