@@ -19,32 +19,32 @@ subnet_availability_zones = [
     "eu-west-1c"
     ]
 
-collector_count = "3"
+collector_count = "2"
 collector_ids = [
     "Collector1",
     "Collector2",
     "Collector3"
     ]
 
-haproxy_count = "0"
+haproxy_count = "2"
 haproxy_ids = [
     "haproxy1",
     "haprpxy2"
     ]
 
-mysql_count = "0"
+mysql_count = "1"
 mysql_ids = [
     "mysql1",
     "mysql2"
     ]
 
-wordpress_count = "0"
+wordpress_count = "1"
 wordpress_ids = [
     "wordpress1",
     "wordpress2"
     ]
 
-app_server_count = "0"
+app_server_count = "1"
 app_server_ids = [
     "app_server1",
     "app_server2"
