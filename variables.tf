@@ -25,15 +25,6 @@ variable "subnet_ids" {
 variable "subnet_availability_zones" {
   default = []
 }
-# variable "subnet0_id" {
-#   default = []
-# }
-# variable "subnet1_id" {
-#   default = []
-# }
-# variable "subnet2_id" {
-#   default = []
-# }
 variable "ami" {
   default = []
 }
@@ -97,16 +88,13 @@ variable "subnet_cidrs" {
 variable "subnet_names" {
   default = {}
 }
+
 variable "collector_count" {
   default = {}
 }
 variable "collector_ids" {
-  # type = list(string)
   default = []
 }
-# variable "collector_subnets" {
-#   default = {}
-# }
 
 variable "haproxy_count" {
   default = {}
