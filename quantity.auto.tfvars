@@ -13,6 +13,7 @@ subnet_names = [
     "subnet2",
     "subnet3"
     ]
+### Subnets need to belong to the AWS Region specified in 'quantity.auto.tfvars'
 subnet_availability_zones = [
     "eu-west-1a",
     "eu-west-1b",
