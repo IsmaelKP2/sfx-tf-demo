@@ -27,13 +27,13 @@ module "vpc" {
   subnet_availability_zones = var.subnet_availability_zones
 }
 
-# module "dashboards" {
-#   source = "./dashboards"
-# }
+module "dashboards" {
+  source = "./dashboards"
+}
 
-# module "detectors" {
-#   source = "./detectors"
-# }
+module "detectors" {
+  source = "./detectors"
+}
 
 module "instances" {
   source = "./instances"
