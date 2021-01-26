@@ -29,7 +29,7 @@ collector_ids = [
 haproxy_count = "2"
 haproxy_ids = [
     "haproxy1",
-    "haprpxy2"
+    "haproxy2"
     ]
 
 mysql_count = "1"
