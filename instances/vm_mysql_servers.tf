@@ -5,9 +5,9 @@ resource "aws_instance" "mysql" {
   subnet_id               = element(var.subnet_ids, count.index)
   key_name                = var.key_name
   vpc_security_group_ids  = [
-    var.allow_egress_id,
-    var.allow_mysql_id,
-    var.allow_ssh_id,
+    var.sg_allow_egress_id,
+    var.sg_mysql_id,
+    var.sg_allow_ssh_id,
     ]
 
   tags = {

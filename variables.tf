@@ -13,9 +13,9 @@ variable "vpc_id" {
 variable "vpc_name" {
   default = []
 }
-variable "vpc_cidr" {
-  default = []
-}
+# variable "vpc_cidr" {
+#   default = []
+# }
 variable "vpc_cidr_block" {
   default = []
 }
@@ -25,9 +25,9 @@ variable "subnet_ids" {
 variable "subnet_availability_zones" {
   default = []
 }
-variable "ami" {
-  default = []
-}
+# variable "ami" {
+#   default = []
+# }
 variable "key_name" {
   default = []
 }
@@ -37,28 +37,25 @@ variable "private_key_path"{
 variable "instance_type" {
   default = []
 }
-variable "smart_gateway_instance_type" {
-  default = []
-}
 variable "collector_instance_type" {
   default = []
 }
-variable "allow_egress_id" {
+variable "sg_allow_egress_id" {
   default = {}
 }
-variable "allow_ssh_id" {
+variable "sg_allow_ssh_id" {
   default = {}
 }
-variable "allow_web_id" {
+variable "sg_web_id" {
   default = {}
 }
-variable "allow_all_id" {
+variable "sg_allow_all_id" {
   default = {}
 }
-variable "allow_mysql_id" {
+variable "sg_mysql_id" {
   default = {}
 }
-variable "allow_collectors_id" {
+variable "sg_collectors_id" {
   default = {}
 }
 
@@ -100,7 +97,7 @@ variable "haproxy_count" {
   default = {}
 }
 variable "haproxy_ids" {
-  type = list(string)
+  # type = list(string)
   default = []
 }
 
@@ -108,7 +105,7 @@ variable "mysql_count" {
   default = {}
 }
 variable "mysql_ids" {
-  type = list(string)
+  # type = list(string)
   default = []
 }
 
@@ -116,7 +113,7 @@ variable "wordpress_count" {
   default = {}
 }
 variable "wordpress_ids" {
-  type = list(string)
+  # type = list(string)
   default = []
 }
 
@@ -124,7 +121,7 @@ variable "app_server_count" {
   default = {}
 }
 variable "app_server_ids" {
-  type = list(string)
+  # type = list(string)
   default = []
 }
 
@@ -153,7 +150,7 @@ variable "smart_agent_version" {
   default = []
 }
 variable "environment" {
-  default = "TF_Demo"
+  default = []
 }
 variable "otelcol_version" {
   default = []

@@ -14,9 +14,9 @@ resource "aws_instance" "wordpress" {
   }
   key_name      = var.key_name
   vpc_security_group_ids  = [
-    var.allow_egress_id,
-    var.allow_web_id,
-    var.allow_ssh_id,
+    var.sg_allow_egress_id,
+    var.sg_web_id,
+    var.sg_allow_ssh_id,
     ]
 
   tags = {

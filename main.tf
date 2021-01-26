@@ -55,12 +55,12 @@ module "instances" {
   instance_type = var.instance_type
   collector_instance_type = var.collector_instance_type
     
-  allow_egress_id = module.security_groups.allow_egress_id
-  allow_ssh_id = module.security_groups.allow_ssh_id
-  allow_web_id = module.security_groups.allow_web_id
-  allow_all_id = module.security_groups.allow_all_id
-  allow_mysql_id = module.security_groups.allow_mysql_id
-  allow_collectors_id = module.security_groups.allow_collectors_id
+  sg_allow_egress_id = module.security_groups.sg_allow_egress_id
+  sg_allow_ssh_id = module.security_groups.sg_allow_ssh_id
+  sg_web_id = module.security_groups.sg_web_id
+  sg_allow_all_id = module.security_groups.sg_allow_all_id
+  sg_mysql_id = module.security_groups.sg_mysql_id
+  sg_collectors_id = module.security_groups.sg_collectors_id
 
   collector_count = var.collector_count
   collector_ids = var.collector_ids

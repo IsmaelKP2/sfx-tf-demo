@@ -1,5 +1,5 @@
 resource "aws_security_group" "allow_egress" {
-  name        = "allow_egress"
+  name        = "Allow Egress"
   description = "Allow Egress traffic"
   vpc_id      = var.vpc_id
 
@@ -11,9 +11,9 @@ resource "aws_security_group" "allow_egress" {
   }
 }
 
-resource "aws_security_group" "allow_web" {
-  name        = "allow_web"
-  description = "Allow Web inbound traffic"
+resource "aws_security_group" "web" {
+  name        = "Web"
+  description = "Web inbound traffic"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -42,9 +42,9 @@ resource "aws_security_group" "allow_web" {
   }
 }
 
-resource "aws_security_group" "allow_mysql" {
-  name        = "allow_mysql"
-  description = "Allow MySQL inbound traffic"
+resource "aws_security_group" "mysql" {
+  name        = "Mysql"
+  description = "MySQL inbound traffic"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -52,12 +52,12 @@ resource "aws_security_group" "allow_mysql" {
     to_port     = 3306
     protocol    = "tcp"
     self = true
-    security_groups = [aws_security_group.allow_web.id]
+    security_groups = [aws_security_group.web.id]
   }
 }
 
 resource "aws_security_group" "allow_ssh" {
-  name        = "allow_ssh"
+  name        = "Allow SSH"
   description = "Allow SSH inbound traffic"
   vpc_id      = var.vpc_id
 
@@ -70,7 +70,7 @@ resource "aws_security_group" "allow_ssh" {
 }
 
 resource "aws_security_group" "allow_all" {
-  name        = "allow_all"
+  name        = "Allow All"
   description = "Allow all traffic between members"
   vpc_id      = var.vpc_id
 
@@ -91,9 +91,9 @@ resource "aws_security_group" "allow_all" {
   }
 }
 
-resource "aws_security_group" "allow_collectors" {
-  name        = "allow_collectors"
-  description = "Allow collector traffic between members"
+resource "aws_security_group" "collectors" {
+  name        = "Collectors"
+  description = "Collector inbound traffic"
   vpc_id      = var.vpc_id
 
   ingress {
