@@ -2,6 +2,7 @@ resource "aws_instance" "wordpress" {
   count         = var.wordpress_count
   ami           = data.aws_ami.latest-ubuntu.id
   instance_type = var.instance_type
+  subnet_id     = element(var.subnet_ids, count.index)
   root_block_device {
     volume_size = 16
     volume_type = "gp2"
