@@ -4,7 +4,7 @@
 resource "signalfx_dashboard" "mydashboard0" {
     name = "My Dashboard"
     dashboard_group = signalfx_dashboard_group.tfg0.id
-    time_range = "-1w"
+    time_range = "-1m"
 
 # Row 0 ###
     chart {

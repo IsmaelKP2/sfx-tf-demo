@@ -13,7 +13,6 @@ provider "signalfx" {
 module "security_groups" {
   source = "./security_groups"
   vpc_id = module.vpc.vpc_id
-  # vpc_cidr = var.vpc_cidr
   vpc_cidr_block = var.vpc_cidr_block
 }
 
@@ -33,6 +32,9 @@ module "dashboards" {
 
 module "detectors" {
   source = "./detectors"
+  notification_email = var.notification_email
+  soc_integration_id = var.soc_integration_id
+  soc_routing_key = var.soc_routing_key
 }
 
 module "instances" {
@@ -45,6 +47,7 @@ module "instances" {
   smart_agent_version = var.smart_agent_version
   otelcol_version = var.otelcol_version
   ballast = var.ballast
+  environment = var.environment 
 
   vpc_id = module.vpc.vpc_id
   vpc_cidr_block = var.vpc_cidr_block

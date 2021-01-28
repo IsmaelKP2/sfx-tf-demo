@@ -133,6 +133,14 @@ variable "app_server_ids" {
 #   default = []
 # }
 
+### SOC Variables ###
+variable "soc_integration_id" {
+  default = {}
+}
+variable "soc_routing_key" {
+  default = {}
+}
+
 ### SignalFX Variables ###
 variable "auth_token" {
   default = []
@@ -141,6 +149,9 @@ variable "api_url" {
   default = []
 }
 variable "realm" {
+  default = []
+}
+variable "notification_email" {
   default = []
 }
 variable "cluster_name" {

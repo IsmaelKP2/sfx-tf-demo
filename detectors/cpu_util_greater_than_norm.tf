@@ -11,7 +11,7 @@ resource "signalfx_detector" "cpu_greater_than_norm_detector" {
     description           = "All the values of cpu.utilization in the last 10m are more than 3 standard deviation(s) above the mean of its preceding 24h."
     severity              = "Critical"
     detect_label          = "CPU utilization is significantly greater than normal, and increasing"
-    notifications         = ["Email,ghigginbottom@splunkcom"]
+    notifications         = ["Email,${var.notification_email}"]
     parameterized_subject = "{{ruleSeverity}} Alert: {{{ruleName}}} ({{{detectorName}}})"
     parameterized_body    = var.message_body
   }

@@ -11,7 +11,7 @@ resource "signalfx_detector" "promote_tags" {
     description           = "Promoting Tags"
     severity              = "Critical"
     detect_label          = "Promoting Tags"
-    notifications         = ["Email,ghigginbottom@signalfx.com"]
+    notifications         = ["Email,${var.notification_email}"]
     parameterized_subject = "{{ruleSeverity}} Alert: {{{ruleName}}} ({{{detectorName}}})"
     parameterized_body    = var.message_body
   }
