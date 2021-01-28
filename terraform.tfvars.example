@@ -10,7 +10,10 @@ vpc_cidr_block = "172.32.0.0/16"
 key_name = "<NAME>"
 private_key_path = "~/.ssh/id_rsa"
 instance_type = "t2.micro"
-collector_instance_type = "t2.small"
+
+### SOC Variables ###
+soc_integration_id = "<ID>>"
+soc_routing_key = "<ROUTING_KEY>>"
 
 ### SignalFX Variables ###
 auth_token = "<AUTH_TOKEN>"
@@ -21,6 +24,8 @@ cluster_name = "demo"
 # smart_agent_version = "5.7.1-1" # Optional - If left blank, latest will be installed
 smart_agent_version = "" # Optional - If left blank, latest will be installed
 
+### Collector Variables ###
 ### https://quay.io/repository/signalfx/splunk-otel-collector?tab=tags
 otelcol_version = "0.3.0"
 ballast = "683"
+collector_instance_type = "t2.small"
