@@ -35,6 +35,11 @@ resource "aws_instance" "app_server" {
   }
 
   provisioner "file" {
+    source      = "${path.module}/scripts/update_sfx_environment.sh"
+    destination = "/tmp/update_sfx_environment.sh"
+  }
+
+  provisioner "file" {
     source      = "${path.module}/agents/free_disk.yaml"
     destination = "/tmp/free_disk.yaml"
   }
@@ -80,10 +85,16 @@ resource "aws_instance" "app_server" {
       "CLUSTERNAME=${var.cluster_name}",
       "AGENTVERSION=${var.smart_agent_version}",
       "LBURL=${aws_lb.collector-lb.dns_name}",
+      "ENVIRONMENT=${var.environment}",
+
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
+      
       "sudo chmod +x /tmp/update_signalfx_config.sh",
       "sudo /tmp/update_signalfx_config.sh $LBURL",
+
+      "sudo chmod +x /tmp/update_sfx_environment.sh",
+      "sudo /tmp/update_sfx_environment.sh $ENVIRONMENT",
 
     # Add free disk monitor
       "sudo mkdir /etc/signalfx/monitors",
