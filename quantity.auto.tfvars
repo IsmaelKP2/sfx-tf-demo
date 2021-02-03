@@ -26,7 +26,7 @@ subnet_availability_zones = [
     "eu-west-1c"
     ]
 
-collector_count = "3" # max 3
+collector_count = "1" # max 3
 collector_ids = [
     "Collector1",
     "Collector2",
@@ -47,14 +47,14 @@ mysql_ids = [
     "mysql3"
     ]
 
-wordpress_count = "1" # max 3
+wordpress_count = "0" # max 3
 wordpress_ids = [
     "wordpress1",
     "wordpress2",
     "wordpress3"
     ]
 
-app_server_count = "0" # max 3
+app_server_count = "1" # max 3
 app_server_ids = [
     "app_server1",
     "app_server2",

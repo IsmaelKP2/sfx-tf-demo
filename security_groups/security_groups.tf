@@ -26,13 +26,7 @@ resource "aws_security_group" "web" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    self = true
-  }
-  ingress {
-    from_port   = 9080
-    to_port     = 9080
-    protocol    = "tcp"
-    self = true
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
     from_port   = 443
@@ -93,12 +87,36 @@ resource "aws_security_group" "allow_all" {
 
 resource "aws_security_group" "collectors" {
   name        = "Collectors"
-  description = "Collector inbound traffic"
+  description = "Collector traffic"
   vpc_id      = var.vpc_id
 
   ingress {
+    from_port   = 9411
+    to_port     = 9411
+    protocol    = "tcp"
+    cidr_blocks = [
+      var.vpc_cidr_block
+    ]
+  }
+  ingress {
     from_port   = 9943
     to_port     = 9943
+    protocol    = "tcp"
+    cidr_blocks = [
+      var.vpc_cidr_block
+    ]
+  }
+  ingress {
+    from_port   = 6060
+    to_port     = 6060
+    protocol    = "tcp"
+    cidr_blocks = [
+      var.vpc_cidr_block
+    ]
+  }
+  ingress {
+    from_port   = 7276
+    to_port     = 7276
     protocol    = "tcp"
     cidr_blocks = [
       var.vpc_cidr_block
@@ -113,8 +131,26 @@ resource "aws_security_group" "collectors" {
     ]
   }
   egress {
+    from_port   = 9411
+    to_port     = 9411
+    protocol    = "tcp"
+    self = true
+  }
+  egress {
     from_port   = 9943
     to_port     = 9943
+    protocol    = "tcp"
+    self = true
+  }
+  egress {
+    from_port   = 6060
+    to_port     = 6060
+    protocol    = "tcp"
+    self = true
+  }
+  egress {
+    from_port   = 7276
+    to_port     = 7276
     protocol    = "tcp"
     self = true
   }

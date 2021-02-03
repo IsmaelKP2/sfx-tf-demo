@@ -4,23 +4,20 @@
 
 extensions:
   health_check:
+
   http_forwarder:
+    ingress:
+      endpoint: 0.0.0.0:6060
     egress:
-      endpoint: "https://api.${SPLUNK_REALM}.signalfx.com"
-  zpages:
+      endpoint: https://api.${SPLUNK_REALM}.signalfx.com
+      headers:
+        # otel_http_forwarder: xxx
+      timeout: 5s
+
+  # zpages:
+    # endpoint: 0.0.0.0:55679
 
 receivers:
-  jaeger:
-    protocols:
-      grpc:
-      thrift_binary:
-      thrift_compact:
-      thrift_http:
-  opencensus:
-  otlp:
-    protocols:
-      grpc:
-      http:
   # This section is used to collect the OpenTelemetry Collector metrics
   # Even if just a Splunk µAPM customer, these metrics are included
   prometheus:
@@ -34,41 +31,37 @@ receivers:
           - source_labels: [ __name__ ]
             regex: '.*grpc_io.*'
             action: drop
+
   sapm:
+
   signalfx:
-  # signalfx/advanced: ???
   ### https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver/signalfxreceiver
   signalfx/allsettings:
     # endpoint specifies the network interface and port which will receive
     # SignalFx metrics.
-    endpoint: localhost:9943
+    endpoint: 0.0.0.0:9943
     access_token_passthrough: true
     # signalfx/tls:
     #   tls_settings:
     #     cert_file: /test.crt
     #     key_file: /test.key
+  
   zipkin:
-  # hostmetrics:
-  #   collection_interval: 1m
-  #   scrapers:
-  #     cpu:
-  #     disk:
-  #     load:
-  #     filesystem:
-  #     memory:
-  #     network:
-  #     processes:
-  #     swap:
+    endpoint: 0.0.0.0:9411
 
 processors:
+  
+  attributes:
   # Optional: If you want to add an environment tag
   # If this option is enabled it must be added to the pipeline section below
-  attributes:
     actions:
     - key: environment
       value: ${SPLUNK_ENVIRONMENT}
       action: insert
+  
   batch:
+
+  memory_limiter:
   # Enabling the memory_limiter is strongly recommended for every pipeline.
   # Configuration is based on the amount of memory allocated to the collector.
   # The configuration below assumes 2GB of memory. In general, the ballast
@@ -80,7 +73,6 @@ processors:
   # is not defined then --mem-ballast-size-mib command line flag must be manually specified.
   # For more information about memory limiter, see
   # https://github.com/open-telemetry/opentelemetry-collector/blob/master/processor/memorylimiter/README.md
-  memory_limiter:
     ballast_size_mib: ${SPLUNK_BALLAST_SIZE_MIB}
     check_interval: 2s
     limit_percentage: ${SPLUNK_MEMORY_LIMIT_PERCENTAGE}
@@ -92,9 +84,9 @@ exporters:
     access_token: "${SPLUNK_ACCESS_TOKEN}"
     endpoint: "https://ingest.${SPLUNK_REALM}.signalfx.com/v2/trace"
   
-  signalfx_correlation:
-    access_token: "${SPLUNK_ACCESS_TOKEN}"
-    endpoint: "https://api.${SPLUNK_REALM}.signalfx.com"
+  # signalfx_correlation:
+  #   access_token: "${SPLUNK_ACCESS_TOKEN}"
+  #   endpoint: "https://api.${SPLUNK_REALM}.signalfx.com"
   
   ### https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/master/exporter/signalfxexporter/README.md
   signalfx:
@@ -108,18 +100,19 @@ exporters:
 service:
   pipelines:
     traces:
-      receivers: [jaeger, opencensus, otlp, sapm, zipkin]
+      receivers: [sapm, zipkin]
       processors: [memory_limiter, batch, attributes]
-      exporters: [sapm, signalfx_correlation]
+      exporters: [sapm]
+
     metrics:
-      receivers: [opencensus, otlp, signalfx, prometheus]
-      # receivers: [opencensus, otlp, signalfx, prometheus, hostmetrics]
+      receivers: [signalfx, prometheus]
       processors: [memory_limiter, batch]
       exporters: [signalfx]
+
     logs:
       receivers: [signalfx]
       processors: [memory_limiter, batch]
       exporters: [signalfx]
 
-  extensions: [health_check, http_forwarder, zpages]
+  extensions: [health_check, http_forwarder]
   

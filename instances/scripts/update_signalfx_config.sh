@@ -20,5 +20,5 @@ mv /etc/signalfx/api_url /etc/signalfx/api_url_old
 mv /etc/signalfx/trace_endpoint_url /etc/signalfx/trace_endpoint_url_old
 
 echo http://$LBURL:9943 > /etc/signalfx/ingest_url
-echo http://$LBURL:9943 > /etc/signalfx/api_url
-echo http://$LBURL/v2/trace > /etc/signalfx/trace_endpoint_url
+echo http://$LBURL:6060 > /etc/signalfx/api_url
+echo http://$LBURL:7276/v2/trace > /etc/signalfx/trace_endpoint_url
