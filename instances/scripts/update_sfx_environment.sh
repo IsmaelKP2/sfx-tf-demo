@@ -5,5 +5,4 @@ ENVIRONMENT=$1
 # echo $ENVIRONMENT > /tmp/environment # just for debugging
 
 sed -i -e "s+    #defaultSpanTags:+    defaultSpanTags:+g" /etc/signalfx/agent.yaml
-sed -i -e "s+     #environment: \"YOUR_ENVIRONMENT\"+     environment: \"$ENVIRONMENT\"+g" /etc/signalfx/agent.yaml 
-sed -i -e "s+intervalSeconds.*+intervalSeconds: 1+g" /etc/signalfx/agent.yaml
+sed -i -e "s+     #environment: \"YOUR_ENVIRONMENT\"+     environment: \"$ENVIRONMENT\"+g" /etc/signalfx/agent.yaml
