@@ -54,6 +54,26 @@ resource "aws_instance" "app_server" {
     destination = "/tmp/run_splunk_lambda_apm.sh"
   }
 
+  provisioner "file" {
+    source      = "${path.module}/scripts/phoneshop_service.sh"
+    destination = "/tmp/phoneshop_service.sh"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/config_files/phoneshop.service"
+    destination = "/tmp/phoneshop.service"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/scripts/locustfile.py"
+    destination = "/tmp/locustfile.py"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/config_files/locust.service"
+    destination = "/tmp/locust.service"
+  }
+
 #### TESTING ####
   provisioner "file" {
     source      = "${path.module}/scripts/generate_load_vars.sh"
@@ -101,24 +121,53 @@ resource "aws_instance" "app_server" {
       "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
       "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
 
-    ## Install Maven
+    ## Phone Shop App
+      ## Install Maven and update cofiguration
       "JAVA_APP_URL=${var.java_app_url}",
       "INVOKE_URL=${var.aws_api_gateway_deployment_retailorder_invoke_url}",
       "sudo chmod +x /tmp/java_app.sh",
       "ENV_PREFIX=${var.environment}",
       "sudo /tmp/java_app.sh $JAVA_APP_URL $INVOKE_URL $ENV_PREFIX",
+      ## create clean version so we can run as a service
+      "cd /home/ubuntu/SplunkLambdaAPM/MobileShop/APM/ && sudo mvn clean package",
 
-    ## Install seige pre-reqs
-      "sudo apt-get update",
-      "sudo apt install looptools -y",
-      "sudo apt install siege -y",
-
-    ## Java App Helper Script
+      ## Java App Helper Script
+      ## Scrip to assist in manually running app if required
+      ## Note: it should be running as a service
       "sudo chmod +x /tmp/run_splunk_lambda_apm.sh",
       "sudo mv /tmp/run_splunk_lambda_apm.sh /home/ubuntu/run_splunk_lambda_apm.sh",
 
       ## Set correct permissions on SplunkLambdaAPM directory
       "sudo chown -R ubuntu:ubuntu /home/ubuntu/SplunkLambdaAPM",
+
+      ## Run phoneshop as a service
+      ## The APM Version of the APM Workshop Phone Shop app will be
+      ## installed and auto started to enable auto generation
+      ## of data by the Locust load generation sofware
+      "sudo chmod +x /tmp/phoneshop_service.sh",
+      "sudo chown root:root /tmp/phoneshop_service.sh",
+      "sudo chmod +x /tmp/phoneshop.service",
+      "sudo chown root:root /tmp/phoneshop.service",
+      "sudo mv /tmp/phoneshop_service.sh /usr/local/bin/phoneshop_service.sh",
+      "sudo mv /tmp/phoneshop.service /etc/systemd/system/phoneshop.service",
+      "sudo systemctl daemon-reload",
+      "sudo chown -R ubuntu:ubuntu /home/ubuntu/SplunkLambdaAPM/MobileShop/APM/target",
+      "sudo service phoneshop restart",
+
+      ## Install Locust.io for load generation
+      ## Locust will generate a random load against the phone shop app
+      ## ensuring traces are generated on a regular basis to keep APM
+      ## dashboards alive - Phone Shop UI can be used to inject bad data
+      ## http://<public-ip-address>:8080/order
+      "sudo apt-get install python3 -y",
+      "sudo apt-get install python3-pip -y",
+      "sudo -H pip3 install locust",
+      "sudo chmod +x locustfile.py",
+      "sudo chmod +x locustfile.service",
+      "sudo mv /tmp/locustfile.py /home/ubuntu/locustfile.py",
+      "sudo mv /tmp/locust.service /etc/systemd/system/locust.service",
+      "sudo systemctl daemon-reload",
+      "sudo service locust restart",
 
     ## Configure motd
       "sudo curl -s https://raw.githubusercontent.com/signalfx/observability-workshop/master/cloud-init/motd -o /etc/motd",
