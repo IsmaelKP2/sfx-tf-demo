@@ -128,6 +128,7 @@ resource "aws_instance" "app_server" {
       "sudo chmod +x /tmp/java_app.sh",
       "ENV_PREFIX=${var.environment}",
       "sudo /tmp/java_app.sh $JAVA_APP_URL $INVOKE_URL $ENV_PREFIX",
+      
       ## create clean version so we can run as a service
       "cd /home/ubuntu/SplunkLambdaAPM/MobileShop/APM/ && sudo mvn clean package",
 
