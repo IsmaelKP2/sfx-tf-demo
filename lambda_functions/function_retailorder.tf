@@ -24,7 +24,8 @@ resource "aws_lambda_function" "retailorder" {
   function_name = "${var.name_prefix}_RetailOrder"
   role          = var.lambda_role_arn
   handler       = "retailorder_lambda_function.lambda_handler"
-  layers        = [aws_lambda_layer_version.request-opentracing_2_0.arn, var.region_wrapper_python]
+  # layers        = [aws_lambda_layer_version.request-opentracing_2_0.arn, var.region_wrapper_python]
+  layers        = [var.region_wrapper_python]
   runtime       = "python3.8"
   timeout       = var.function_timeout
 
