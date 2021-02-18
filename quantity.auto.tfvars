@@ -19,11 +19,11 @@ subnet_names = [
     "subnet2",
     "subnet3"
     ]
-### Subnets need to belong to the AWS Region specified in 'quantity.auto.tfvars'
+### Subnets need to belong to the AWS Region specified in 'terraform.tfvars'
 subnet_availability_zones = [
-    "eu-west-1a",
-    "eu-west-1b",
-    "eu-west-1c"
+    "eu-west-3a",
+    "eu-west-3b",
+    "eu-west-3c"
     ]
 
 collector_count = "1" # max 3
@@ -54,7 +54,7 @@ wordpress_ids = [
     "wordpress3"
     ]
 
-app_server_count = "1" # max 3
+app_server_count = "0" # max 3
 app_server_ids = [
     "app_server1",
     "app_server2",
