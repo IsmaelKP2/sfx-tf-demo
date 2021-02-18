@@ -9,6 +9,12 @@ variable "java_app_url" {
 variable "profile" {
   default = []
 }
+variable "aws_access_key_id" {
+  default = []
+}
+variable "aws_secret_access_key" {
+  default = []
+}
 # variable "region" {
 #   default = []
 # }
@@ -69,10 +75,10 @@ variable "sg_collectors_id" {
 variable "name_prefix" {
   default = {}
 }
-variable "function_ids" {
-  type = list(string)
-  default = []
-}
+# variable "function_ids" {
+#   type = list(string)
+#   default = []
+# }
 variable "retailorder_rest_api_id" {
   default = {}
 }
@@ -263,6 +269,11 @@ variable "lambda_role_arn" {
 variable "function_timeout" {
   default = 15
 }
+
+variable "function_lamdba_sqs_dynamodb_url" {
+  default = "https://raw.githubusercontent.com/linuxacademy/content-lambda-boto3/master/Triggering-Lambda-from-SQS/lambda_function.py"
+}
+
 
 ### SOC Variables ###
 variable "soc_integration_id" {
