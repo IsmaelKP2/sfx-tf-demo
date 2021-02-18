@@ -4,6 +4,7 @@ resource "aws_lb" "collector-lb" {
   load_balancer_type  = "application"
   security_groups      = [
     var.sg_collectors_id,
+    var.sg_allow_egress_id,
     ]
   subnets = var.subnet_ids
 
