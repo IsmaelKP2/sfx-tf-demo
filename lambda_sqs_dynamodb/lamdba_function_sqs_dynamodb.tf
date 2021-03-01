@@ -1,26 +1,26 @@
-### Lambda Function Code
-## Terafrom generates the lambda function from a zip file which is pulled down 
-## from a separate repo defined in variables.tf in root folder
-resource "null_resource" "lamdba_function_lamdba_sqs_dynamodb_file" {
-  provisioner "local-exec" {
-    command = "curl -o lamdba_sqs_dynamodb_function.py ${var.function_lamdba_sqs_dynamodb_url}"
-  }
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm lamdba_sqs_dynamodb_function.py && rm lamdba_sqs_dynamodb.zip"
-  }
-}
+# ### Lambda Function Code
+# ## Terafrom generates the lambda function from a zip file which is pulled down 
+# ## from a separate repo defined in variables.tf in root folder
+# resource "null_resource" "lamdba_function_lamdba_sqs_dynamodb_file" {
+#   provisioner "local-exec" {
+#     command = "curl -o lamdba_sqs_dynamodb_function.py ${var.function_lamdba_sqs_dynamodb_url}"
+#   }
+#   provisioner "local-exec" {
+#     when    = destroy
+#     command = "rm lamdba_sqs_dynamodb_function.py && rm lamdba_sqs_dynamodb.zip"
+#   }
+# }
 
+### Create a local zip file containing lambda function code so we can upload to AWS
 data "archive_file" "lamdba_sqs_dynamodb_zip" {
   type         = "zip"
-  source_file  = "lamdba_sqs_dynamodb_function.py"
-  output_path  = "lamdba_sqs_dynamodb.zip"
-  depends_on   = [null_resource.lamdba_function_lamdba_sqs_dynamodb_file]
+  source_file  = "${path.module}/lamdba_sqs_dynamodb_function.py"
+  output_path  = "${path.module}/lamdba_sqs_dynamodb.zip"
 }
 
 ### Create Lambda Function ###
 resource "aws_lambda_function" "tfdemo_lamdba_sqs_dynamodb" {
-  filename      = "lamdba_sqs_dynamodb.zip"
+  filename      = "${path.module}/lamdba_sqs_dynamodb.zip"
   function_name = "${var.name_prefix}_Lambda_SQS_DynamoDB"
   role          = aws_iam_role.tfdemo_lambda_sqs_dynamodb_role.arn
   handler       = "lamdba_sqs_dynamodb_function.lambda_handler"
@@ -45,7 +45,7 @@ resource "aws_lambda_function" "tfdemo_lamdba_sqs_dynamodb" {
 
 resource "aws_lambda_event_source_mapping" "event_source_mapping" {
   batch_size        = 1
-  event_source_arn  = "${aws_sqs_queue.messages_queue.arn}"
+  event_source_arn  = aws_sqs_queue.messages_queue.arn
   enabled           = true
-  function_name     = "${aws_lambda_function.tfdemo_lamdba_sqs_dynamodb.arn}"
+  function_name     = aws_lambda_function.tfdemo_lamdba_sqs_dynamodb.arn
 }

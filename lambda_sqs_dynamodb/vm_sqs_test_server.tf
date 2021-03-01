@@ -27,10 +27,10 @@ resource "aws_instance" "sqs_test_server" {
     destination = "/tmp/generate_aws_config.sh"
   }
 
-  # provisioner "file" {
-  #   source      = "${path.module}/scripts/install_sfx_agent.sh"
-  #   destination = "/tmp/install_sfx_agent.sh"
-  # }
+  provisioner "file" {
+    source      = "${path.module}/scripts/install_sfx_agent.sh"
+    destination = "/tmp/install_sfx_agent.sh"
+  }
 
   # provisioner "file" {
   #   source      = "${path.module}/scripts/update_signalfx_config.sh"
