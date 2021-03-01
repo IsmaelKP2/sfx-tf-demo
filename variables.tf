@@ -1,5 +1,25 @@
 #File is sym linked to sub-folders
 
+# variable "instances_enabled" {
+#   default = false
+# }
+
+variable "instances_enabled" {
+  default = []
+}
+variable "lambda_functions_enabled" {
+  default = []
+}
+variable "lambda_sqs_dynamodb_enabled" {
+  default = []
+}
+variable "dashboards_enabled" {
+  default = []
+}
+variable "detectors_enabled" {
+  default = []
+}
+
 ## URL for the Java App - pulls it from the listed Git Repo
 variable "java_app_url" {
   default = "https://github.com/hagen-p/SplunkLambdaAPM.git"

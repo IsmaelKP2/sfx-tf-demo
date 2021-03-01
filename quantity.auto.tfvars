@@ -7,6 +7,15 @@
 
 ### It also controls the subnet settings created by the VPC module
 
+
+### Enable / Disable Modules
+instances_enabled = true
+lambda_functions_enabled = true
+lambda_sqs_dynamodb_enabled = true
+dashboards_enabled = true
+detectors_enabled = true
+
+
 subnet_count = "3" # max 3
 ### Subnet cidrs need to be from the vpc_cidr_block detailed in terraform.tfvars
 subnet_cidrs = [
@@ -26,14 +35,14 @@ subnet_availability_zones = [
     "eu-west-3c"
     ]
 
-collector_count = "1" # max 3
+collector_count = "2" # max 3
 collector_ids = [
     "Collector1",
     "Collector2",
     "Collector3"
     ]
 
-haproxy_count = "0" # max 3
+haproxy_count = "1" # max 3
 haproxy_ids = [
     "haproxy1",
     "haproxy2",

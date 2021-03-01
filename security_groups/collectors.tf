@@ -4,6 +4,14 @@ resource "aws_security_group" "collectors" {
   vpc_id      = var.vpc_id
 
   ingress {
+    from_port   = 55679
+    to_port     = 55680
+    protocol    = "tcp"
+    cidr_blocks = [
+      var.vpc_cidr_block
+    ]
+  }
+  ingress {
     from_port   = 9411
     to_port     = 9411
     protocol    = "tcp"
