@@ -9,15 +9,16 @@
 
 
 ### Enable / Disable Modules
-instances_enabled = true
-lambda_functions_enabled = true
-lambda_sqs_dynamodb_enabled = true
-dashboards_enabled = true
-detectors_enabled = true
+instances_enabled = false
+phone_shop_enabled = true
+lambda_sqs_dynamodb_enabled = false
+dashboards_enabled = false
+detectors_enabled = false
 
 
 subnet_count = "3" # max 3
 ### Subnet cidrs need to be from the vpc_cidr_block detailed in terraform.tfvars
+### Can these use variable values so they can be moved to terraform.tfvars
 subnet_cidrs = [
     "172.32.0.0/20",
     "172.32.16.0/20",
@@ -29,6 +30,7 @@ subnet_names = [
     "subnet3"
     ]
 ### Subnets need to belong to the AWS Region specified in 'terraform.tfvars'
+### Need to automate this via variables.tf lookup
 subnet_availability_zones = [
     "eu-west-3a",
     "eu-west-3b",
@@ -63,9 +65,14 @@ wordpress_ids = [
     "wordpress3"
     ]
 
-app_server_count = "0" # max 3
-app_server_ids = [
-    "app_server1",
-    "app_server2",
-    "app_server3"
+# app_server_count = "0" # max 3
+# app_server_ids = [
+#     "app_server1",
+#     "app_server2",
+#     "app_server3"
+#     ]
+
+phone_shop_server_count = "1" # only 1 is required
+phone_shop_server_ids = [
+    "pss1"
     ]

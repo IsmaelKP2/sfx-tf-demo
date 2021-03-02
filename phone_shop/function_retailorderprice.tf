@@ -3,7 +3,7 @@
 ## from a separate repo defined in varibales.tf in root folder
 resource "null_resource" "retailorderprice_lambda_function_file" {
   provisioner "local-exec" {
-    command = "curl -o retailorderprice_index.js ${lookup(var.function_version_function_retailorderprice_url, var.function_version)}"
+    command = "curl -o retailorderprice_index.js ${var.function_retailorderprice_url}"
   }
   provisioner "local-exec" {
     when    = destroy
@@ -21,8 +21,8 @@ data "archive_file" "retailorderprice_lambda_zip" {
 ### Create Lambda Function ###
 resource "aws_lambda_function" "retailorderprice" {
   filename      = "retailorderprice_lambda.zip"
-  function_name = "${var.name_prefix}_RetailOrderPrice"
-  role          = var.lambda_role_arn
+  function_name = "${var.environment}_RetailOrderPrice"
+  role          = aws_iam_role.lambda_role.arn
   handler       = "retailorderprice_index.handler"
   layers        = [var.region_wrapper_nodejs]
   runtime       = "nodejs12.x"

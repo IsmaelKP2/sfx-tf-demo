@@ -3,7 +3,7 @@
 ## from a separate repo defined in varibales.tf in root folder
 resource "null_resource" "retailorderdiscount_lambda_function_file" {
   provisioner "local-exec" {
-    command = "curl -o retailorderdiscount_index.js ${lookup(var.function_version_function_retailorderdiscount_url, var.function_version)}"
+    command = "curl -o retailorderdiscount_index.js ${var.function_retailorderdiscount_url}"
   }
   provisioner "local-exec" {
     when    = destroy
@@ -21,8 +21,8 @@ data "archive_file" "retailorderdiscount_lambda_zip" {
 ### Create Lambda Function ###
 resource "aws_lambda_function" "retailorderdiscount" {
   filename      = "retailorderdiscount_lambda.zip"
-  function_name = "${var.name_prefix}_RetailOrderDiscount"
-  role          = var.lambda_role_arn
+  function_name = "${var.environment}_RetailOrderDiscount"
+  role          = aws_iam_role.lambda_role.arn
   handler       = "retailorderdiscount_index.handler"
   layers        = [var.region_wrapper_nodejs]
   runtime       = "nodejs12.x"
@@ -118,7 +118,7 @@ resource "aws_lambda_permission" "retailorderdiscount_apigw" {
 
 ### COULD REPLACE THIS WITH OUTPUT AS NO LONGER USING COUNT ###
 resource "aws_ssm_parameter" "retailorderdiscount_path" {
-  name  = "${var.name_prefix}_retailorderdiscount_path"
+  name  = "${var.environment}_retailorderdiscount_path"
   type  = "String"
   value = join("/",["",aws_api_gateway_deployment.retailorderdiscount.stage_name, aws_lambda_function.retailorderdiscount.function_name])
   overwrite = true

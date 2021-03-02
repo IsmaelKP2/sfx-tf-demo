@@ -1,18 +1,8 @@
-resource "aws_instance" "app_server" {
-  count         = var.app_server_count
+resource "aws_instance" "phone_shop_server" {
+  count         = var.phone_shop_server_count
   ami           = data.aws_ami.latest-ubuntu.id
   instance_type = var.instance_type
   subnet_id     = element(var.subnet_ids, count.index)
-
-  root_block_device {
-    volume_size = 16
-    volume_type = "gp2"
-  }
-  ebs_block_device {
-    device_name = "/dev/xvdg"
-    volume_size = 8
-    volume_type = "gp2"
-  }
   key_name      = var.key_name
   vpc_security_group_ids  = [
     var.sg_allow_egress_id,
@@ -21,7 +11,7 @@ resource "aws_instance" "app_server" {
     ]
 
   tags = {
-    Name  = lower(element(var.app_server_ids, count.index))
+    Name  = lower(element(var.phone_shop_server_ids, count.index))
   }
 
   provisioner "file" {
@@ -30,18 +20,8 @@ resource "aws_instance" "app_server" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/scripts/update_signalfx_config.sh"
-    destination = "/tmp/update_signalfx_config.sh"
-  }
-
-  provisioner "file" {
     source      = "${path.module}/scripts/update_sfx_environment.sh"
     destination = "/tmp/update_sfx_environment.sh"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/agents/free_disk.yaml"
-    destination = "/tmp/free_disk.yaml"
   }
 
   provisioner "file" {
@@ -74,13 +54,6 @@ resource "aws_instance" "app_server" {
     destination = "/tmp/locust.service"
   }
 
-#### TESTING ####
-  provisioner "file" {
-    source      = "${path.module}/scripts/generate_load_vars.sh"
-    destination = "/tmp/generate_load_vars.sh"
-  }
-  #### TESTING ####
-
 # remote-exec
   provisioner "remote-exec" {
     inline = [
@@ -92,39 +65,25 @@ resource "aws_instance" "app_server" {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
 
-    # Add Data partition
-      "sudo mkdir /media/data",
-      "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",
-      "sudo mkfs.ext4 /dev/xvdg1",
-      "sudo mount /dev/xvdg1 /media/data",
-
     # Install SignalFx
       "TOKEN=${var.auth_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
       "CLUSTERNAME=${var.cluster_name}",
       "AGENTVERSION=${var.smart_agent_version}",
-      "LBURL=${aws_lb.collector-lb.dns_name}",
       "ENVIRONMENT=${var.environment}",
 
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
       
-      "sudo chmod +x /tmp/update_signalfx_config.sh",
-      "sudo /tmp/update_signalfx_config.sh $LBURL",
-
       "sudo chmod +x /tmp/update_sfx_environment.sh",
       "sudo /tmp/update_sfx_environment.sh $ENVIRONMENT",
-
-    # Add free disk monitor
-      "sudo mkdir /etc/signalfx/monitors",
-      "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
-      "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
 
     ## Phone Shop App
       ## Install Maven and update cofiguration
       "JAVA_APP_URL=${var.java_app_url}",
-      "INVOKE_URL=${var.aws_api_gateway_deployment_retailorder_invoke_url}",
+      # "INVOKE_URL=${var.aws_api_gateway_deployment_retailorder_invoke_url}",
+      "INVOKE_URL=${aws_api_gateway_deployment.retailorder.invoke_url}",
       "sudo chmod +x /tmp/java_app.sh",
       "ENV_PREFIX=${var.environment}",
       "sudo /tmp/java_app.sh $JAVA_APP_URL $INVOKE_URL $ENV_PREFIX",
@@ -185,10 +144,10 @@ resource "aws_instance" "app_server" {
   }
 }
 
-output "app_server_details" {
+output "phone_shop_server_details" {
   value =  formatlist(
     "%s, %s", 
-    aws_instance.app_server.*.tags.Name,
-    aws_instance.app_server.*.public_ip,
+    aws_instance.phone_shop_server.*.tags.Name,
+    aws_instance.phone_shop_server.*.public_ip,
   )
 }

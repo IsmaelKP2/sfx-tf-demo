@@ -3,7 +3,7 @@
 ## from a separate repo defined in varibales.tf in root folder
 resource "null_resource" "retailorderline_lambda_function_file" {
   provisioner "local-exec" {
-    command = "curl -o retailorderline_lambda_function.py ${lookup(var.function_version_function_retailorderline_url, var.function_version)}"
+    command = "curl -o retailorderline_lambda_function.py ${var.function_retailorderline_url}"
   }
   provisioner "local-exec" {
     when    = destroy
@@ -21,8 +21,8 @@ data "archive_file" "retailorderline_lambda_zip" {
 ### Create Lambda Function ###
 resource "aws_lambda_function" "retailorderline" {
   filename      = "retailorderline_lambda.zip"
-  function_name = "${var.name_prefix}_RetailOrderLine"
-  role          = var.lambda_role_arn
+  function_name = "${var.environment}_RetailOrderLine"
+  role          = aws_iam_role.lambda_role.arn
   handler       = "retailorderline_lambda_function.lambda_handler"
   layers        = [aws_lambda_layer_version.request-opentracing_2_0.arn, var.region_wrapper_python]
   runtime       = "python3.8"
@@ -30,7 +30,7 @@ resource "aws_lambda_function" "retailorderline" {
 
   environment {
     variables = {
-      LAMBDA_FUNCTION_NAME     = "${var.name_prefix}_RetailOrder"
+      LAMBDA_FUNCTION_NAME     = "${var.environment}_RetailOrder"
       SIGNALFX_ACCESS_TOKEN    = var.auth_token
       SIGNALFX_APM_ENVIRONMENT = var.environment
       SIGNALFX_METRICS_URL     = "https://ingest.${var.realm}.signalfx.com"

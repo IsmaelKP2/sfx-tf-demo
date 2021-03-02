@@ -3,7 +3,7 @@
 ## from a separate repo defined in varibales.tf in root folder
 resource "null_resource" "retailorder_lambda_function_file" {
   provisioner "local-exec" {
-    command = "curl -o retailorder_lambda_function.py ${lookup(var.function_version_function_retailorder_url, var.function_version)}"
+    command = "curl -o retailorder_lambda_function.py ${var.function_retailorder_url}"
   }
   provisioner "local-exec" {
     when    = destroy
@@ -21,8 +21,8 @@ data "archive_file" "retailorder_lambda_zip" {
 ### Create Lambda Function ###
 resource "aws_lambda_function" "retailorder" {
   filename      = "retailorder_lambda.zip"
-  function_name = "${var.name_prefix}_RetailOrder"
-  role          = var.lambda_role_arn
+  function_name = "${var.environment}_RetailOrder"
+  role          = aws_iam_role.lambda_role.arn
   handler       = "retailorder_lambda_function.lambda_handler"
   # layers        = [aws_lambda_layer_version.request-opentracing_2_0.arn, var.region_wrapper_python]
   layers        = [var.region_wrapper_python]
