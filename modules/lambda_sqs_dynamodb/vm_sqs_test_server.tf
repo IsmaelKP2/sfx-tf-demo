@@ -57,14 +57,9 @@ resource "aws_instance" "sqs_test_server" {
       "TOKEN=${var.auth_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
-      "CLUSTERNAME=${var.cluster_name}",
       "AGENTVERSION=${var.smart_agent_version}",
       "sudo chmod +x /tmp/install_sfx_agent.sh",
-      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
-      
-    #   "sudo chmod +x /tmp/update_signalfx_config.sh",
-    #   "sudo /tmp/update_signalfx_config.sh $LBURL",
-
+      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
       "sudo chmod +x /tmp/update_sfx_environment.sh",
       "sudo /tmp/update_sfx_environment.sh $ENVIRONMENT",
  

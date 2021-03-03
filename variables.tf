@@ -213,9 +213,6 @@ variable "realm" {
 variable "notification_email" {
   default = []
 }
-variable "cluster_name" {
-  default = []
-}
 variable "smart_agent_version" {
   default = []
 }

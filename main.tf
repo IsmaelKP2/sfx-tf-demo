@@ -26,11 +26,6 @@ module "detectors" {
   region             = lookup(var.aws_region, var.region)
 }
 
-# module "iam_roles" {
-#   source = "./iam_roles"
-#   region           = lookup(var.aws_region, var.region)
-# }
-
 module "security_groups" {
   source           = "./modules/security_groups"
   vpc_id           = module.vpc.vpc_id
@@ -58,7 +53,6 @@ module "phone_shop" {
   region                  = lookup(var.aws_region, var.region)
   environment             = var.environment
   realm                   = var.realm
-  cluster_name            = var.cluster_name
   smart_agent_version     = var.smart_agent_version
   instance_type           = var.instance_type
   key_name                = var.key_name
@@ -78,7 +72,6 @@ module "lambda_sqs_dynamodb" {
   region                  = lookup(var.aws_region, var.region)
   environment             = var.environment
   realm                   = var.realm
-  cluster_name            = var.cluster_name
   smart_agent_version     = var.smart_agent_version
   aws_access_key_id       = var.aws_access_key_id
   aws_secret_access_key   = var.aws_secret_access_key
@@ -97,7 +90,6 @@ module "instances" {
   auth_token              = var.auth_token
   api_url                 = var.api_url
   realm                   = var.realm
-  cluster_name            = var.cluster_name
   smart_agent_version     = var.smart_agent_version
   otelcol_version         = var.otelcol_version
   ballast                 = var.ballast
@@ -141,9 +133,6 @@ output "MySQL_Servers" {
 output "WordPress_Servers" {
   value = var.instances_enabled ? module.instances.*.wordpress_details : null
 }
-# output "App_Servers" {
-#   value = var.instances_enabled ? module.instances.*.app_server_details : null
-# }
 output "collector_lb_dns" {
   value = var.instances_enabled ? module.instances.*.collector_lb_int_dns : null
 }

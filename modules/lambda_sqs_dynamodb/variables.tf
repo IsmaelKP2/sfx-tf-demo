@@ -14,9 +14,6 @@ variable "environment" {
 variable "realm" {
   default = []
 }
-variable "cluster_name" {
-  default = []
-}
 variable "smart_agent_version" {
   default = []
 }

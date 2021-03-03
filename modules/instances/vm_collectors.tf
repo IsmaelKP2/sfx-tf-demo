@@ -57,12 +57,11 @@ resource "aws_instance" "collector" {
       "TOKEN=${var.auth_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
-      "CLUSTERNAME=${var.cluster_name}",
       "AGENTVERSION=${var.smart_agent_version}",
       "ENVIRONMENT=${var.environment}",
       
       "sudo chmod +x /tmp/install_sfx_agent.sh",
-      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
+      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
 
       "sudo sed -i -e 's+intervalSeconds.*+intervalSeconds: 1+g' /etc/signalfx/agent.yaml",
       
