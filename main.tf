@@ -1,6 +1,5 @@
 # AWS Auth Configuration
 provider "aws" {
-  # profile    = var.profile
   region     = lookup(var.aws_region, var.region)
   access_key = var.aws_access_key_id
   secret_key = var.aws_secret_access_key
@@ -9,7 +8,7 @@ provider "aws" {
 # SignalFx Provider
 provider "signalfx" {
   auth_token = var.auth_token
-  api_url = var.api_url
+  api_url    = var.api_url
 }
 
 module "dashboards" {
@@ -40,7 +39,7 @@ module "security_groups" {
 }
 
 module "vpc" {
-  source = "./vpc"
+  source = "./modules/vpc"
   vpc_name                  = var.vpc_name
   vpc_cidr_block            = var.vpc_cidr_block
   subnet_count              = var.subnet_count
