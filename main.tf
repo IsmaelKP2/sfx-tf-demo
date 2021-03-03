@@ -19,7 +19,7 @@ module "dashboards" {
 }
 
 module "detectors" {
-  source             = "./detectors"
+  source             = "./modules/detectors"
   count              = var.detectors_enabled ? 1 : 0
   notification_email = var.notification_email
   soc_integration_id = var.soc_integration_id
