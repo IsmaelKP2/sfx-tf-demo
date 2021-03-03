@@ -3,23 +3,26 @@
 # this should NOT be stored in a public source control system as it contains sensitive information
 
 ### AWS Variables ###
-profile = "<NAME>"
 region = "<REGION>"
-vpc_id = "<ID>"
+vpc_name = "tfdemo"
 vpc_cidr_block = "172.32.0.0/16"
 key_name = "<NAME>"
 private_key_path = "~/.ssh/id_rsa"
 instance_type = "t2.micro"
+aws_access_key_id = "<ACCCESS_KEY_ID>>"
+aws_secret_access_key = "<SECRET_ACCESS_KEY>>"
 
 ### SOC Variables ###
-soc_integration_id = "<ID>>"
-soc_routing_key = "<ROUTING_KEY>>"
+soc_integration_id = "<ID>"
+soc_routing_key = "<ROUTING_KEY>"
 
 ### SignalFX Variables ###
 auth_token = "<AUTH_TOKEN>"
 api_url = "https://api.eu0.signalfx.com"
 realm = "eu0"
 cluster_name = "demo"
+environment = "<ENVIRONMENT>"
+notification_email = "<EMAIL>"
 
 # smart_agent_version = "5.7.1-1" # Optional - If left blank, latest will be installed
 smart_agent_version = "" # Optional - If left blank, latest will be installed
