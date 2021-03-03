@@ -63,16 +63,16 @@ This section details the parameters required by AWS such as Region (see below fo
 
 **Region:** When you run the deployment terraform will prompt you for a realm, however if you enable the setting here, and populate it with a numerical value representing your preferred AWS Region, it will save you having to enter a value on each run. The setttings for this are controlled via variables.tf, but the valid options are:
 
-  1:eu-west-1
-  2:eu-west-3
-  3:eu-central-1
-  4:us-east-1
-  5:us-east-2
-  6:us-west-1
-  7:us-west-2
-  8:ap-southeast-1
-  9:ap-southeast-2
-  10:sa-east-1
+- 1:eu-west-1
+- 2:eu-west-3
+- 3:eu-central-1
+- 4:us-east-1
+- 5:us-east-2
+- 6:us-west-1
+- 7:us-west-2
+- 8:ap-southeast-1
+- 9:ap-southeast-2
+- 10:sa-east-1
 
 #### SOC Variables
 
