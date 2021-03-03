@@ -37,28 +37,28 @@ subnet_availability_zones = [
     "eu-west-3c"
     ]
 
-collector_count = "3" # max 3
+collector_count = "3" # min 1 : max 3
 collector_ids = [
     "Collector1",
     "Collector2",
     "Collector3"
     ]
 
-haproxy_count = "2" # max 3
+haproxy_count = "1" # min 0 : max 3
 haproxy_ids = [
     "haproxy1",
     "haproxy2",
     "haproxy3"
     ]
 
-mysql_count = "2" # max 3
+mysql_count = "1" # min 0 : max 3
 mysql_ids = [
     "mysql1",
     "mysql2",
     "mysql3"
     ]
 
-wordpress_count = "2" # max 3
+wordpress_count = "1" # min 0 : max 3
 wordpress_ids = [
     "wordpress1",
     "wordpress2",
