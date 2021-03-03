@@ -1,5 +1,4 @@
-## Enable/Disable Modules - Values are set in quantity.auto.tfvars
-
+## Enable/Disable Modules - Values are set in quantity.auto.tfvars ###
 variable "instances_enabled" {
   default = []
 }
@@ -132,21 +131,6 @@ variable "wordpress_ids" {
   default = []
 }
 
-# variable "app_server_count" {
-#   default = {}
-# }
-# variable "app_server_ids" {
-#   default = []
-# }
-
-variable "phone_shop_server_count" {
-  default = {}
-}
-variable "phone_shop_server_ids" {
-  default = []
-}
-
-
 # variable "xxx _count" {
 #   default = {}
 # }
@@ -205,10 +189,6 @@ variable "region_wrapper_nodejs" {
     "9" = "arn:aws:lambda:ap-southeast-2:254067382080:layer:signalfx-lambda-nodejs-wrapper:17"
     "10" = "arn:aws:lambda:sa-east-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:17"  
   }
-}
-
-variable "function_lamdba_sqs_dynamodb_url" {
-  default = "https://raw.githubusercontent.com/linuxacademy/content-lambda-boto3/master/Triggering-Lambda-from-SQS/lambda_function.py"
 }
 
 

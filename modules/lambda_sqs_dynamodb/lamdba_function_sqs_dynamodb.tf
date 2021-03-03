@@ -21,7 +21,7 @@ data "archive_file" "lamdba_sqs_dynamodb_zip" {
 ### Create Lambda Function ###
 resource "aws_lambda_function" "tfdemo_lamdba_sqs_dynamodb" {
   filename      = "${path.module}/lamdba_sqs_dynamodb.zip"
-  function_name = "${var.name_prefix}_Lambda_SQS_DynamoDB"
+  function_name = "${var.environment}_Lambda_SQS_DynamoDB"
   role          = aws_iam_role.tfdemo_lambda_sqs_dynamodb_role.arn
   handler       = "lamdba_sqs_dynamodb_function.lambda_handler"
   layers        = [var.region_wrapper_python]
@@ -30,10 +30,9 @@ resource "aws_lambda_function" "tfdemo_lamdba_sqs_dynamodb" {
 
   environment {
     variables = {
-      DYNAMODB_TABLE           = "${var.name_prefix}-messages"
+      DYNAMODB_TABLE           = "${var.environment}-messages"
       MAX_QUEUE_MESSAGES       = "10"
-      # QUEUE_NAME               = "Messages"
-      QUEUE_NAME               = "${var.name_prefix}-messages"
+      QUEUE_NAME               = "${var.environment}-messages"
       SIGNALFX_ACCESS_TOKEN    = var.auth_token
       SIGNALFX_APM_ENVIRONMENT = var.environment
       SIGNALFX_METRICS_URL     = "https://ingest.${var.realm}.signalfx.com"

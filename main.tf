@@ -1,7 +1,9 @@
 # AWS Auth Configuration
 provider "aws" {
-  profile    = var.profile
+  # profile    = var.profile
   region     = lookup(var.aws_region, var.region)
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 
 # SignalFx Provider
@@ -25,13 +27,13 @@ module "detectors" {
   region             = lookup(var.aws_region, var.region)
 }
 
-module "iam_roles" {
-  source = "./iam_roles"
-  region           = lookup(var.aws_region, var.region)
-}
+# module "iam_roles" {
+#   source = "./iam_roles"
+#   region           = lookup(var.aws_region, var.region)
+# }
 
 module "security_groups" {
-  source           = "./security_groups"
+  source           = "./modules/security_groups"
   vpc_id           = module.vpc.vpc_id
   vpc_cidr_block   = var.vpc_cidr_block
   region           = lookup(var.aws_region, var.region)
@@ -49,7 +51,7 @@ module "vpc" {
 }
 
 module "phone_shop" {
-  source                  = "./phone_shop"
+  source                  = "./modules/phone_shop"
   count                   = var.phone_shop_enabled ? 1 : 0
   region_wrapper_python   = lookup(var.region_wrapper_python, var.region)
   region_wrapper_nodejs   = lookup(var.region_wrapper_nodejs, var.region)
@@ -62,34 +64,33 @@ module "phone_shop" {
   instance_type           = var.instance_type
   key_name                = var.key_name
   private_key_path        = var.private_key_path
-  phone_shop_server_count = var.phone_shop_server_count
-  phone_shop_server_ids   = var.phone_shop_server_ids
   subnet_ids              = module.vpc.subnet_ids
   sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
   sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
   sg_web_id               = module.security_groups.sg_web_id
+  ami                     = data.aws_ami.latest-ubuntu.id
 }
 
-# module "lambda_sqs_dynamodb" {
-#   source                           = "./lambda_sqs_dynamodb"
-#   count                            = var.lambda_sqs_dynamodb_enabled ? 1 : 0
-#   function_lamdba_sqs_dynamodb_url = var.function_lamdba_sqs_dynamodb_url
-#   function_version                 = var.function_version
-#   region_wrapper_python            = lookup(var.region_wrapper_python, var.region)
-#   auth_token                       = var.auth_token
-#   region                           = lookup(var.aws_region, var.region)
-#   name_prefix                      = var.name_prefix
-#   environment                      = var.environment
-#   realm                            = var.realm
-#   aws_access_key_id                = var.aws_access_key_id
-#   aws_secret_access_key            = var.aws_secret_access_key
-#   key_name                         = var.key_name
-#   private_key_path                 = var.private_key_path
-#   instance_type                    = var.instance_type
-#   subnet_ids                       = module.vpc.subnet_ids
-#   sg_allow_egress_id               = module.security_groups.sg_allow_egress_id
-#   sg_allow_ssh_id                  = module.security_groups.sg_allow_ssh_id
-# }
+module "lambda_sqs_dynamodb" {
+  source                  = "./modules/lambda_sqs_dynamodb"
+  count                   = var.lambda_sqs_dynamodb_enabled ? 1 : 0
+  region_wrapper_python   = lookup(var.region_wrapper_python, var.region)
+  auth_token              = var.auth_token
+  region                  = lookup(var.aws_region, var.region)
+  environment             = var.environment
+  realm                   = var.realm
+  cluster_name            = var.cluster_name
+  smart_agent_version     = var.smart_agent_version
+  aws_access_key_id       = var.aws_access_key_id
+  aws_secret_access_key   = var.aws_secret_access_key
+  key_name                = var.key_name
+  private_key_path        = var.private_key_path
+  instance_type           = var.instance_type
+  subnet_ids              = module.vpc.subnet_ids
+  sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
+  sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
+  ami                     = data.aws_ami.latest-ubuntu.id
+}
 
 module "instances" {
   source                  = "./instances"
@@ -140,16 +141,16 @@ output "MySQL_Servers" {
 output "WordPress_Servers" {
   value = var.instances_enabled ? module.instances.*.wordpress_details : null
 }
-output "App_Servers" {
-  value = var.instances_enabled ? module.instances.*.app_server_details : null
-}
+# output "App_Servers" {
+#   value = var.instances_enabled ? module.instances.*.app_server_details : null
+# }
 output "collector_lb_dns" {
   value = var.instances_enabled ? module.instances.*.collector_lb_int_dns : null
 }
 
-# output "SQS_Test_Server" {
-#   value = var.lambda_sqs_dynamodb_enabled ? module.lambda_sqs_dynamodb.*.sqs_test_server_details : null
-# }
+output "SQS_Test_Server" {
+  value = var.lambda_sqs_dynamodb_enabled ? module.lambda_sqs_dynamodb.*.sqs_test_server_details : null
+}
 
 output "Phone_Shop_Server" {
   value = var.phone_shop_enabled ? module.phone_shop.*.phone_shop_server_details : null

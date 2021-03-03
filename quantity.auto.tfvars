@@ -11,7 +11,7 @@
 ### Enable / Disable Modules
 instances_enabled = false
 phone_shop_enabled = true
-lambda_sqs_dynamodb_enabled = false
+lambda_sqs_dynamodb_enabled = true
 dashboards_enabled = false
 detectors_enabled = false
 
@@ -37,14 +37,14 @@ subnet_availability_zones = [
     "eu-west-3c"
     ]
 
-collector_count = "2" # max 3
+collector_count = "1" # max 3
 collector_ids = [
     "Collector1",
     "Collector2",
     "Collector3"
     ]
 
-haproxy_count = "1" # max 3
+haproxy_count = "0" # max 3
 haproxy_ids = [
     "haproxy1",
     "haproxy2",
@@ -71,8 +71,3 @@ wordpress_ids = [
 #     "app_server2",
 #     "app_server3"
 #     ]
-
-phone_shop_server_count = "1" # only 1 is required
-phone_shop_server_ids = [
-    "pss1"
-    ]

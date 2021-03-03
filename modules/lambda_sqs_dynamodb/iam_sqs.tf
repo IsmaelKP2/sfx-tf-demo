@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "tfdemo_lambda_sqs_dynamodb_policy" {
-  name_prefix   = "${var.name_prefix}_lambda_sqs_dynamodb_pol_"
+  name_prefix   = "${var.environment}_lambda_sqs_dynamodb_pol_"
   description   = "Policy used by the Lambda SQS DynamoDB Role for TFDemo"
 
   policy = <<EOF
@@ -30,8 +30,7 @@ EOF
 }
 
 resource "aws_iam_role" "tfdemo_lambda_sqs_dynamodb_role" {
-  # name_prefix = "tfdemo_lambda_sqs_dynamodb_role_"
-  name_prefix = "${var.name_prefix}_lambda_sqs_dynamodb_"
+  name_prefix = "${var.environment}_lambda_sqs_dynamodb_"
     
   assume_role_policy = <<EOF
 {

@@ -1,9 +1,9 @@
 resource "aws_instance" "sqs_test_server" {
-  ami                     = data.aws_ami.latest-ubuntu.id
-  instance_type           = var.instance_type
-  subnet_id               = element(var.subnet_ids, 0)
-  key_name                = var.key_name
-  vpc_security_group_ids  = [
+  ami                       = var.ami
+  instance_type             = var.instance_type
+  subnet_id                 = element(var.subnet_ids, 0)
+  key_name                  = var.key_name
+  vpc_security_group_ids    = [
     var.sg_allow_egress_id,
     var.sg_allow_ssh_id,
     ]
@@ -37,10 +37,10 @@ resource "aws_instance" "sqs_test_server" {
   #   destination = "/tmp/update_signalfx_config.sh"
   # }
 
-  # provisioner "file" {
-  #   source      = "${path.module}/scripts/update_sfx_environment.sh"
-  #   destination = "/tmp/update_sfx_environment.sh"
-  # }
+  provisioner "file" {
+    source      = "${path.module}/scripts/update_sfx_environment.sh"
+    destination = "/tmp/update_sfx_environment.sh"
+  }
 
 # remote-exec
   provisioner "remote-exec" {
@@ -53,20 +53,20 @@ resource "aws_instance" "sqs_test_server" {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
 
-    # # Install SignalFx
-    #   "TOKEN=${var.auth_token}",
-    #   "REALM=${var.realm}",
-    #   "HOSTNAME=${self.tags.Name}",
-    #   "CLUSTERNAME=${var.cluster_name}",
-    #   "AGENTVERSION=${var.smart_agent_version}",
-    #   "sudo chmod +x /tmp/install_sfx_agent.sh",
-    #   "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
+    # Install SignalFx
+      "TOKEN=${var.auth_token}",
+      "REALM=${var.realm}",
+      "HOSTNAME=${self.tags.Name}",
+      "CLUSTERNAME=${var.cluster_name}",
+      "AGENTVERSION=${var.smart_agent_version}",
+      "sudo chmod +x /tmp/install_sfx_agent.sh",
+      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
       
     #   "sudo chmod +x /tmp/update_signalfx_config.sh",
     #   "sudo /tmp/update_signalfx_config.sh $LBURL",
 
-    #   "sudo chmod +x /tmp/update_sfx_environment.sh",
-    #   "sudo /tmp/update_sfx_environment.sh $ENVIRONMENT",
+      "sudo chmod +x /tmp/update_sfx_environment.sh",
+      "sudo /tmp/update_sfx_environment.sh $ENVIRONMENT",
  
     ## Setup testing env
       "sudo apt install python3 -y",
@@ -77,7 +77,7 @@ resource "aws_instance" "sqs_test_server" {
       "pip3 install faker --user",
       "sudo mv /tmp/sendmessage.py /home/ubuntu/send_message.py",
       "sudo chmod +x /tmp/generate_send_messages.sh",
-      "QUEUE=${var.name_prefix}-messages",
+      "QUEUE=${var.environment}-messages",
       "/tmp/generate_send_messages.sh $QUEUE",
       "sudo chmod +x /home/ubuntu/send_messages.sh",
 

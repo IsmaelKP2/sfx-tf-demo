@@ -1,17 +1,16 @@
 resource "aws_instance" "phone_shop_server" {
-  count         = var.phone_shop_server_count
-  ami           = data.aws_ami.latest-ubuntu.id
-  instance_type = var.instance_type
-  subnet_id     = element(var.subnet_ids, count.index)
-  key_name      = var.key_name
-  vpc_security_group_ids  = [
+  ami                       = var.ami
+  instance_type             = var.instance_type
+  subnet_id                 = element(var.subnet_ids, 0)
+  key_name                  = var.key_name
+  vpc_security_group_ids    = [
     var.sg_allow_egress_id,
     var.sg_allow_ssh_id,
     var.sg_web_id,
     ]
 
   tags = {
-    Name  = lower(element(var.phone_shop_server_ids, count.index))
+    Name = "pss1"
   }
 
   provisioner "file" {
@@ -82,7 +81,6 @@ resource "aws_instance" "phone_shop_server" {
     ## Phone Shop App
       ## Install Maven and update cofiguration
       "JAVA_APP_URL=${var.java_app_url}",
-      # "INVOKE_URL=${var.aws_api_gateway_deployment_retailorder_invoke_url}",
       "INVOKE_URL=${aws_api_gateway_deployment.retailorder.invoke_url}",
       "sudo chmod +x /tmp/java_app.sh",
       "ENV_PREFIX=${var.environment}",

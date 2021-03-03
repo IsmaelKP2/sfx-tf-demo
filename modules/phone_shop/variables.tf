@@ -47,12 +47,6 @@ variable "key_name" {
 variable "private_key_path"{
   default = []
 }
-variable "phone_shop_server_count" {
-  default = {}
-}
-variable "phone_shop_server_ids" {
-  default = []
-}
 variable "subnet_ids" {
   default = []
 }
@@ -80,19 +74,6 @@ variable "region_wrapper_python" {
 variable "region_wrapper_nodejs" {
   default = {}
 }
-
-## AMI ##
-data "aws_ami" "latest-ubuntu" {
-  most_recent = true
-  owners      = ["099720109477"] # This is the owner id of Canonical who owns the official aws ubuntu images
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+variable "ami" {
+  default = {}
 }
