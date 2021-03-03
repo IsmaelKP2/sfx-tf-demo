@@ -1,5 +1,3 @@
-# Variables need to be defined first in the variables.tf file
-
 # this should NOT be stored in a public source control system as it contains sensitive information
 
 ### AWS Variables ###
@@ -18,14 +16,12 @@ soc_routing_key = "<ROUTING_KEY>"
 
 ### SignalFX Variables ###
 auth_token = "<AUTH_TOKEN>"
-api_url = "https://api.eu0.signalfx.com"
-realm = "eu0"
-cluster_name = "demo"
+api_url = "https://api.<REALM>.signalfx.com"
+realm = "<REALM>"
 environment = "<ENVIRONMENT>"
 notification_email = "<EMAIL>"
 
-# smart_agent_version = "5.7.1-1" # Optional - If left blank, latest will be installed
-smart_agent_version = "" # Optional - If left blank, latest will be installed
+smart_agent_version = "" # Optional - If left blank, latest will be installed - example value would be "5.7.1-1"
 
 ### Collector Variables ###
 ### https://quay.io/repository/signalfx/splunk-otel-collector?tab=tags
