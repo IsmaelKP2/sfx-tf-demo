@@ -18,12 +18,12 @@ resource "aws_instance" "sqs_test_server" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/generate_send_messages.sh"
+    source      = "${path.module}/scripts/generate_send_messages.sh"
     destination = "/tmp/generate_send_messages.sh"
   }
 
   provisioner "file" {
-    source      = "${path.module}/generate_aws_config.sh"
+    source      = "${path.module}/scripts/generate_aws_config.sh"
     destination = "/tmp/generate_aws_config.sh"
   }
 
@@ -31,11 +31,6 @@ resource "aws_instance" "sqs_test_server" {
     source      = "${path.module}/scripts/install_sfx_agent.sh"
     destination = "/tmp/install_sfx_agent.sh"
   }
-
-  # provisioner "file" {
-  #   source      = "${path.module}/scripts/update_signalfx_config.sh"
-  #   destination = "/tmp/update_signalfx_config.sh"
-  # }
 
   provisioner "file" {
     source      = "${path.module}/scripts/update_sfx_environment.sh"
