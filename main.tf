@@ -13,7 +13,7 @@ provider "signalfx" {
 }
 
 module "dashboards" {
-  source           = "./dashboards"
+  source           = "./modules/dashboards"
   count            = var.dashboards_enabled ? 1 : 0
   region           = lookup(var.aws_region, var.region)
 }

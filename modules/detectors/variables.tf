@@ -12,12 +12,6 @@ variable "soc_routing_key" {
 }
 
 ### SignalFX Variables ###
-variable "auth_token" {
-  default = []
-}
-variable "realm" {
-  default = []
-}
 variable "notification_email" {
   default = []
 }
