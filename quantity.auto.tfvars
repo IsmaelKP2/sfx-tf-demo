@@ -9,11 +9,11 @@
 
 
 ### Enable / Disable Modules
-instances_enabled = false
+instances_enabled = true
 phone_shop_enabled = true
 lambda_sqs_dynamodb_enabled = true
-dashboards_enabled = false
-detectors_enabled = false
+dashboards_enabled = true
+detectors_enabled = true
 
 
 subnet_count = "3" # max 3
