@@ -1,19 +1,28 @@
-resource "aws_instance" "mysql" {
-  count                   = var.mysql_count
-  ami                     = data.aws_ami.latest-ubuntu.id
-  instance_type           = var.instance_type
-  subnet_id               = element(var.subnet_ids, count.index)
-  key_name                = var.key_name
-  vpc_security_group_ids  = [
+resource "aws_instance" "wordpress" {
+  count                     = var.wordpress_count
+  ami                       = var.ami
+  instance_type             = var.instance_type
+  subnet_id                 = element(var.subnet_ids, count.index)
+  root_block_device {
+    volume_size = 16
+    volume_type = "gp2"
+  }
+  ebs_block_device {
+    device_name = "/dev/xvdg"
+    volume_size = 8
+    volume_type = "gp2"
+  }
+  key_name                  = var.key_name
+  vpc_security_group_ids = [
     var.sg_allow_egress_id,
-    var.sg_mysql_id,
+    var.sg_web_id,
     var.sg_allow_ssh_id,
     ]
 
   tags = {
-    Name  = lower(element(var.mysql_ids, count.index))
+    Name  = lower(element(var.wordpress_ids, count.index))
   }
-
+ 
   provisioner "file" {
     source      = "${path.module}/scripts/install_sfx_agent.sh"
     destination = "/tmp/install_sfx_agent.sh"
@@ -25,13 +34,13 @@ resource "aws_instance" "mysql" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/scripts/install_mysql.sh"
-    destination = "/tmp/install_mysql.sh"
+    source      = "${path.module}/scripts/install_apache.sh"
+    destination = "/tmp/install_apache.sh"
   }
 
   provisioner "file" {
-    source      = "${path.module}/agents/mysql.yaml"
-    destination = "/tmp/mysql.yaml"
+    source      = "${path.module}/agents/wordpress.yaml"
+    destination = "/tmp/wordpress.yaml"
   }
 
   provisioner "file" {
@@ -39,12 +48,17 @@ resource "aws_instance" "mysql" {
     destination = "/tmp/free_disk.yaml"
   }
 
-  provisioner "remote-exec" {
+    provisioner "remote-exec" {
     inline = [
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
+      
+      "sudo mkdir /media/data",
+      "sudo echo 'type=83' | sudo sfdisk /dev/xvdg",
+      "sudo mkfs.ext4 /dev/xvdg1",
+      "sudo mount /dev/xvdg1 /media/data",
 
       "TOKEN=${var.auth_token}",
       "REALM=${var.realm}",
@@ -59,13 +73,13 @@ resource "aws_instance" "mysql" {
       "sudo /tmp/update_signalfx_config.sh $LBURL",
 
       "sudo mkdir /etc/signalfx/monitors",
-      "sudo mv /tmp/mysql.yaml /etc/signalfx/monitors/mysql.yaml",
-      "sudo chown root:root /etc/signalfx/monitors/mysql.yaml",
+      "sudo mv /tmp/wordpress.yaml /etc/signalfx/monitors/wordpress.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/wordpress.yaml",
       "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
       "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
-
-      "sudo chmod +x /tmp/install_mysql.sh",
-      "sudo /tmp/install_mysql.sh",
+      
+      "sudo chmod +x /tmp/install_apache.sh",
+      "sudo /tmp/install_apache.sh",
     ]
   }
 
@@ -78,10 +92,10 @@ resource "aws_instance" "mysql" {
   }
 }
 
-output "mysql_details" {
+output "wordpress_details" {
   value =  formatlist(
     "%s, %s", 
-    aws_instance.mysql.*.tags.Name,
-    aws_instance.mysql.*.public_ip,
+    aws_instance.wordpress.*.tags.Name,
+    aws_instance.wordpress.*.public_ip,
   )
 }

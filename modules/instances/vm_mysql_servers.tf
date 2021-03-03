@@ -1,19 +1,19 @@
-resource "aws_instance" "haproxy" {
-  count                   = var.haproxy_count
-  ami                     = data.aws_ami.latest-ubuntu.id
-  instance_type           = var.instance_type
-  subnet_id               = element(var.subnet_ids, count.index)
-  key_name                = var.key_name
-  vpc_security_group_ids  = [
+resource "aws_instance" "mysql" {
+  count                     = var.mysql_count
+  ami                       = var.ami
+  instance_type             = var.instance_type
+  subnet_id                 = element(var.subnet_ids, count.index)
+  key_name                  = var.key_name
+  vpc_security_group_ids    = [
     var.sg_allow_egress_id,
-    var.sg_web_id,
+    var.sg_mysql_id,
     var.sg_allow_ssh_id,
     ]
 
   tags = {
-    Name  = lower(element(var.haproxy_ids, count.index))
+    Name  = lower(element(var.mysql_ids, count.index))
   }
- 
+
   provisioner "file" {
     source      = "${path.module}/scripts/install_sfx_agent.sh"
     destination = "/tmp/install_sfx_agent.sh"
@@ -25,13 +25,13 @@ resource "aws_instance" "haproxy" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/scripts/install_haproxy.sh"
-    destination = "/tmp/install_haproxy.sh"
+    source      = "${path.module}/scripts/install_mysql.sh"
+    destination = "/tmp/install_mysql.sh"
   }
 
   provisioner "file" {
-    source      = "${path.module}/agents/haproxy.yaml"
-    destination = "/tmp/haproxy.yaml"
+    source      = "${path.module}/agents/mysql.yaml"
+    destination = "/tmp/mysql.yaml"
   }
 
   provisioner "file" {
@@ -52,22 +52,20 @@ resource "aws_instance" "haproxy" {
       "CLUSTERNAME=${var.cluster_name}",
       "AGENTVERSION=${var.smart_agent_version}",
       "LBURL=${aws_lb.collector-lb.dns_name}",
-      
+
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $CLUSTERNAME $AGENTVERSION",
       "sudo chmod +x /tmp/update_signalfx_config.sh",
       "sudo /tmp/update_signalfx_config.sh $LBURL",
 
       "sudo mkdir /etc/signalfx/monitors",
-      "sudo mv /tmp/haproxy.yaml /etc/signalfx/monitors/haproxy.yaml",
-      "sudo chown root:root /etc/signalfx/monitors/haproxy.yaml",
+      "sudo mv /tmp/mysql.yaml /etc/signalfx/monitors/mysql.yaml",
+      "sudo chown root:root /etc/signalfx/monitors/mysql.yaml",
       "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
       "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
-      
-      "sudo chmod +x /tmp/install_haproxy.sh",
-      "sudo /tmp/install_haproxy.sh",
-      "sudo usermod -a -G haproxy signalfx-agent",
-      "sudo service signalfx-agent restart",
+
+      "sudo chmod +x /tmp/install_mysql.sh",
+      "sudo /tmp/install_mysql.sh",
     ]
   }
 
@@ -80,10 +78,10 @@ resource "aws_instance" "haproxy" {
   }
 }
 
-output "haproxy_details" {
+output "mysql_details" {
   value =  formatlist(
     "%s, %s", 
-    aws_instance.haproxy.*.tags.Name,
-    aws_instance.haproxy.*.public_ip,
+    aws_instance.mysql.*.tags.Name,
+    aws_instance.mysql.*.public_ip,
   )
 }

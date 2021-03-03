@@ -1,10 +1,10 @@
 resource "aws_instance" "collector" {
-  count                   = var.collector_count
-  ami                     = data.aws_ami.latest-ubuntu.id
-  instance_type           = var.collector_instance_type
-  subnet_id               = element(var.subnet_ids, count.index)
-  key_name                = var.key_name
-  vpc_security_group_ids  = [
+  count                     = var.collector_count
+  ami                       = var.ami
+  instance_type             = var.collector_instance_type
+  subnet_id                 = element(var.subnet_ids, count.index)
+  key_name                  = var.key_name
+  vpc_security_group_ids    = [
     var.sg_allow_egress_id,
     var.sg_allow_ssh_id,
     var.sg_collectors_id,

@@ -92,7 +92,7 @@ module "lambda_sqs_dynamodb" {
 }
 
 module "instances" {
-  source                  = "./instances"
+  source                  = "./modules/instances"
   count                   = var.instances_enabled ? 1 : 0
   auth_token              = var.auth_token
   api_url                 = var.api_url
@@ -110,6 +110,7 @@ module "instances" {
   private_key_path        = var.private_key_path
   instance_type           = var.instance_type
   collector_instance_type = var.collector_instance_type
+  ami                     = data.aws_ami.latest-ubuntu.id
 
   sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
   sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
