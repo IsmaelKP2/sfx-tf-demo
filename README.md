@@ -2,15 +2,15 @@
 
 ## Introduction
 
-This is a collection of Terraform Modules which can be used to deploy a test environment into a new AWS VPC.  The purpose is to enable the user to deploy some typical AWS resources, and at the same time, deploy Splunk IMT and APM to monitor the deployed resources. The aim is to provide fully configured working examples to supplement the Splunk documentation, and accelerate adoption time.
+This is a collection of Terraform Modules which can be used to deploy a test environment into a new AWS VPC.  The purpose is to enable the user to deploy some typical AWS resources, and at the same time, deploy Splunk Infrastructure Monitoring and Splunk Application Performance Monitoring to monitor the deployed resources. The aim is to provide fully configured working examples to supplement the Splunk documentation, and accelerate adoption time.
 
 ## Requirements
 
-To use this repo, you need an active AWS account. Where possible resources that qualify for the free tier are used by default to enable deployment to trial accounts with minimal costs.
+To use this repo, you need an active AWS account. Where possible resources that qualify for the free tier are used by default to enable deployment to AWS trial accounts with minimal costs.
 
-You will also need a Splunk Infrastructure Monitoring Account. Some modules leverage the Splunk APM features so ideally you will also have APM enabled on your Splunk environment.  Note if you using a Trial Account, APM is not typically enabled.
+You will also need a Splunk Infrastructure Monitoring Account. Some modules leverage the Splunk APM features so ideally you will also have APM enabled on your Splunk environment.  Note if you are using a Splunk Trial Account, APM is not typically enabled.
 
-Optionally a Splunk On-Call account with an active integration with Splunk IM/APM so that the full alerting flow can be tested.
+Optionally a Splunk On-Call account with an active integration with Splunk IM/APM so that the full alerting flow can also be tested.
 
 ## Setup
 
@@ -61,19 +61,18 @@ collector_instance_type = "t2.micro"
 
 This section details the parameters required by AWS such as Region (see below for more info on this), VPC settings, SSH Auth Key, and authentication to your AWS account.
 
-**Region**
-When you run the deployment terraform will prompt you for a realm, however if you enable the setting here, and populate it with a numerical value representing your preferred AWS Region, it will save you having to enter a value on each run. The setttings for this are controlled via variables.tf, but the valid options are:
+**Region:** When you run the deployment terraform will prompt you for a realm, however if you enable the setting here, and populate it with a numerical value representing your preferred AWS Region, it will save you having to enter a value on each run. The setttings for this are controlled via variables.tf, but the valid options are:
 
-..*1:eu-west-1
-..*2:eu-west-3
-..*3:eu-central-1
-..*4:us-east-1
-..*5:us-east-2
-..*6:us-west-1
-..*7:us-west-2
-..*8:ap-southeast-1
-..*9:ap-southeast-2
-..*10:sa-east-1
+  1:eu-west-1
+  2:eu-west-3
+  3:eu-central-1
+  4:us-east-1
+  5:us-east-2
+  6:us-west-1
+  7:us-west-2
+  8:ap-southeast-1
+  9:ap-southeast-2
+  10:sa-east-1
 
 #### SOC Variables
 
