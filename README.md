@@ -30,7 +30,7 @@ The following describes each section of terraform.tfvars:
 
 ### Enable / Disable Modules
 
-There are a number of core modules which are always deployed such as VPC and Security Groups, but the modules listed under the enable/disable comment can be activated byc hanging the values from the default of "false" to "true".
+There are a number of core modules which are always deployed such as VPC and Security Groups, but the modules listed under the enable/disable comment can be activated by changing the values from the default of "false" to "true".
 
 There are no interdependencies between modules, so you can deploy any combination.  The 'Phone Shop' module is currently the only one using APM.
 
