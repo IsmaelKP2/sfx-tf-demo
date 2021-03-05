@@ -39,12 +39,12 @@ wordpress_ids = [
     ]
 
 ### AWS Variables ###
-region = "<REGION>"
-vpc_name = "tfdemo"
+#region = "<REGION>"
 
 ## VPC Subnet Settings ##
+vpc_name = "tfdemo"
 vpc_cidr_block = "172.32.0.0/16"
-subnet_count = "3" # max 3
+subnet_count = "3"
 subnet_cidrs = [
     "172.32.0.0/20",
     "172.32.16.0/20",
