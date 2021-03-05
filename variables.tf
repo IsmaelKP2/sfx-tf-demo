@@ -41,6 +41,15 @@ variable "subnet_ids" {
 variable "subnet_availability_zones" {
   default = []
 }
+variable "subnet_count" {
+  default = {}
+}
+variable "subnet_cidrs" {
+  default = {}
+}
+variable "subnet_names" {
+  default = {}
+}
 variable "key_name" {
   default = []
 }
@@ -93,16 +102,6 @@ data "aws_ami" "latest-ubuntu" {
 }
 
 ### Instance Count Variables ###
-variable "subnet_count" {
-  default = {}
-}
-variable "subnet_cidrs" {
-  default = {}
-}
-variable "subnet_names" {
-  default = {}
-}
-
 variable "collector_count" {
   default = {}
 }
@@ -162,16 +161,16 @@ variable "aws_region" {
 ## List available at https://github.com/signalfx/lambda-layer-versions/blob/master/python/PYTHON.md ##
 variable "region_wrapper_python" {
   default = {
-    "1" = "arn:aws:lambda:eu-west-1:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "2" = "arn:aws:lambda:eu-west-3:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "3" = "arn:aws:lambda:eu-central-1:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "4" = "arn:aws:lambda:us-east-1:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "5" = "arn:aws:lambda:us-east-2:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "6" = "arn:aws:lambda:us-west-1:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "7" = "arn:aws:lambda:us-west-2:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "8" = "arn:aws:lambda:ap-southeast-1:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "9" = "arn:aws:lambda:ap-southeast-2:254067382080:layer:signalfx-lambda-python-wrapper:11"
-    "10" = "arn:aws:lambda:sa-east-1:254067382080:layer:signalfx-lambda-python-wrapper:11"  
+    "1" = "arn:aws:lambda:eu-west-1:254067382080:layer:signalfx-lambda-python-wrapper:15"
+    "2" = "arn:aws:lambda:eu-west-3:254067382080:layer:signalfx-lambda-python-wrapper:15"
+    "3" = "arn:aws:lambda:eu-central-1:254067382080:layer:signalfx-lambda-python-wrapper:15"
+    "4" = "arn:aws:lambda:us-east-1:254067382080:layer:signalfx-lambda-python-wrapper:16"
+    "5" = "arn:aws:lambda:us-east-2:254067382080:layer:signalfx-lambda-python-wrapper:16"
+    "6" = "arn:aws:lambda:us-west-1:254067382080:layer:signalfx-lambda-python-wrapper:15"
+    "7" = "arn:aws:lambda:us-west-2:254067382080:layer:signalfx-lambda-python-wrapper:15"
+    "8" = "arn:aws:lambda:ap-southeast-1:254067382080:layer:signalfx-lambda-python-wrapper:15"
+    "9" = "arn:aws:lambda:ap-southeast-2:254067382080:layer:signalfx-lambda-python-wrapper:15"
+    "10" = "arn:aws:lambda:sa-east-1:254067382080:layer:signalfx-lambda-python-wrapper:15"  
   }
 }
 
@@ -180,14 +179,14 @@ variable "region_wrapper_nodejs" {
   default = {
     "1" = "arn:aws:lambda:eu-west-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
     "2" = "arn:aws:lambda:eu-west-3:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
-    "3" = "arn:aws:lambda:eu-central-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:19"
-    "4" = "arn:aws:lambda:us-east-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
-    "5" = "arn:aws:lambda:us-east-2:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
-    "6" = "arn:aws:lambda:us-west-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
-    "7" = "arn:aws:lambda:us-west-2:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
-    "8" = "arn:aws:lambda:ap-southeast-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:17"
-    "9" = "arn:aws:lambda:ap-southeast-2:254067382080:layer:signalfx-lambda-nodejs-wrapper:17"
-    "10" = "arn:aws:lambda:sa-east-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:17"  
+    "3" = "arn:aws:lambda:eu-central-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
+    "4" = "arn:aws:lambda:us-east-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:19"
+    "5" = "arn:aws:lambda:us-east-2:254067382080:layer:signalfx-lambda-nodejs-wrapper:19"
+    "6" = "arn:aws:lambda:us-west-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:19"
+    "7" = "arn:aws:lambda:us-west-2:254067382080:layer:signalfx-lambda-nodejs-wrapper:19"
+    "8" = "arn:aws:lambda:ap-southeast-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
+    "9" = "arn:aws:lambda:ap-southeast-2:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"
+    "10" = "arn:aws:lambda:sa-east-1:254067382080:layer:signalfx-lambda-nodejs-wrapper:18"  
   }
 }
 
@@ -225,38 +224,3 @@ variable "otelcol_version" {
 variable "ballast" {
   default = []
 }
-
-# variable "message_body" {
-#   type = string
-
-#   default = <<-EOF
-#     {{#if anomalous}}
-# 	    Rule "{{{ruleName}}}" in detector "{{{detectorName}}}" triggered at {{timestamp}}.
-#     {{else}}
-# 	    Rule "{{{ruleName}}}" in detector "{{{detectorName}}}" cleared at {{timestamp}}.
-#     {{/if}}
-
-#     {{#if anomalous}}
-#       Triggering condition: {{{readableRule}}}
-#     {{/if}}
-
-#     {{#if anomalous}}
-#       Signal value: {{inputs.A.value}}
-#     {{else}}
-#       Current signal value: {{inputs.A.value}}
-#     {{/if}}
-
-#     {{#notEmpty dimensions}}
-#       Signal details: {{{dimensions}}}
-#     {{/notEmpty}}
-
-#     {{#if anomalous}}
-#       {{#if runbookUrl}}
-#         Runbook: {{{runbookUrl}}}
-#       {{/if}}
-#       {{#if tip}}
-#         Tip: {{{tip}}}
-#       {{/if}}
-#     {{/if}}
-#   EOF
-# }
