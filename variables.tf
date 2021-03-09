@@ -68,6 +68,10 @@ variable "ecs_app_port" {
   description = "Port exposed by the docker image to redirect traffic to"
   default     = 8080
 }
+variable "ecs_az_count" {
+  description = "Number of AZs to cover in a given region"
+  default     = "3"
+}
 variable "ecs_health_check_path" {
   description = "Path used by ALB for Health Checks"
   default = "/"

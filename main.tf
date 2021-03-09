@@ -52,6 +52,7 @@ module "aws_ecs" {
   ecs_fargate_cpu         = var.ecs_fargate_cpu
   ecs_fargate_memory      = var.ecs_fargate_memory
   ecs_app_count           = var.ecs_app_count
+  ecs_az_count            = var.ecs_az_count
 }
 
 module "phone_shop" {

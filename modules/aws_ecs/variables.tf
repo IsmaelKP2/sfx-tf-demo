@@ -11,9 +11,9 @@ variable "ecs_app_port" {
   default     = {}
 }
 
-variable "az_count" {
+variable "ecs_az_count" {
   description = "Number of AZs to cover in a given region"
-  default     = "3"
+  default     = {}
 }
 
 variable "ecs_health_check_path" {
