@@ -13,11 +13,7 @@ resource "aws_instance" "wordpress" {
     volume_type = "gp2"
   }
   key_name                  = var.key_name
-  vpc_security_group_ids = [
-    var.sg_allow_egress_id,
-    var.sg_web_id,
-    var.sg_allow_ssh_id,
-    ]
+  vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
   tags = {
     Name  = lower(element(var.wordpress_ids, count.index))

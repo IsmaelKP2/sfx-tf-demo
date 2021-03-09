@@ -3,10 +3,7 @@ resource "aws_instance" "sqs_test_server" {
   instance_type             = var.instance_type
   subnet_id                 = element(var.public_subnet_ids, 0)
   key_name                  = var.key_name
-  vpc_security_group_ids    = [
-    var.sg_allow_egress_id,
-    var.sg_allow_ssh_id,
-    ]
+  vpc_security_group_ids    = [aws_security_group.lambda_sqs_lambda_sg.id]
 
   tags = {
     Name  = "sqs_test"

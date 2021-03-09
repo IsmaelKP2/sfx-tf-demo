@@ -11,12 +11,3 @@ variable "vpc_cidr_block" {
 variable "subnet_count" {
   default = {}
 }
-variable "subnet_cidrs" {
-  default = {}
-}
-variable "subnet_names" {
-  default = {}
-}
-variable "subnet_availability_zones" {
-  default = []
-}

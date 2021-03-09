@@ -27,26 +27,6 @@ variable "ami" {
   default = {}
 }
 
-variable "sg_allow_egress_id" {
-  default = {}
-}
-variable "sg_allow_ssh_id" {
-  default = {}
-}
-variable "sg_web_id" {
-  default = {}
-}
-variable "sg_allow_all_id" {
-  default = {}
-}
-variable "sg_mysql_id" {
-  default = {}
-}
-variable "sg_collectors_id" {
-  default = {}
-}
-
-
 ### SignalFX Variables ###
 variable "auth_token" {
   default = []

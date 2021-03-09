@@ -47,15 +47,6 @@ variable "private_key_path"{
 variable "public_subnet_ids" {
   default = []
 }
-variable "sg_allow_egress_id" {
-  default = {}
-}
-variable "sg_allow_ssh_id" {
-  default = {}
-}
-variable "sg_web_id" {
-  default = {}
-}
 variable "lambda_role_arn" {
   default = {}
 }
@@ -64,6 +55,12 @@ variable "function_timeout" {
 }
 variable "region" {
   default = {}
+}
+variable "vpc_id" {
+  default = []
+}
+variable "vpc_cidr_block" {
+  default = []
 }
 variable "region_wrapper_python" {
   default = {}

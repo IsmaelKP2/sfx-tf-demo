@@ -26,12 +26,12 @@ module "detectors" {
   region             = lookup(var.aws_region, var.region)
 }
 
-module "security_groups" {
-  source           = "./modules/security_groups"
-  vpc_id           = module.vpc.vpc_id
-  vpc_cidr_block   = var.vpc_cidr_block
-  region           = lookup(var.aws_region, var.region)
-}
+# module "security_groups" {
+#   source           = "./modules/security_groups"
+#   vpc_id           = module.vpc.vpc_id
+#   vpc_cidr_block   = var.vpc_cidr_block
+#   region           = lookup(var.aws_region, var.region)
+# }
 
 module "vpc" {
   source                    = "./modules/vpc"
@@ -61,6 +61,8 @@ module "phone_shop" {
   region_wrapper_nodejs   = lookup(var.region_wrapper_nodejs, var.region)
   auth_token              = var.auth_token
   region                  = lookup(var.aws_region, var.region)
+  vpc_id                  = module.vpc.vpc_id
+  vpc_cidr_block          = var.vpc_cidr_block
   environment             = var.environment
   realm                   = var.realm
   smart_agent_version     = var.smart_agent_version
@@ -68,9 +70,6 @@ module "phone_shop" {
   key_name                = var.key_name
   private_key_path        = var.private_key_path
   public_subnet_ids       = module.vpc.public_subnet_ids
-  sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
-  sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
-  sg_web_id               = module.security_groups.sg_web_id
   ami                     = data.aws_ami.latest-ubuntu.id
 }
 
@@ -80,6 +79,8 @@ module "lambda_sqs_dynamodb" {
   region_wrapper_python   = lookup(var.region_wrapper_python, var.region)
   auth_token              = var.auth_token
   region                  = lookup(var.aws_region, var.region)
+  vpc_id                  = module.vpc.vpc_id
+  vpc_cidr_block          = var.vpc_cidr_block
   environment             = var.environment
   realm                   = var.realm
   smart_agent_version     = var.smart_agent_version
@@ -89,8 +90,6 @@ module "lambda_sqs_dynamodb" {
   private_key_path        = var.private_key_path
   instance_type           = var.instance_type
   public_subnet_ids       = module.vpc.public_subnet_ids
-  sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
-  sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
   ami                     = data.aws_ami.latest-ubuntu.id
 }
 
@@ -113,14 +112,6 @@ module "instances" {
   instance_type           = var.instance_type
   collector_instance_type = var.collector_instance_type
   ami                     = data.aws_ami.latest-ubuntu.id
-
-  sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
-  sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
-  sg_web_id               = module.security_groups.sg_web_id
-  sg_allow_all_id         = module.security_groups.sg_allow_all_id
-  sg_mysql_id             = module.security_groups.sg_mysql_id
-  sg_collectors_id        = module.security_groups.sg_collectors_id
- 
   collector_count         = var.collector_count
   collector_ids           = var.collector_ids
   haproxy_count           = var.haproxy_count

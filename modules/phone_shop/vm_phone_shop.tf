@@ -3,12 +3,8 @@ resource "aws_instance" "phone_shop_server" {
   instance_type             = var.instance_type
   subnet_id                 = element(var.public_subnet_ids, 0)
   key_name                  = var.key_name
-  vpc_security_group_ids    = [
-    var.sg_allow_egress_id,
-    var.sg_allow_ssh_id,
-    var.sg_web_id,
-    ]
-
+  vpc_security_group_ids    = [aws_security_group.phone_shop.id]
+ 
   tags = {
     Name = "pss1"
   }

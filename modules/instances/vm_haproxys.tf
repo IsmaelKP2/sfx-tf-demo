@@ -4,11 +4,7 @@ resource "aws_instance" "haproxy" {
   instance_type             = var.instance_type
   subnet_id                 = element(var.public_subnet_ids, count.index)
   key_name                  = var.key_name
-  vpc_security_group_ids    = [
-    var.sg_allow_egress_id,
-    var.sg_web_id,
-    var.sg_allow_ssh_id,
-    ]
+  vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
   tags = {
     Name  = lower(element(var.haproxy_ids, count.index))

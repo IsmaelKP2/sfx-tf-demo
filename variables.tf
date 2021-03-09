@@ -44,16 +44,7 @@ variable "public_subnet_ids" {
 variable "private_subnet_ids" {
   default = {}
 }
-variable "subnet_availability_zones" {
-  default = []
-}
 variable "subnet_count" {
-  default = {}
-}
-variable "subnet_cidrs" {
-  default = {}
-}
-variable "subnet_names" {
   default = {}
 }
 variable "key_name" {
@@ -67,24 +58,6 @@ variable "instance_type" {
 }
 variable "collector_instance_type" {
   default = []
-}
-variable "sg_allow_egress_id" {
-  default = {}
-}
-variable "sg_allow_ssh_id" {
-  default = {}
-}
-variable "sg_web_id" {
-  default = {}
-}
-variable "sg_allow_all_id" {
-  default = {}
-}
-variable "sg_mysql_id" {
-  default = {}
-}
-variable "sg_collectors_id" {
-  default = {}
 }
 variable "aws_api_gateway_deployment_retailorder_invoke_url" {
   default = {}
