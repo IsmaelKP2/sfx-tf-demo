@@ -4,63 +4,49 @@
 # can choose to store the information in here, or enter it at run time.
 
 ### Enable / Disable Modules
-instances_enabled = false
-phone_shop_enabled = false
+ecs_cluster_enabled         = false
+instances_enabled           = false
+phone_shop_enabled          = false
 lambda_sqs_dynamodb_enabled = false
-dashboards_enabled = false
-detectors_enabled = false
+dashboards_enabled          = false
+detectors_enabled           = false
 
-collector_count = "2" # min 1 : max 3
+## Instance Quantities ##
+collector_count = "2" # min 1 : max = subnet_count
 collector_ids = [
-    "Collector1",
-    "Collector2",
-    "Collector3"
-    ]
+  "Collector1",
+  "Collector2",
+  "Collector3"
+  ]
 
-haproxy_count = "1" # min 0 : max 3
+haproxy_count = "1" # min 0 : max = subnet_count
 haproxy_ids = [
-    "haproxy1",
-    "haproxy2",
-    "haproxy3"
-    ]
+  "haproxy1",
+  "haproxy2",
+  "haproxy3"
+  ]
 
-mysql_count = "1" # min 0 : max 3
+mysql_count = "1" # min 0 : max = subnet_count
 mysql_ids = [
-    "mysql1",
-    "mysql2",
-    "mysql3"
-    ]
+  "mysql1",
+  "mysql2",
+  "mysql3"
+  ]
 
-wordpress_count = "1" # min 0 : max 3
+wordpress_count = "1" # min 0 : max = subnet_count
 wordpress_ids = [
-    "wordpress1",
-    "wordpress2",
-    "wordpress3"
-    ]
+  "wordpress1",
+  "wordpress2",
+  "wordpress3"
+  ]
 
 ### AWS Variables ###
 #region = "<REGION>"
 
-## VPC Subnet Settings ##
-vpc_name = "tfdemo"
+## VPC Settings ##
+vpc_name       = "tfdemo"
 vpc_cidr_block = "172.32.0.0/16"
-subnet_count = "3"
-subnet_cidrs = [
-    "172.32.0.0/20",
-    "172.32.16.0/20",
-    "172.32.32.0/20"
-    ]
-subnet_names = [
-    "subnet1",
-    "subnet2",
-    "subnet3"
-    ]
-# Uses 'Join' to combine the Region with the following values to generate AZ Names base on Region
-subnet_availability_zones = [
-    "a",
-    "b",
-    "c"
-    ]
+subnet_count   = "2" 
 
 ## Auth Settings ##
 key_name = "<NAME>"
@@ -84,6 +70,6 @@ smart_agent_version = "" # Optional - If left blank, latest will be installed - 
 
 ### Collector Variables ###
 ### https://quay.io/repository/signalfx/splunk-otel-collector?tab=tags
-otelcol_version = "0.21.1"
+otelcol_version = "0.20.0"
 ballast = "683"
 collector_instance_type = "t2.small"
