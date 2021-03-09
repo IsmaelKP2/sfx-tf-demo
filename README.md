@@ -47,39 +47,41 @@ The quantities of each EC2 Instance deployed as part of the "Instances" Module a
 # can choose to store the information in here, or enter it at run time.
 
 ### Enable / Disable Modules
-instances_enabled = false
-phone_shop_enabled = false
+ecs_cluster_enabled         = false
+instances_enabled           = false
+phone_shop_enabled          = false
 lambda_sqs_dynamodb_enabled = false
-dashboards_enabled = false
-detectors_enabled = false
+dashboards_enabled          = false
+detectors_enabled           = false
 
-collector_count = "2" # min 1 : max 3
+## Instance Quantities ##
+collector_count = "2" # min 1 : max = subnet_count
 collector_ids = [
-    "Collector1",
-    "Collector2",
-    "Collector3"
-    ]
+  "Collector1",
+  "Collector2",
+  "Collector3"
+  ]
 
-haproxy_count = "1" # min 0 : max 3
+haproxy_count = "1" # min 0 : max = subnet_count
 haproxy_ids = [
-    "haproxy1",
-    "haproxy2",
-    "haproxy3"
-    ]
+  "haproxy1",
+  "haproxy2",
+  "haproxy3"
+  ]
 
-mysql_count = "1" # min 0 : max 3
+mysql_count = "1" # min 0 : max = subnet_count
 mysql_ids = [
-    "mysql1",
-    "mysql2",
-    "mysql3"
-    ]
+  "mysql1",
+  "mysql2",
+  "mysql3"
+  ]
 
-wordpress_count = "1" # min 0 : max 3
+wordpress_count = "1" # min 0 : max = subnet_count
 wordpress_ids = [
-    "wordpress1",
-    "wordpress2",
-    "wordpress3"
-    ]
+  "wordpress1",
+  "wordpress2",
+  "wordpress3"
+  ]
 ```
 
 ### AWS Variables
@@ -103,36 +105,20 @@ When you run the deployment terraform will prompt you for a Region, however if y
 
 #### VPC Settings
 
-A new VPC is created, with three Subnets using the listed IP Schemas, but feel free to replace these with your values, just ensure that the Subnet ranges are part of the VPC CIDR Block.
+A new VPC is created and is used by the Instances, Phone Shop & Lambda SQS Dynamo DB modules.  The number of subnets is controlled by the 'subnet_count' parameter, and defaults to 2 which should be sufficient for most test cases.
 
-We default to using Availability Zones 'a', 'b' and 'c' for each Subnet, combining the listed values with the Region to create the full parameter.  Some Regions have additional AZs such as 'd', 'e', 'f' etc, feel free to update these, but there should be an equal number of each parameter.
+Two sets of subnets will be created, a Private and a Public Subnet, so by default 4 subnets will be created. Each Subnet will be created using a CIDR allocated from the 'vpc_cidr_block', so by default the 1st subnet will use 172.32.0.0/24, the 2nd subnet will use 172.32.1.0/24 etc.
 
-The 'subnet_count' parameter determines how many subnets are deployed and should ideally be kept to at least '3'.  If you add more subnets you will also be able to deploy more EC2 Instances and Collectors as we assign one per subnet, but we assume the max for all will be '3'.
+Note: The ECS Cluster Module will create its own unique VPC and Subnets.  At present all the variables controlling this are contained within the modules variables.tf file.
 
 ```yaml
 ### AWS Variables ###
 #region = "<REGION>"
 
-## VPC Subnet Settings ##
-vpc_name = "tfdemo"
+## VPC Settings ##
+vpc_name       = "tfdemo"
 vpc_cidr_block = "172.32.0.0/16"
-subnet_count = "3"
-subnet_cidrs = [
-    "172.32.0.0/20",
-    "172.32.16.0/20",
-    "172.32.32.0/20"
-    ]
-subnet_names = [
-    "subnet1",
-    "subnet2",
-    "subnet3"
-    ]
-# Uses 'Join' to combine the Region with the following values to generate AZ Names base on Region
-subnet_availability_zones = [
-    "a",
-    "b",
-    "c"
-    ]
+subnet_count   = "2" 
 
 ## Auth Settings ##
 key_name = "<NAME>"
