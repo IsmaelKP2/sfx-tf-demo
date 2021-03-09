@@ -1,4 +1,7 @@
 ## Enable/Disable Modules - Values are set in quantity.auto.tfvars ###
+variable "ecs_cluster_enabled" {
+  default = []
+}
 variable "instances_enabled" {
   default = []
 }
@@ -82,6 +85,36 @@ variable "sg_collectors_id" {
 }
 variable "aws_api_gateway_deployment_retailorder_invoke_url" {
   default = {}
+}
+
+## AWS_ECS Variables ##
+variable "ecs_app_port" {
+  description = "Port exposed by the docker image to redirect traffic to"
+  default     = 8080
+}
+variable "ecs_health_check_path" {
+  description = "Path used by ALB for Health Checks"
+  default = "/"
+}
+variable "ecs_app_image" {
+  description = "Docker image to run in the ECS cluster"
+  default     = "jaegertracing/example-hotrod"
+}
+variable "ecs_container_name" {
+  description = "Name of the coantiner deployed in ECS"
+  default     = "hotrod"
+}
+variable "ecs_fargate_cpu" {
+  description = "Fargate instance CPU units to provision (1 vCPU = 1024 CPU units)"
+  default     = "1024"
+}
+variable "ecs_fargate_memory" {
+  description = "Fargate instance memory to provision (in MiB)"
+  default     = "2048"
+}
+variable "ecs_app_count" {
+  description = "Number of docker containers to run"
+  default     = 3
 }
 
 ## AMI ##

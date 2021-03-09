@@ -34,7 +34,7 @@ module "security_groups" {
 }
 
 module "vpc" {
-  source = "./modules/vpc"
+  source                    = "./modules/vpc"
   vpc_name                  = var.vpc_name
   vpc_cidr_block            = var.vpc_cidr_block
   subnet_count              = var.subnet_count
@@ -42,6 +42,19 @@ module "vpc" {
   subnet_names              = var.subnet_names
   subnet_availability_zones = var.subnet_availability_zones
   region                    = lookup(var.aws_region, var.region)
+}
+
+module "aws_ecs" {
+  source                  = "./modules/aws_ecs"
+  count                   = var.ecs_cluster_enabled ? 1 : 0
+  region                  = lookup(var.aws_region, var.region)
+  ecs_app_port            = var.ecs_app_port
+  ecs_health_check_path   = var.ecs_health_check_path
+  ecs_app_image           = var.ecs_app_image
+  ecs_container_name      = var.ecs_container_name
+  ecs_fargate_cpu         = var.ecs_fargate_cpu
+  ecs_fargate_memory      = var.ecs_fargate_memory
+  ecs_app_count           = var.ecs_app_count
 }
 
 module "phone_shop" {
@@ -143,4 +156,8 @@ output "SQS_Test_Server" {
 
 output "Phone_Shop_Server" {
   value = var.phone_shop_enabled ? module.phone_shop.*.phone_shop_server_details : null
+}
+
+output "ECS_ALB_hostname" {
+  value = var.ecs_cluster_enabled ? module.aws_ecs.*.ecs_alb_hostname : null
 }
