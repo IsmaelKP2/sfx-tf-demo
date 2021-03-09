@@ -1,7 +1,7 @@
 resource "aws_instance" "phone_shop_server" {
   ami                       = var.ami
   instance_type             = var.instance_type
-  subnet_id                 = element(var.subnet_ids, 0)
+  subnet_id                 = element(var.public_subnet_ids, 0)
   key_name                  = var.key_name
   vpc_security_group_ids    = [
     var.sg_allow_egress_id,

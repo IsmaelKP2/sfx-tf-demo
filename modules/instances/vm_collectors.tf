@@ -2,7 +2,7 @@ resource "aws_instance" "collector" {
   count                     = var.collector_count
   ami                       = var.ami
   instance_type             = var.collector_instance_type
-  subnet_id                 = element(var.subnet_ids, count.index)
+  subnet_id                 = element(var.public_subnet_ids, count.index)
   key_name                  = var.key_name
   vpc_security_group_ids    = [
     var.sg_allow_egress_id,

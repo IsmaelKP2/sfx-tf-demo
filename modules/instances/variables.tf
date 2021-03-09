@@ -8,8 +8,8 @@ variable "vpc_id" {
 variable "vpc_cidr_block" {
   default = []
 }
-variable "subnet_ids" {
-  default = []
+variable "public_subnet_ids" {
+  default = {}
 }
 variable "key_name" {
   default = []

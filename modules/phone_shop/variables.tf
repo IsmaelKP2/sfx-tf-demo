@@ -44,7 +44,7 @@ variable "key_name" {
 variable "private_key_path"{
   default = []
 }
-variable "subnet_ids" {
+variable "public_subnet_ids" {
   default = []
 }
 variable "sg_allow_egress_id" {

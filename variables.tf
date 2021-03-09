@@ -38,8 +38,11 @@ variable "vpc_name" {
 variable "vpc_cidr_block" {
   default = []
 }
-variable "subnet_ids" {
-  default = []
+variable "public_subnet_ids" {
+  default = {}
+}
+variable "private_subnet_ids" {
+  default = {}
 }
 variable "subnet_availability_zones" {
   default = []

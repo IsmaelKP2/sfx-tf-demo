@@ -38,9 +38,6 @@ module "vpc" {
   vpc_name                  = var.vpc_name
   vpc_cidr_block            = var.vpc_cidr_block
   subnet_count              = var.subnet_count
-  subnet_cidrs              = var.subnet_cidrs
-  subnet_names              = var.subnet_names
-  subnet_availability_zones = var.subnet_availability_zones
   region                    = lookup(var.aws_region, var.region)
 }
 
@@ -70,7 +67,7 @@ module "phone_shop" {
   instance_type           = var.instance_type
   key_name                = var.key_name
   private_key_path        = var.private_key_path
-  subnet_ids              = module.vpc.subnet_ids
+  public_subnet_ids       = module.vpc.public_subnet_ids
   sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
   sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
   sg_web_id               = module.security_groups.sg_web_id
@@ -91,7 +88,7 @@ module "lambda_sqs_dynamodb" {
   key_name                = var.key_name
   private_key_path        = var.private_key_path
   instance_type           = var.instance_type
-  subnet_ids              = module.vpc.subnet_ids
+  public_subnet_ids       = module.vpc.public_subnet_ids
   sg_allow_egress_id      = module.security_groups.sg_allow_egress_id
   sg_allow_ssh_id         = module.security_groups.sg_allow_ssh_id
   ami                     = data.aws_ami.latest-ubuntu.id
@@ -110,7 +107,7 @@ module "instances" {
   region                  = lookup(var.aws_region, var.region)
   vpc_id                  = module.vpc.vpc_id
   vpc_cidr_block          = var.vpc_cidr_block
-  subnet_ids              = module.vpc.subnet_ids
+  public_subnet_ids       = module.vpc.public_subnet_ids
   key_name                = var.key_name
   private_key_path        = var.private_key_path
   instance_type           = var.instance_type

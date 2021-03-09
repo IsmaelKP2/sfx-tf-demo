@@ -1,12 +1,29 @@
-resource "aws_subnet" "tfdemo_subnets" {
-  count       = var.subnet_count
-  vpc_id      = aws_vpc.vpc_tfdemo.id
-  # availability_zone = element(var.subnet_availability_zones, count.index)
-  availability_zone = join("",[var.region, (element(var.subnet_availability_zones, count.index))]) 
-  cidr_block  = element(var.subnet_cidrs, count.index)
+# Fetch AZs in the current region
+data "aws_availability_zones" "available" {
+}
+
+# Create private subnets, each in a different AZ
+resource "aws_subnet" "private_subnets" {
+  count             = var.subnet_count
+  cidr_block        = cidrsubnet(aws_vpc.vpc_tfdemo.cidr_block, 8, count.index)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  vpc_id            = aws_vpc.vpc_tfdemo.id
+
+  tags = {
+    Name  =        join("_", [var.vpc_name, "private", count.index])
+  }
+}
+
+
+# Create public subnets, each in a different AZ
+resource "aws_subnet" "public_subnets" {
+  count                   = var.subnet_count
+  cidr_block              = cidrsubnet(aws_vpc.vpc_tfdemo.cidr_block, 8, var.subnet_count + count.index)
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  vpc_id                  = aws_vpc.vpc_tfdemo.id
   map_public_ip_on_launch = true
 
   tags = {
-    Name  = element(var.subnet_names, count.index)
+    Name  =        join("_", [var.vpc_name, "public", count.index])
   }
 }

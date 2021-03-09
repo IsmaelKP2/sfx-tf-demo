@@ -6,7 +6,7 @@ resource "aws_lb" "collector-lb" {
     var.sg_collectors_id,
     var.sg_allow_egress_id,
     ]
-  subnets = var.subnet_ids
+  subnets = var.public_subnet_ids
 
   enable_deletion_protection = false
 }
