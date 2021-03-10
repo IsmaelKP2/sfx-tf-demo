@@ -48,7 +48,7 @@ monitors:
   - type: vmem
 
   - type: collectd/nginx
-    discoveryRule: name == "nginx" && port == 80
+    discoveryRule: container_image == "nginx" && port == 80
 
   - type: docker-container-stats
     labelsToDimensions:
