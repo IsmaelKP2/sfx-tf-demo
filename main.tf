@@ -26,19 +26,12 @@ module "detectors" {
   region             = lookup(var.aws_region, var.region)
 }
 
-# module "security_groups" {
-#   source           = "./modules/security_groups"
-#   vpc_id           = module.vpc.vpc_id
-#   vpc_cidr_block   = var.vpc_cidr_block
-#   region           = lookup(var.aws_region, var.region)
-# }
-
 module "vpc" {
-  source                    = "./modules/vpc"
-  vpc_name                  = var.vpc_name
-  vpc_cidr_block            = var.vpc_cidr_block
-  subnet_count              = var.subnet_count
-  region                    = lookup(var.aws_region, var.region)
+  source                  = "./modules/vpc"
+  vpc_name                = var.vpc_name
+  vpc_cidr_block          = var.vpc_cidr_block
+  subnet_count            = var.subnet_count
+  region                  = lookup(var.aws_region, var.region)
 }
 
 module "aws_ecs" {
@@ -53,6 +46,35 @@ module "aws_ecs" {
   ecs_fargate_memory      = var.ecs_fargate_memory
   ecs_app_count           = var.ecs_app_count
   ecs_az_count            = var.ecs_az_count
+}
+
+module "eks" {
+  source                  = "./modules/eks"
+  count                   = var.eks_cluster_enabled ? 1 : 0
+  region                  = lookup(var.aws_region, var.region)
+  environment             = var.environment
+  smart_agent_version     = var.smart_agent_version
+  auth_token              = var.auth_token
+  realm                   = var.realm
+
+  vpc_id                  = module.vpc.vpc_id
+  vpc_cidr_block          = var.vpc_cidr_block
+  public_subnet_ids       = module.vpc.public_subnet_ids
+  aws_access_key_id       = var.aws_access_key_id
+  aws_secret_access_key   = var.aws_secret_access_key
+  
+  instance_type           = var.instance_type
+  ami                     = data.aws_ami.latest-ubuntu.id
+  key_name                = var.key_name
+  private_key_path        = var.private_key_path
+
+  eks_cluster_name        = var.eks_cluster_name
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
 }
 
 module "phone_shop" {
@@ -121,6 +143,11 @@ module "instances" {
   mysql_ids               = var.mysql_ids
   wordpress_count         = var.wordpress_count
   wordpress_ids           = var.wordpress_ids
+  splunk_ent_count        = var.splunk_ent_count
+  splunk_ent_ids          = var.splunk_ent_ids
+  splunk_ent_version      = var.splunk_ent_version
+  splunk_ent_filename     = var.splunk_ent_filename
+  splunk_ent_inst_type    = var.splunk_ent_inst_type
 }
 
 output "Collectors" {
@@ -138,15 +165,44 @@ output "WordPress_Servers" {
 output "collector_lb_dns" {
   value = var.instances_enabled ? module.instances.*.collector_lb_int_dns : null
 }
-
+output "Splunk_Enterprise_Server" {
+  value = var.instances_enabled ? module.instances.*.splunk_ent_details : null
+}
 output "SQS_Test_Server" {
   value = var.lambda_sqs_dynamodb_enabled ? module.lambda_sqs_dynamodb.*.sqs_test_server_details : null
 }
-
 output "Phone_Shop_Server" {
   value = var.phone_shop_enabled ? module.phone_shop.*.phone_shop_server_details : null
 }
-
 output "ECS_ALB_hostname" {
   value = var.ecs_cluster_enabled ? module.aws_ecs.*.ecs_alb_hostname : null
 }
+
+### EKS Outputs ###
+# output "eks_cluster_id" {
+#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_id : null
+# }
+# output "eks_cluster_endpoint" {
+#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_endpoint : null
+# }
+# output "eks_cluster_security_group_id" {
+#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_security_group_id : null
+# }
+# output "eks_kubectl_config" {
+#   value = var.eks_cluster_enabled ? module.eks.*.eks_kubectl_config : null
+# }
+# output "eks_config_map_aws_auth" {
+#   value = var.eks_cluster_enabled ? module.eks.*.eks_config_map_aws_auth : null
+# }
+# output "eks_cluster_name" {
+#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_name : null
+# }
+
+
+# output "eks_cluster_endpoint" {
+#   value = module.eks.*.eks_cluster_endpoint
+# }
+
+# output "eks_cluster_name" {
+#   value = module.eks.*.eks_cluster_name
+# }

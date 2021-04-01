@@ -1,4 +1,7 @@
 ## Enable/Disable Modules - Values are set in quantity.auto.tfvars ###
+variable "eks_cluster_enabled" {
+  default = []
+}
 variable "ecs_cluster_enabled" {
   default = []
 }
@@ -61,6 +64,16 @@ variable "collector_instance_type" {
 }
 variable "aws_api_gateway_deployment_retailorder_invoke_url" {
   default = {}
+}
+
+## EKS Variables ##
+# variable "eks_az_count" {
+#   description = "Number of AZs to cover in a given region"
+#   default     = "3"
+# }
+variable "eks_cluster_name" {
+  default = "terraform-eks-demo"
+  # type    = string
 }
 
 ## AWS_ECS Variables ##
@@ -140,6 +153,13 @@ variable "wordpress_count" {
   default = {}
 }
 variable "wordpress_ids" {
+  default = []
+}
+
+variable "splunk_ent_count" {
+  default = {}
+}
+variable "splunk_ent_ids" {
   default = []
 }
 
@@ -235,5 +255,16 @@ variable "otelcol_version" {
   default = []
 }
 variable "ballast" {
+  default = []
+}
+
+### Splunk Enterprise Variables ###
+variable "splunk_ent_version" {
+  default = {}
+}
+variable "splunk_ent_filename" {
+  default = {}
+}
+variable "splunk_ent_inst_type" {
   default = []
 }
