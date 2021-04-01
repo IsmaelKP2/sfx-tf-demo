@@ -33,6 +33,7 @@ receivers:
             action: drop
 
   sapm:
+    # access_token_passthrough: true # Testing
 
   signalfx:
   ### https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/master/receiver/signalfxreceiver

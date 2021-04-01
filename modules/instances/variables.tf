@@ -74,3 +74,22 @@ variable "wordpress_count" {
 variable "wordpress_ids" {
   default = []
 }
+
+
+
+### Splunk Enterprise Variables ###
+variable "splunk_ent_count" {
+  default = {}
+}
+variable "splunk_ent_ids" {
+  default = []
+}
+variable "splunk_ent_version" {
+  default = {}
+}
+variable "splunk_ent_filename" {
+  default = {}
+}
+variable "splunk_ent_inst_type" {
+  default = []
+}

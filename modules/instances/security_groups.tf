@@ -1,8 +1,9 @@
 resource "aws_security_group" "instances_sg" {
-  name        = "Instances SG"
-  description = "Allow ingress traffic between Instances and Egress to Internet"
-  vpc_id      = var.vpc_id
+  name          = "Instances SG"
+  description   = "Allow ingress traffic between Instances and Egress to Internet"
+  vpc_id        = var.vpc_id
 
+  ## Allow all traffic between group members
   ingress {
     from_port   = 0
     to_port     = 0
@@ -10,6 +11,7 @@ resource "aws_security_group" "instances_sg" {
     self = true
   }
 
+  ## Allow SSH - required for Terraform
   ingress {
     from_port   = 22
     to_port     = 22
@@ -17,6 +19,7 @@ resource "aws_security_group" "instances_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ## Allow all egress traffic
   egress {
     from_port   = 0
     to_port     = 0
@@ -24,5 +27,19 @@ resource "aws_security_group" "instances_sg" {
     cidr_blocks = [
       "0.0.0.0/0"
     ]
+  }
+}
+
+
+resource "aws_security_group" "splunk_ent_sg" {
+  name          = "Splunk Ent SG"
+  description   = "Allow access to Splunk Enterprise UI via Internet"
+  vpc_id        = var.vpc_id
+
+  ingress {
+    from_port   = 8000
+    to_port     = 8000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

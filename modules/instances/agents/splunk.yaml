@@ -1,0 +1,15 @@
+---
+  - type: collectd/processes
+    processes:
+    - splunkd
+    - mongod
+    collectContextSwitch: true
+  
+  - type: collectd/systemd
+    intervalSeconds: 10
+    services:
+      - splunk
+      - mongod
+    sendActiveState: true
+    sendSubState: true
+    sendLoadState: true
