@@ -91,5 +91,5 @@ variable "splunk_ent_filename" {
   default = {}
 }
 variable "splunk_ent_inst_type" {
-  default = []
+  default = {}
 }

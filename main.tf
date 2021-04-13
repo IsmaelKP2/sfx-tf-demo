@@ -165,9 +165,6 @@ output "WordPress_Servers" {
 output "collector_lb_dns" {
   value = var.instances_enabled ? module.instances.*.collector_lb_int_dns : null
 }
-output "Splunk_Enterprise_Server" {
-  value = var.instances_enabled ? module.instances.*.splunk_ent_details : null
-}
 output "SQS_Test_Server" {
   value = var.lambda_sqs_dynamodb_enabled ? module.lambda_sqs_dynamodb.*.sqs_test_server_details : null
 }
@@ -177,6 +174,16 @@ output "Phone_Shop_Server" {
 output "ECS_ALB_hostname" {
   value = var.ecs_cluster_enabled ? module.aws_ecs.*.ecs_alb_hostname : null
 }
+output "Splunk_Enterprise_Server" {
+  value = var.instances_enabled ? module.instances.*.splunk_ent_details : null
+}
+output "splunk_password" {
+  value = var.instances_enabled ? module.instances.*.splunk_password : null
+}
+output "splunk_url" {
+  value = var.instances_enabled ? module.instances.*.splunk_ent_urls : null
+}
+
 
 ### EKS Outputs ###
 # output "eks_cluster_id" {

@@ -1,3 +1,9 @@
+resource "random_password" "splunk_password" {
+  length           = 12
+  special          = true
+  override_special = "@£$"
+}
+
 resource "aws_instance" "splunk_ent" {
   count                     = var.splunk_ent_count
   ami                       = var.ami
@@ -28,6 +34,11 @@ resource "aws_instance" "splunk_ent" {
   }
 
   provisioner "file" {
+    source      = "${path.module}/scripts/install_splunk.sh"
+    destination = "/tmp/install_splunk.sh"
+  }
+
+  provisioner "file" {
     source      = "${path.module}/agents/splunk.yaml"
     destination = "/tmp/splunk.yaml"
   }
@@ -50,23 +61,31 @@ resource "aws_instance" "splunk_ent" {
       "AGENTVERSION=${var.smart_agent_version}",
       "LBURL=${aws_lb.collector-lb.dns_name}",
       
+    ## Create Splunk Ent Vars
+      "SPLUNK_PASSWORD=${random_password.splunk_password.result}",
+      "SPLUNK_ENT_VERSION=${var.splunk_ent_version}",
+      "SPLUNK_FILENAME=${var.splunk_ent_filename}",
+
+    ## Write env vars to file (used for debugging)
+      "echo $SPLUNK_PASSWORD > /tmp/splunk_password",
+      "echo $SPLUNK_ENT_VERSION > /tmp/splunk_ent_version",
+      "echo $SPLUNK_FILENAME > /tmp/splunk_filename",
+
+    ## Install Splunk
+      "sudo chmod +x /tmp/install_splunk.sh",
+      "sudo /tmp/install_splunk.sh $SPLUNK_PASSWORD $SPLUNK_ENT_VERSION $SPLUNK_FILENAME",
+    
+    ## Install SignalFX Agent
       "sudo chmod +x /tmp/install_sfx_agent.sh",
       "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
       "sudo chmod +x /tmp/update_signalfx_config.sh",
       "sudo /tmp/update_signalfx_config.sh $LBURL",
 
+    ## Add Monitors
       "sudo mkdir /etc/signalfx/monitors",
       "sudo mv /tmp/splunk.yaml /etc/signalfx/monitors/splunk.yaml",
-      #"sudo chown root:root /etc/signalfx/monitors/splunk.yaml",
       "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
-      #"sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
       "sudo chown root:root /etc/signalfx/monitors/*.*",
-      
-      "sudo wget -O /tmp/splunk-8.1.2-545206cc9f70-Linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.1.2&product=splunk&filename=splunk-8.1.2-545206cc9f70-Linux-x86_64.tgz&wget=true'",
-      "sudo tar -zxvf /tmp/splunk-8.1.2-545206cc9f70-Linux-x86_64.tgz -C /opt",
-      "sudo /opt/splunk/bin/splunk cmd splunkd rest --noauth POST /services/authentication/users 'name=admin&password=password&roles=admin'",
-      "sudo /opt/splunk/bin/splunk start --accept-license --answer-yes",
-      "sudo /opt/splunk/bin/splunk enable boot-start",
     ]
   }
 
@@ -85,4 +104,17 @@ output "splunk_ent_details" {
     aws_instance.splunk_ent.*.tags.Name,
     aws_instance.splunk_ent.*.public_ip,
   )
+}
+
+output "splunk_ent_urls" {
+  value =  formatlist(
+    "%s%s:%s", 
+    "http://",
+    aws_instance.splunk_ent.*.public_ip,
+    "8000",
+  )
+}
+
+output "splunk_password" {
+  value = random_password.splunk_password.result
 }

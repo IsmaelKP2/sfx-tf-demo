@@ -259,12 +259,12 @@ variable "ballast" {
 }
 
 ### Splunk Enterprise Variables ###
-variable "splunk_ent_version" {
-  default = {}
-}
 variable "splunk_ent_filename" {
   default = {}
 }
+variable "splunk_ent_version" {
+  default = {}
+}
 variable "splunk_ent_inst_type" {
-  default = []
+  default = {}
 }
