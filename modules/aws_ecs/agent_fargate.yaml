@@ -25,7 +25,7 @@ monitors:
   - type: memory
   - type: collectd/protocols
   - type: vmem
-  
+
 # for jmx stats- configure as you like  
   - type: collectd/genericjmx
     host: localhost
@@ -43,8 +43,7 @@ monitors:
   - type: signalfx-forwarder
     listenAddress: 0.0.0.0:9080
     extraSpanTags:
-      environment: trace-generator
-# environment is your 'tenant' to separate organizations
+      environment: tfdemo-ecs-hotrod
 
   - type: ecs-metadata
     excludedImages:
