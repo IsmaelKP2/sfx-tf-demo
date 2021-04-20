@@ -64,7 +64,7 @@ metricsToExclude:
 # must be given as a YAML/JSON object.
 _: {"#from": "env:CONFIG_OVERRIDE", optional: true, flatten: true}
 
-traceEndpointUrl: "https://ingest.eu0.signalfx.com/v2/trace"
+# traceEndpointUrl: "https://ingest.eu0.signalfx.com/v2/trace"
 # or set environment variable SIGNALFX_ENDPOINT_URL
 
 collectd:
