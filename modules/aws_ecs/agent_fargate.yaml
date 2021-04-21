@@ -27,18 +27,18 @@ monitors:
   - type: collectd/protocols
   - type: vmem
 
-# for jmx stats- configure as you like  
-  - type: collectd/genericjmx
-    host: localhost
-    port: 3000
-    mBeanDefinitions:
-      threading:
-        objectName: java.lang:type=Threading
-        values:
-        - type: gauge
-          table: false
-          instancePrefix: jvm.threads.count
-          attribute: ThreadCount
+# # for jmx stats- configure as you like  
+#   - type: collectd/genericjmx
+#     host: localhost
+#     port: 3000
+#     mBeanDefinitions:
+#       threading:
+#         objectName: java.lang:type=Threading
+#         values:
+#         - type: gauge
+#           table: false
+#           instancePrefix: jvm.threads.count
+#           attribute: ThreadCount
 
 # for tracing
   - type: signalfx-forwarder
