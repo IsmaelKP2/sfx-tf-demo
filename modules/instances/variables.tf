@@ -28,7 +28,7 @@ variable "ami" {
 }
 
 ### SignalFX Variables ###
-variable "auth_token" {
+variable "access_token" {
   default = []
 }
 variable "api_url" {

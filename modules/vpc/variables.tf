@@ -2,6 +2,9 @@
 variable "region" {
   default = {}
 }
+variable "environment" {
+  default = []
+}
 variable "vpc_name" {
   default = []
 }

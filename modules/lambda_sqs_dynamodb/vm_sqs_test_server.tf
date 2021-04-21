@@ -46,7 +46,7 @@ resource "aws_instance" "sqs_test_server" {
       "sudo apt-get upgrade -y",
 
     # Install SignalFx
-      "TOKEN=${var.auth_token}",
+      "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
       "AGENTVERSION=${var.smart_agent_version}",

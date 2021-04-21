@@ -8,7 +8,8 @@ resource "aws_instance" "eks_admin_server" {
   ]
  
   tags = {
-    Name = "eks_admin"
+    # Name = "eks_admin"
+    Name = "${var.environment}_eks_admin"
   }
 
   provisioner "file" {
@@ -65,7 +66,7 @@ resource "aws_instance" "eks_admin_server" {
       "sudo apt-get upgrade -y",
 
     ## Install SignalFx
-      "TOKEN=${var.auth_token}",
+      "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
       "AGENTVERSION=${var.smart_agent_version}",
@@ -117,6 +118,10 @@ resource "aws_instance" "eks_admin_server" {
     ## Configure motd
       "sudo curl -s https://raw.githubusercontent.com/signalfx/observability-workshop/master/cloud-init/motd -o /etc/motd",
       "sudo chmod -x /etc/update-motd.d/*",
+
+    ## Add Cluster Details to S3
+      # "BUCKET=${aws_s3_bucket.eksurl.id}",
+      # "kubectl get svc hotrod | grep hotrod | tr -s ' ' | cut -d ' ' -f 4 | aws s3 cp - s3://$BUCKET/eksurl.txt",
     ]
   }
 

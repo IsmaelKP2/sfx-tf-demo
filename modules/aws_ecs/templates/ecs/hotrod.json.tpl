@@ -5,7 +5,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                  "awslogs-group": "/ecs/tfdemo",
+                  "awslogs-group": "${environment}/ecs",
                   "awslogs-region": "${region}",
                   "awslogs-stream-prefix": "signalfx-agent"
                 }
@@ -20,23 +20,27 @@
             "environment": [
                 {
                     "name": "ACCESS_TOKEN",
-                    "value": "dAb_HPT5SSP243Af4lYikg"
+                    "value": "${access_token}"
                 },
                 {
                     "name": "INGEST_URL",
-                    "value": "https://ingest.eu0.signalfx.com"
+                    "value": "https://ingest.${realm}.signalfx.com"
                 },
                 {
                     "name": "API_URL",
-                    "value": "https://api.eu0.signalfx.com"
+                    "value": "https://api.${realm}.signalfx.com"
                 },
                 {
                     "name": "CONFIG_URL",
-                    "value": "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/master/modules/aws_ecs/agent_fargate.yaml"
+                    "value": "${agent_url}"
                 },
                 {
                     "name": "TRACE_ENDPOINT_URL",
-                    "value": "https://ingest.eu0.signalfx.com/v2/trace"
+                    "value": "https://ingest.${realm}.signalfx.com/v2/trace"
+                },
+                {
+                    "name": "SPAN_TAGS",
+                    "value": "${environment}-ecs-hotrod"
                 }
             ],
             "dockerLabels": {
@@ -49,9 +53,9 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                  "awslogs-group": "/ecs/tfdemo",
+                  "awslogs-group": "${environment}/ecs",
                   "awslogs-region": "${region}",
-                  "awslogs-stream-prefix": "ecs"
+                  "awslogs-stream-prefix": "hotrod"
                 }
             },
             "portMappings": [

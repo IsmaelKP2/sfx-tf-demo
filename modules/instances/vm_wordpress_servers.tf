@@ -16,7 +16,7 @@ resource "aws_instance" "wordpress" {
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
   tags = {
-    Name  = lower(element(var.wordpress_ids, count.index))
+    Name = lower(join("_",[var.environment,element(var.wordpress_ids, count.index)]))
   }
  
   provisioner "file" {
@@ -56,7 +56,7 @@ resource "aws_instance" "wordpress" {
       "sudo mkfs.ext4 /dev/xvdg1",
       "sudo mount /dev/xvdg1 /media/data",
 
-      "TOKEN=${var.auth_token}",
+      "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
       "AGENTVERSION=${var.smart_agent_version}",

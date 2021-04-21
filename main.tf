@@ -7,8 +7,8 @@ provider "aws" {
 
 # SignalFx Provider
 provider "signalfx" {
-  auth_token = var.auth_token
-  api_url    = var.api_url
+  auth_token      = var.access_token
+  api_url         = var.api_url
 }
 
 module "dashboards" {
@@ -28,16 +28,21 @@ module "detectors" {
 
 module "vpc" {
   source                  = "./modules/vpc"
-  vpc_name                = var.vpc_name
+  vpc_name                = var.environment
   vpc_cidr_block          = var.vpc_cidr_block
   subnet_count            = var.subnet_count
   region                  = lookup(var.aws_region, var.region)
+  environment             = var.environment
 }
 
 module "aws_ecs" {
   source                  = "./modules/aws_ecs"
   count                   = var.ecs_cluster_enabled ? 1 : 0
   region                  = lookup(var.aws_region, var.region)
+  access_token            = var.access_token
+  realm                   = var.realm
+  environment             = var.environment
+  ecs_agent_url           = var.ecs_agent_url
   ecs_app_port            = var.ecs_app_port
   ecs_health_check_path   = var.ecs_health_check_path
   ecs_app_image           = var.ecs_app_image
@@ -54,7 +59,7 @@ module "eks" {
   region                  = lookup(var.aws_region, var.region)
   environment             = var.environment
   smart_agent_version     = var.smart_agent_version
-  auth_token              = var.auth_token
+  access_token            = var.access_token
   realm                   = var.realm
 
   vpc_id                  = module.vpc.vpc_id
@@ -82,7 +87,7 @@ module "phone_shop" {
   count                   = var.phone_shop_enabled ? 1 : 0
   region_wrapper_python   = lookup(var.region_wrapper_python, var.region)
   region_wrapper_nodejs   = lookup(var.region_wrapper_nodejs, var.region)
-  auth_token              = var.auth_token
+  access_token            = var.access_token
   region                  = lookup(var.aws_region, var.region)
   vpc_id                  = module.vpc.vpc_id
   vpc_cidr_block          = var.vpc_cidr_block
@@ -100,7 +105,7 @@ module "lambda_sqs_dynamodb" {
   source                  = "./modules/lambda_sqs_dynamodb"
   count                   = var.lambda_sqs_dynamodb_enabled ? 1 : 0
   region_wrapper_python   = lookup(var.region_wrapper_python, var.region)
-  auth_token              = var.auth_token
+  access_token            = var.access_token
   region                  = lookup(var.aws_region, var.region)
   vpc_id                  = module.vpc.vpc_id
   vpc_cidr_block          = var.vpc_cidr_block
@@ -119,7 +124,7 @@ module "lambda_sqs_dynamodb" {
 module "instances" {
   source                  = "./modules/instances"
   count                   = var.instances_enabled ? 1 : 0
-  auth_token              = var.auth_token
+  access_token            = var.access_token
   api_url                 = var.api_url
   realm                   = var.realm
   smart_agent_version     = var.smart_agent_version

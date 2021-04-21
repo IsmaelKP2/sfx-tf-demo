@@ -2,8 +2,25 @@ variable "region" {
   default = {}
 }
 
+variable "environment" {
+  default = {}
+}
+
+variable "access_token" {
+  default = []
+}
+
+variable "realm" {
+  default = []
+}
+
 variable "ecs_vpc_name" {
-  default = "tfdemo_ecs_vpc"
+  default = "ecs_vpc"
+}
+
+variable "ecs_agent_url" {
+  description = "Path to the agent file to be used for ecs"
+  default     = {}  
 }
 
 variable "ecs_app_port" {
@@ -46,7 +63,7 @@ variable "ecs_app_count" {
   default     = {}
 }
 
-variable "ecs_task_execution_role_name" {
-  description = "ECS task execution role name"
-  default = "TFDEMO_ECS_TaskExecutionRole"
-}
+# variable "ecs_task_execution_role_name" {
+#   description = "ECS task execution role name"
+#   default = "ECS_TaskExecutionRole"
+# }

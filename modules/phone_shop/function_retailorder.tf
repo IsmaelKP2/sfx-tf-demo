@@ -33,7 +33,7 @@ resource "aws_lambda_function" "retailorder" {
     variables = {
       ORDER_LINE               = aws_lambda_function.retailorderline.arn
       PRICE_URL                = aws_api_gateway_deployment.retailorderprice.invoke_url
-      SIGNALFX_ACCESS_TOKEN    = var.auth_token
+      SIGNALFX_ACCESS_TOKEN    = var.access_token
       SIGNALFX_APM_ENVIRONMENT = var.environment
       SIGNALFX_METRICS_URL     = "https://ingest.${var.realm}.signalfx.com"
       SIGNALFX_TRACING_URL     = "https://ingest.${var.realm}.signalfx.com/v2/trace"

@@ -31,7 +31,7 @@ resource "aws_lambda_function" "retailorderline" {
   environment {
     variables = {
       LAMBDA_FUNCTION_NAME     = "${var.environment}_RetailOrder"
-      SIGNALFX_ACCESS_TOKEN    = var.auth_token
+      SIGNALFX_ACCESS_TOKEN    = var.access_token
       SIGNALFX_APM_ENVIRONMENT = var.environment
       SIGNALFX_METRICS_URL     = "https://ingest.${var.realm}.signalfx.com"
       SIGNALFX_TRACING_URL     = "https://ingest.${var.realm}.signalfx.com/v2/trace"

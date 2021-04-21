@@ -32,7 +32,7 @@ resource "aws_lambda_function" "retailorderprice" {
     variables = {
       DISCOUNT_HOST            = aws_ssm_parameter.retaildiscount_invoke_url.value
       DISCOUNT_PATH            = aws_ssm_parameter.retailorderdiscount_path.value
-      SIGNALFX_ACCESS_TOKEN    = var.auth_token
+      SIGNALFX_ACCESS_TOKEN    = var.access_token
       SIGNALFX_APM_ENVIRONMENT = var.environment
       SIGNALFX_METRICS_URL     = "https://ingest.${var.realm}.signalfx.com"
       SIGNALFX_ENDPOINT_URL    = "https://ingest.${var.realm}.signalfx.com/v2/trace"

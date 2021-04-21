@@ -1,8 +1,8 @@
 # ALB Security Group: Edit to restrict access to the application
-resource "aws_security_group" "tfdemo_ecs_lb_sg" {
-  name        = "tfdemo_ecs_lb_sg"
+resource "aws_security_group" "ecs_lb_sg" {
+  name        = "${var.environment}_ecs_lb_sg"
   description = "Controls access to the ECS ALB"
-  vpc_id      = aws_vpc.tfdemo_ecs_vpc.id
+  vpc_id      = aws_vpc.ecs_vpc.id
 
   ingress {
     protocol    = "tcp"
@@ -20,16 +20,16 @@ resource "aws_security_group" "tfdemo_ecs_lb_sg" {
 }
 
 # Traffic to the ECS cluster should only come from the ALB
-resource "aws_security_group" "tfdemo_ecs_tasks_sg" {
-  name        = "tfdemo_ecs_tasks_sg"
+resource "aws_security_group" "ecs_tasks_sg" {
+  name        = "${var.environment}_ecs_tasks_sg"
   description = "Allow inbound access from the ECS ALB only"
-  vpc_id      = aws_vpc.tfdemo_ecs_vpc.id
+  vpc_id      = aws_vpc.ecs_vpc.id
 
   ingress {
     protocol        = "tcp"
     from_port       = var.ecs_app_port
     to_port         = var.ecs_app_port
-    security_groups = [aws_security_group.tfdemo_ecs_lb_sg.id]
+    security_groups = [aws_security_group.ecs_lb_sg.id]
   }
 
   egress {

@@ -1,15 +1,15 @@
 # Set up CloudWatch group and log stream and retain logs for 30 days
-resource "aws_cloudwatch_log_group" "tfdemo_ecs_log_group" {
-  name              = "/ecs/tfdemo"
+resource "aws_cloudwatch_log_group" "ecs_log_group" {
+  name              = "${var.environment}/ecs"
   retention_in_days = 30
 
   tags = {
-    Name = "tfdemo-ecs-log-group"
+    Name = "${var.environment}_ecs_log_group"
   }
 }
 
-resource "aws_cloudwatch_log_stream" "tfdemo_ecs_log_stream" {
-  name           = "tfdemo-ecs-log-stream"
-  log_group_name = aws_cloudwatch_log_group.tfdemo_ecs_log_group.name
+resource "aws_cloudwatch_log_stream" "ecs_log_stream" {
+  name           = "${var.environment}_ecs_log_stream"
+  log_group_name = aws_cloudwatch_log_group.ecs_log_group.name
 }
 

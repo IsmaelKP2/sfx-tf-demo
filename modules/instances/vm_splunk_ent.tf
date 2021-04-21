@@ -20,7 +20,7 @@ resource "aws_instance" "splunk_ent" {
   ]
 
   tags = {
-    Name  = lower(element(var.splunk_ent_ids, count.index))
+    Name = lower(join("_",[var.environment,element(var.splunk_ent_ids, count.index)]))
   }
  
   provisioner "file" {
@@ -55,7 +55,7 @@ resource "aws_instance" "splunk_ent" {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
 
-      "TOKEN=${var.auth_token}",
+      "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
       "AGENTVERSION=${var.smart_agent_version}",

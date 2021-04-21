@@ -30,7 +30,7 @@ resource "aws_lambda_function" "retailorderdiscount" {
 
   environment {
     variables = {
-      SIGNALFX_ACCESS_TOKEN = var.auth_token
+      SIGNALFX_ACCESS_TOKEN = var.access_token
       SIGNALFX_APM_ENVIRONMENT = var.environment
       SIGNALFX_ENDPOINT_URL = "https://ingest.${var.realm}.signalfx.com/v2/trace"
       SIGNALFX_METRICS_URL  = "https://ingest.${var.realm}.signalfx.com"

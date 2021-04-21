@@ -2,7 +2,7 @@ monitors:
 - type: signalfx-forwarder
   listenAddress: 0.0.0.0:9080
   extraSpanTags:
-    environment: tfdemo-eks-hotrod
+    environment: ${var.environment}-eks-hotrod
 
 - type: kubernetes-events
   whitelistedEvents:

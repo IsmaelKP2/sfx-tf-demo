@@ -32,10 +32,11 @@ monitors:
     # Used to add a tag to spans missing it
     defaultSpanTags:
       # Set the environment filter in SignalFx
-      environment: tfdemo2-ecs-hotrod
+      # environment: tfdemo-ecs-hotrod
     # Used to add and override a tag on a span
     extraSpanTags:
-      environment: tfdemo-ecs-hotrod
+      # environment: tfdemo-ecs-hotrod
+      environment: {"#from": "env:SPAN_TAGS"}
 
   - type: ecs-metadata
     excludedImages:

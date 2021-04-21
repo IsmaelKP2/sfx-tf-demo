@@ -2,39 +2,39 @@
 data "aws_availability_zones" "available" {
 }
 
-resource "aws_vpc" "tfdemo_ecs_vpc" {
+resource "aws_vpc" "ecs_vpc" {
   cidr_block = "172.17.0.0/16"
 
   tags = {
-    Name = var.ecs_vpc_name
+    Name = join("_",[var.environment, var.ecs_vpc_name])
   }
 }
 
 # Create private subnets, each in a different AZ
 resource "aws_subnet" "private" {
   count             = var.ecs_az_count
-  cidr_block        = cidrsubnet(aws_vpc.tfdemo_ecs_vpc.cidr_block, 8, count.index)
+  cidr_block        = cidrsubnet(aws_vpc.ecs_vpc.cidr_block, 8, count.index)
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  vpc_id            = aws_vpc.tfdemo_ecs_vpc.id
+  vpc_id            = aws_vpc.ecs_vpc.id
 }
 
 # Create  public subnets, each in a different AZ
 resource "aws_subnet" "public" {
   count                   = var.ecs_az_count
-  cidr_block              = cidrsubnet(aws_vpc.tfdemo_ecs_vpc.cidr_block, 8, var.ecs_az_count + count.index)
+  cidr_block              = cidrsubnet(aws_vpc.ecs_vpc.cidr_block, 8, var.ecs_az_count + count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
-  vpc_id                  = aws_vpc.tfdemo_ecs_vpc.id
+  vpc_id                  = aws_vpc.ecs_vpc.id
   map_public_ip_on_launch = true
 }
 
 # Internet Gateway for the public subnet
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.tfdemo_ecs_vpc.id
+  vpc_id = aws_vpc.ecs_vpc.id
 }
 
 # Route the public subnet traffic through the IGW
 resource "aws_route" "internet_access" {
-  route_table_id         = aws_vpc.tfdemo_ecs_vpc.main_route_table_id
+  route_table_id         = aws_vpc.ecs_vpc.main_route_table_id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.gw.id
 }
@@ -55,7 +55,7 @@ resource "aws_nat_gateway" "gw" {
 # Create a new route table for the private subnets, make it route non-local traffic through the NAT gateway to the internet
 resource "aws_route_table" "private" {
   count  = var.ecs_az_count
-  vpc_id = aws_vpc.tfdemo_ecs_vpc.id
+  vpc_id = aws_vpc.ecs_vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"

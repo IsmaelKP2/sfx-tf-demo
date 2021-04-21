@@ -1,6 +1,6 @@
-resource "aws_iam_policy" "tfdemo_lambda_sqs_dynamodb_policy" {
+resource "aws_iam_policy" "lambda_sqs_dynamodb_policy" {
   name_prefix   = "${var.environment}_lambda_sqs_dynamodb_pol_"
-  description   = "Policy used by the Lambda SQS DynamoDB Role for TFDemo"
+  description   = "Policy used by the Lambda SQS DynamoDB Role for ${var.environment}"
 
   policy = <<EOF
 {
@@ -29,7 +29,7 @@ resource "aws_iam_policy" "tfdemo_lambda_sqs_dynamodb_policy" {
 EOF
 }
 
-resource "aws_iam_role" "tfdemo_lambda_sqs_dynamodb_role" {
+resource "aws_iam_role" "lambda_sqs_dynamodb_role" {
   name_prefix = "${var.environment}_lambda_sqs_dynamodb_"
     
   assume_role_policy = <<EOF
@@ -49,7 +49,7 @@ resource "aws_iam_role" "tfdemo_lambda_sqs_dynamodb_role" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "tfdemo_lambda_sqs_dynamodb_attach" {
-  role       = aws_iam_role.tfdemo_lambda_sqs_dynamodb_role.name
-  policy_arn = aws_iam_policy.tfdemo_lambda_sqs_dynamodb_policy.arn
+resource "aws_iam_role_policy_attachment" "lambda_sqs_dynamodb_attach" {
+  role       = aws_iam_role.lambda_sqs_dynamodb_role.name
+  policy_arn = aws_iam_policy.lambda_sqs_dynamodb_policy.arn
 }

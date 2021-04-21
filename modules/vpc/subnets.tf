@@ -5,12 +5,12 @@ data "aws_availability_zones" "available" {
 # Create private subnets, each in a different AZ
 resource "aws_subnet" "private_subnets" {
   count             = var.subnet_count
-  cidr_block        = cidrsubnet(aws_vpc.vpc_tfdemo.cidr_block, 8, count.index)
+  cidr_block        = cidrsubnet(aws_vpc.main_vpc.cidr_block, 8, count.index)
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  vpc_id            = aws_vpc.vpc_tfdemo.id
+  vpc_id            = aws_vpc.main_vpc.id
 
   tags = {
-    Name  =        join("_", [var.vpc_name, "private", count.index])
+    Name  =        join("_", [var.environment, "private", count.index])
   }
 }
 
@@ -18,12 +18,12 @@ resource "aws_subnet" "private_subnets" {
 # Create public subnets, each in a different AZ
 resource "aws_subnet" "public_subnets" {
   count                   = var.subnet_count
-  cidr_block              = cidrsubnet(aws_vpc.vpc_tfdemo.cidr_block, 8, var.subnet_count + count.index)
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, 8, var.subnet_count + count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
-  vpc_id                  = aws_vpc.vpc_tfdemo.id
+  vpc_id                  = aws_vpc.main_vpc.id
   map_public_ip_on_launch = true
 
   tags = {
-    Name  =        join("_", [var.vpc_name, "public", count.index])
+    Name  =        join("_", [var.environment, "public", count.index])
   }
 }

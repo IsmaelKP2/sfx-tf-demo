@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_role" {
-  name_prefix = "tfdemo_lambda_role_"
+  name_prefix = "${var.environment}_lambda_role_"
   
   assume_role_policy = <<EOF
 {
@@ -23,7 +23,7 @@ EOF
 # }
 
 resource "aws_iam_policy" "lambda_initiate_lambda_policy" {
-  name_prefix   = "tfdemo_lambda_initiate_lambda_"
+  name_prefix   = "${var.environment}_lambda_initiate_lambda_"
   description   = "Policy used by the Lambda Initiate Lambda Role for Splunk APM Demo"
 
   policy = <<EOF

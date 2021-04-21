@@ -2,13 +2,13 @@
 
 # Introduction
 
-This is a collection of Terraform Modules which can be used to deploy a test environment into a new AWS VPC.  The purpose is to enable you to deploy some typical AWS resources, and at the same time, deploy Splunk Infrastructure Monitoring and Splunk Application Performance Monitoring, combining "Infrastructure as Code" with Monitoring as Code". The aim is to provide fully configured working examples to supplement the Splunk documentation.
+This is a collection of Terraform Modules which can be used to deploy a test environment into a new AWS VPC.  The purpose is to enable you to deploy some typical AWS resources, and at the same time, deploy Splunk Infrastructure Monitoring and Splunk Application Performance Monitoring, combining "Infrastructure as Code" with "Monitoring as Code". The aim is to provide fully configured working examples to supplement the official Splunk documentation.
 
 # Requirements
 
 To use this repo, you need an active AWS account. Where possible resources that qualify for the free tier are used by default to enable deployment to AWS trial accounts with minimal costs.
 
-You will also need a Splunk Infrastructure Monitoring Account. Some modules leverage the Splunk APM features so ideally you will also have APM enabled on your Splunk environment.  Note if you are using a Splunk Trial Account, APM is not typically enabled.
+You will also need a Splunk Infrastructure Monitoring Account. Some modules leverage the Splunk APM features so ideally you will also have APM enabled on your Splunk environment.
 
 The "Detectors" Module requires a Splunk On-Call account with an active integration to Splunk IM, enabling end to end testing of both "Monitoring" and "Incident Response".
 
@@ -36,9 +36,9 @@ There are a number of core modules which are always deployed such as VPC and Sec
 
 You will find more information about each Module at the end of this document.
 
-There are no interdependencies between modules, so you can deploy any combination.  The 'Phone Shop' module is currently the only one using APM.
+There are no interdependencies between modules, so you can deploy any combination.  The 'EKS Cluster', 'ECS Cluster' and 'Phone Shop' modules all have APM enabled and are instrumented to emit Traces.
 
-The quantities of each EC2 Instance deployed as part of the "Instances" Module are also controlled here. You can deploy between 0 & 3 of most types, but you should always deploy at least 1 Collector, which gets deployed behind an AWS ALB.
+The quantities of each EC2 Instance deployed as part of the 'Instances' Module are also controlled here. You can deploy between 0 & 3 of most types, but you should always deploy at least 1 Collector, which gets deployed behind an AWS ALB, and is used by the Instances to send in their metrics to the Splunk IM Platform.
 
 ```yaml
 # This file contains all the settings which are unique to each deployment and it
@@ -47,6 +47,7 @@ The quantities of each EC2 Instance deployed as part of the "Instances" Module a
 # can choose to store the information in here, or enter it at run time.
 
 ### Enable / Disable Modules
+eks_cluster_enabled         = false
 ecs_cluster_enabled         = false
 instances_enabled           = false
 phone_shop_enabled          = false
@@ -82,6 +83,11 @@ wordpress_ids = [
   "wordpress2",
   "wordpress3"
   ]
+
+splunk_ent_count = "0" # min 0 : max = 1 as only one is required, used as a yes/no parameter
+splunk_ent_ids = [
+  "splunk_ent1"
+  ]
 ```
 
 ### AWS Variables
@@ -105,18 +111,17 @@ When you run the deployment terraform will prompt you for a Region, however if y
 
 #### VPC Settings
 
-A new VPC is created and is used by the Instances, Phone Shop & Lambda SQS Dynamo DB modules.  The number of subnets is controlled by the 'subnet_count' parameter, and defaults to 2 which should be sufficient for most test cases.
+A new VPC is created and is used by the EKS Cluster, Instances, Phone Shop & Lambda SQS Dynamo DB modules (the ECS Cluster Module creates its own VPC).  The number of subnets is controlled by the 'subnet_count' parameter, and defaults to 2 which should be sufficient for most test cases.
 
 Two sets of subnets will be created, a Private and a Public Subnet, so by default 4 subnets will be created. Each Subnet will be created using a CIDR allocated from the 'vpc_cidr_block', so by default the 1st subnet will use 172.32.0.0/24, the 2nd subnet will use 172.32.1.0/24 etc.
 
-Note: The ECS Cluster Module will create its own unique VPC and Subnets.  At present all the variables controlling this are contained within the modules variables.tf file.
+Note: The ECS Cluster Module will create its own unique VPC and Subnets and creates a Fargate deployment.  At present all the variables controlling this are contained within the ECS Cluster modules variables.tf file (modules/aws_ecs/variables.tf).
 
 ```yaml
 ### AWS Variables ###
 #region = "<REGION>"
 
 ## VPC Settings ##
-vpc_name       = "tfdemo"
 vpc_cidr_block = "172.32.0.0/16"
 subnet_count   = "2" 
 
@@ -146,7 +151,7 @@ Optionally you can specify a version for the smart_agent, but if left blank the 
 
 ```yaml
 ### SignalFX Variables ###
-auth_token = "<AUTH_TOKEN>"
+access_token = "<ACCESS_TOKEN>"
 api_url = "https://api.<REALM>.signalfx.com"
 realm = "<REALM>"
 environment = "<ENVIRONMENT>"
@@ -177,6 +182,7 @@ The following EC2 Instances can be deployed:
 - HAProxy
 - MySQL
 - Wordpress (just a basic Apache server in reality)
+- Splunk Enterprise
 
 Each Instance has Infrastructure Monitoring 'monitors' configured to match the services running on them.  The configuration for each monitor is deployed into /etc/signalfx/monitors/xxx.yaml, this means the /etc/signalfx/agent.yaml file is the same regardless of role.
 

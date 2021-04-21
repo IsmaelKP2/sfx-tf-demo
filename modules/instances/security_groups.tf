@@ -1,5 +1,5 @@
 resource "aws_security_group" "instances_sg" {
-  name          = "Instances SG"
+  name          = "${var.environment}_Instances SG"
   description   = "Allow ingress traffic between Instances and Egress to Internet"
   vpc_id        = var.vpc_id
 
@@ -32,7 +32,7 @@ resource "aws_security_group" "instances_sg" {
 
 
 resource "aws_security_group" "splunk_ent_sg" {
-  name          = "Splunk Ent SG"
+  name          = "${var.environment}_Splunk Ent SG"
   description   = "Allow access to Splunk Enterprise UI via Internet"
   vpc_id        = var.vpc_id
 

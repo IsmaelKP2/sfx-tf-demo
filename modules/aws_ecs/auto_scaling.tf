@@ -2,7 +2,7 @@
 
 resource "aws_appautoscaling_target" "target" {
   service_namespace  = "ecs"
-  resource_id        = "service/${aws_ecs_cluster.tfdemo_ecs_cluster.name}/${aws_ecs_service.tfdmo_ecs_service.name}"
+  resource_id        = "service/${aws_ecs_cluster.ecs_cluster.name}/${aws_ecs_service.ecs_service.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   min_capacity       = 3
   max_capacity       = 6
@@ -10,9 +10,9 @@ resource "aws_appautoscaling_target" "target" {
 
 # Automatically scale capacity up by one
 resource "aws_appautoscaling_policy" "up" {
-  name               = "tfdemo_ecs_scale_up"
+  name               = "${var.environment}_ecs_scale_up"
   service_namespace  = "ecs"
-  resource_id        = "service/${aws_ecs_cluster.tfdemo_ecs_cluster.name}/${aws_ecs_service.tfdmo_ecs_service.name}"
+  resource_id        = "service/${aws_ecs_cluster.ecs_cluster.name}/${aws_ecs_service.ecs_service.name}"
   scalable_dimension = "ecs:service:DesiredCount"
 
   step_scaling_policy_configuration {
@@ -31,9 +31,9 @@ resource "aws_appautoscaling_policy" "up" {
 
 # Automatically scale capacity down by one
 resource "aws_appautoscaling_policy" "down" {
-  name               = "tfdemo_ecs_scale_down"
+  name               = "${var.environment}_ecs_scale_down"
   service_namespace  = "ecs"
-  resource_id        = "service/${aws_ecs_cluster.tfdemo_ecs_cluster.name}/${aws_ecs_service.tfdmo_ecs_service.name}"
+  resource_id        = "service/${aws_ecs_cluster.ecs_cluster.name}/${aws_ecs_service.ecs_service.name}"
   scalable_dimension = "ecs:service:DesiredCount"
 
   step_scaling_policy_configuration {
@@ -52,7 +52,7 @@ resource "aws_appautoscaling_policy" "down" {
 
 # CloudWatch alarm that triggers the autoscaling up policy
 resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
-  alarm_name          = "tfdemo_ecs_cpu_utilization_high"
+  alarm_name          = "${var.environment}_ecs_cpu_utilization_high"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
   metric_name         = "CPUUtilization"
@@ -62,8 +62,8 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
   threshold           = "85"
 
   dimensions = {
-    ClusterName = aws_ecs_cluster.tfdemo_ecs_cluster.name
-    ServiceName = aws_ecs_service.tfdmo_ecs_service.name
+    ClusterName = aws_ecs_cluster.ecs_cluster.name
+    ServiceName = aws_ecs_service.ecs_service.name
   }
 
   alarm_actions = [aws_appautoscaling_policy.up.arn]
@@ -71,7 +71,7 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_high" {
 
 # CloudWatch alarm that triggers the autoscaling down policy
 resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
-  alarm_name          = "tfdemo_ecs_cpu_utilization_low"
+  alarm_name          = "${var.environment}_ecs_cpu_utilization_low"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "2"
   metric_name         = "CPUUtilization"
@@ -81,8 +81,8 @@ resource "aws_cloudwatch_metric_alarm" "service_cpu_low" {
   threshold           = "10"
 
   dimensions = {
-    ClusterName = aws_ecs_cluster.tfdemo_ecs_cluster.name
-    ServiceName = aws_ecs_service.tfdmo_ecs_service.name
+    ClusterName = aws_ecs_cluster.ecs_cluster.name
+    ServiceName = aws_ecs_service.ecs_service.name
   }
 
   alarm_actions = [aws_appautoscaling_policy.down.arn]

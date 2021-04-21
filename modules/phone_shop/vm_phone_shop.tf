@@ -6,7 +6,8 @@ resource "aws_instance" "phone_shop_server" {
   vpc_security_group_ids    = [aws_security_group.phone_shop.id]
  
   tags = {
-    Name = "pss1"
+    # Name = "pss1"
+    Name = "${var.environment}_pss"
   }
 
   provisioner "file" {
@@ -61,7 +62,7 @@ resource "aws_instance" "phone_shop_server" {
       "sudo apt-get upgrade -y",
 
     # Install SignalFx
-      "TOKEN=${var.auth_token}",
+      "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
       "AGENTVERSION=${var.smart_agent_version}",

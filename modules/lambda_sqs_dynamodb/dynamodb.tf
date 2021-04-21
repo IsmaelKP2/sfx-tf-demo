@@ -1,7 +1,5 @@
-resource "aws_dynamodb_table" "tfdemo_messages" {
-  # name           = "TFDemo-Messages"
-  name           = "${var.environment}-messages"
-  # name           = "Message"
+resource "aws_dynamodb_table" "messages" {
+  name           = "${var.environment}_messages"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5

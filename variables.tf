@@ -77,6 +77,10 @@ variable "eks_cluster_name" {
 }
 
 ## AWS_ECS Variables ##
+variable "ecs_agent_url" {
+  description = "Path to the agent file to be used for ecs"
+  default     = {}  
+}
 variable "ecs_app_port" {
   description = "Port exposed by the docker image to redirect traffic to"
   default     = 8080
@@ -233,7 +237,7 @@ variable "soc_routing_key" {
 }
 
 ### SignalFX Variables ###
-variable "auth_token" {
+variable "access_token" {
   default = []
 }
 variable "api_url" {

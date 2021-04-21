@@ -20,7 +20,7 @@ variable "function_retailorderdiscount_url" {
 
 
 ### SignalFX Variables ###
-variable "auth_token" {
+variable "access_token" {
   default = []
 }
 variable "environment" {

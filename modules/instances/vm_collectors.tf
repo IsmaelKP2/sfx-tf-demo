@@ -7,7 +7,8 @@ resource "aws_instance" "collector" {
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
 
   tags = {
-    Name  = lower(element(var.collector_ids, count.index))
+    # Name  = lower(element(var.collector_ids, count.index))
+    Name = lower(join("_",[var.environment,element(var.collector_ids, count.index)]))
     role = "collector"
   }
 
@@ -50,7 +51,7 @@ resource "aws_instance" "collector" {
       "sudo apt-get upgrade -y",
 
     # Install SignalFx
-      "TOKEN=${var.auth_token}",
+      "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
       "AGENTVERSION=${var.smart_agent_version}",
