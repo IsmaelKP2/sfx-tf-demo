@@ -15,7 +15,7 @@ data "template_file" "hotrod" {
 }
 
 resource "aws_ecs_task_definition" "tfdemo_ecs_task_def" {
-  family                   = "ctfdemo_ecs_task"
+  family                   = "tfdemo_ecs_task"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
