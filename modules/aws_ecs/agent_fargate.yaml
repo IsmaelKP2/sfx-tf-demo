@@ -16,7 +16,7 @@ observers:
     # same ECS task.
   - type: ecs
     labelsToDimensions: &labelMap
-      com.amazonaws.ecs.container-name: hotrod
+      com.amazonaws.ecs.container-name: container_spec_name
 
 monitors:
   - type: cpu
