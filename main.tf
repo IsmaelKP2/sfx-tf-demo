@@ -150,6 +150,7 @@ module "instances" {
   splunk_ent_inst_type    = var.splunk_ent_inst_type
 }
 
+### Instances Outputs ###
 output "Collectors" {
   value = var.instances_enabled ? module.instances.*.collector_details : null
 }
@@ -168,12 +169,18 @@ output "collector_lb_dns" {
 output "SQS_Test_Server" {
   value = var.lambda_sqs_dynamodb_enabled ? module.lambda_sqs_dynamodb.*.sqs_test_server_details : null
 }
+
+### Phone Shop Outputs ###
 output "Phone_Shop_Server" {
   value = var.phone_shop_enabled ? module.phone_shop.*.phone_shop_server_details : null
 }
+
+### ECS Outputs ###
 output "ECS_ALB_hostname" {
   value = var.ecs_cluster_enabled ? module.aws_ecs.*.ecs_alb_hostname : null
 }
+
+### Splunk Enterprise Outputs ###
 output "Splunk_Enterprise_Server" {
   value = var.instances_enabled ? module.instances.*.splunk_ent_details : null
 }
@@ -186,11 +193,15 @@ output "splunk_url" {
 
 
 ### EKS Outputs ###
+output "eks_cluster_endpoint" {
+  value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_endpoint : null
+}
+output "eks_admin_server" {
+  value = var.eks_cluster_enabled ? module.eks.*.eks_admin_server_details : null
+}
+
 # output "eks_cluster_id" {
 #   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_id : null
-# }
-# output "eks_cluster_endpoint" {
-#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_endpoint : null
 # }
 # output "eks_cluster_security_group_id" {
 #   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_security_group_id : null
@@ -203,13 +214,4 @@ output "splunk_url" {
 # }
 # output "eks_cluster_name" {
 #   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_name : null
-# }
-
-
-# output "eks_cluster_endpoint" {
-#   value = module.eks.*.eks_cluster_endpoint
-# }
-
-# output "eks_cluster_name" {
-#   value = module.eks.*.eks_cluster_name
 # }
