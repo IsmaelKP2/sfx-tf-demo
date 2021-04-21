@@ -3,6 +3,7 @@
 signalFxAccessToken: {"#from": "env:ACCESS_TOKEN"}
 ingestUrl: {"#from": "env:INGEST_URL", optional: true}
 apiUrl: {"#from": "env:API_URL", optional: true}
+traceEndpointUrl: {"#from": "env:SIGNALFX_ENDPOINT_URL", optional: true}
 
 intervalSeconds: {"#from": "env:INTERVAL_SECONDS", default: 10}
 
@@ -15,7 +16,7 @@ observers:
     # same ECS task.
   - type: ecs
     labelsToDimensions: &labelMap
-      com.amazonaws.ecs.container-name: container_spec_name
+      com.amazonaws.ecs.container-name: hotrod
 
 monitors:
   - type: cpu
@@ -42,8 +43,11 @@ monitors:
 # for tracing
   - type: signalfx-forwarder
     listenAddress: 0.0.0.0:9080
-    extraSpanTags:
+    defaultSpanTags:
       environment: tfdemo-ecs-hotrod
+    # Used to add and override a tag on a span
+    #extraSpanTags:
+     #SPAN_TAG_KEY: "SPAN_TAG_VALUE"
 
   - type: ecs-metadata
     excludedImages:
@@ -64,12 +68,9 @@ metricsToExclude:
 # must be given as a YAML/JSON object.
 _: {"#from": "env:CONFIG_OVERRIDE", optional: true, flatten: true}
 
-# traceEndpointUrl: "https://ingest.eu0.signalfx.com/v2/trace"
-# or set environment variable SIGNALFX_ENDPOINT_URL
-
-collectd:
-  disableCollectd: true
-  configDir: /tmp/collectd
+# collectd:
+#   disableCollectd: true
+#   configDir: /tmp/collectd
 
 writer:
   traceExportFormat: sapm
