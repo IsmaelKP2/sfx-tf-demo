@@ -1,8 +1,14 @@
+#! /bin/bash
+# Version 2.0
+
+ENV=$1
+
+cat << EOF > /home/ubuntu/values.yaml
 monitors:
 - type: signalfx-forwarder
   listenAddress: 0.0.0.0:9080
   extraSpanTags:
-    environment: ${var.environment}-eks-hotrod
+    environment: $ENV-eks-hotrod
 
 - type: kubernetes-events
   whitelistedEvents:
@@ -20,3 +26,4 @@ monitors:
      involvedObjectKind: Pod
    - reason: Pulled
      involvedObjectKind: Pod
+EOF

@@ -23,6 +23,11 @@ resource "aws_instance" "eks_admin_server" {
   }
 
   provisioner "file" {
+    source      = "${path.module}/scripts/generate_values.sh"
+    destination = "/tmp/generate_values.sh"
+  }
+
+  provisioner "file" {
     source      = "${path.module}/scripts/install_eks_tools.sh"
     destination = "/tmp/install_eks_tools.sh"
   }
@@ -32,10 +37,10 @@ resource "aws_instance" "eks_admin_server" {
     destination = "/home/ubuntu/deployment.yaml"
   }
 
-  provisioner "file" {
-    source      = "${path.module}/config_files/values.yaml"
-    destination = "/home/ubuntu/values.yaml"
-  }
+  # provisioner "file" {
+  #   source      = "${path.module}/config_files/values.yaml"
+  #   destination = "/home/ubuntu/values.yaml"
+  # }
 
   depends_on = [aws_eks_cluster.demo]
 
@@ -92,6 +97,9 @@ resource "aws_instance" "eks_admin_server" {
     ## Install EKS Tools
       "sudo chmod +x /tmp/install_eks_tools.sh",
       "/tmp/install_eks_tools.sh",
+      "ENVIRONMENT=${var.environment}",
+      "sudo chmod +x /tmp/generate_values.sh",
+      "/tmp/generate_values.sh $ENVIRONMENT",
 
     ## Deploy SFX Agent into Cluster using Helm
       "AWS_DEFAULT_REGION=${var.region}",
@@ -114,6 +122,7 @@ resource "aws_instance" "eks_admin_server" {
       "echo $EKS_CLUSTER_NAME > /tmp/eks_cluster_name",
       "echo $TOKEN > /tmp/access_token",
       "echo $REALM > /tmp/realm",
+      "echo $ENVIRONMENT > /tmp/environment",
 
     ## Configure motd
       "sudo curl -s https://raw.githubusercontent.com/signalfx/observability-workshop/master/cloud-init/motd -o /etc/motd",
