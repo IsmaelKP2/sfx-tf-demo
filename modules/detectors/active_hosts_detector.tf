@@ -1,5 +1,5 @@
 resource "signalfx_detector" "active_host__detector" {
-  name         = "Active Host Detector"
+  name         = "${var.environment} Active Host Detector"
   description  = "Alert when the number of active hosts goes above a static threshold - deployed via Terraform"
   max_delay    = 1
   program_text = <<-EOF

@@ -16,6 +16,10 @@ variable "notification_email" {
   default = []
 }
 
+variable "environment" {
+  default = []
+}
+
 variable "message_body" {
   type = string
 

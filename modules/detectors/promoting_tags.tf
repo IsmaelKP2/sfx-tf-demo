@@ -1,5 +1,5 @@
 resource "signalfx_detector" "promote_tags" {
-  name         = "Promoting Tags"
+  name         = "${var.environment} Promoting Tags"
   description  = "Promoting Tags"
   max_delay    = 1
   program_text = <<-EOF

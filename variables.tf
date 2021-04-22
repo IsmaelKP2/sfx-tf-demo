@@ -67,13 +67,8 @@ variable "aws_api_gateway_deployment_retailorder_invoke_url" {
 }
 
 ## EKS Variables ##
-# variable "eks_az_count" {
-#   description = "Number of AZs to cover in a given region"
-#   default     = "3"
-# }
 variable "eks_cluster_name" {
-  default = "terraform-eks-demo"
-  # type    = string
+  default = {}
 }
 
 ## AWS_ECS Variables ##

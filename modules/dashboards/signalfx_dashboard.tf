@@ -2,7 +2,7 @@
 
 # Create a new dashboard
 resource "signalfx_dashboard" "mydashboard0" {
-    name = "My Dashboard"
+    name = "${var.environment} Dashboard"
     dashboard_group = signalfx_dashboard_group.tfg0.id
     time_range = "-1m"
 

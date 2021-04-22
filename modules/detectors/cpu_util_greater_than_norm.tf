@@ -1,5 +1,5 @@
 resource "signalfx_detector" "cpu_greater_than_norm_detector" {
-  name         = "CPU Utilization % Greater than Historical Norm"
+  name         = "${var.environment} CPU Utilization % Greater than Historical Norm"
   description  = "Alerts when CPU usage for this host for the last 10 minutes was significantly higher than normal, as compared to the last 24 hours - deployed via Terraform"
   max_delay    = 1
   program_text = <<-EOF
