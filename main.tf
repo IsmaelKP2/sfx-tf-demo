@@ -1,29 +1,31 @@
 # AWS Auth Configuration
 provider "aws" {
-  region     = lookup(var.aws_region, var.region)
-  access_key = var.aws_access_key_id
-  secret_key = var.aws_secret_access_key
+  region                  = lookup(var.aws_region, var.region)
+  access_key              = var.aws_access_key_id
+  secret_key              = var.aws_secret_access_key
 }
 
 # SignalFx Provider
 provider "signalfx" {
-  auth_token      = var.access_token
-  api_url         = var.api_url
+  auth_token              = var.access_token
+  api_url                 = var.api_url
 }
 
 module "dashboards" {
-  source           = "./modules/dashboards"
-  count            = var.dashboards_enabled ? 1 : 0
-  region           = lookup(var.aws_region, var.region)
+  source                  = "./modules/dashboards"
+  count                   = var.dashboards_enabled ? 1 : 0
+  region                  = lookup(var.aws_region, var.region)
+  environment             = var.environment
 }
 
 module "detectors" {
-  source             = "./modules/detectors"
-  count              = var.detectors_enabled ? 1 : 0
-  notification_email = var.notification_email
-  soc_integration_id = var.soc_integration_id
-  soc_routing_key    = var.soc_routing_key
-  region             = lookup(var.aws_region, var.region)
+  source                  = "./modules/detectors"
+  count                   = var.detectors_enabled ? 1 : 0
+  notification_email      = var.notification_email
+  soc_integration_id      = var.soc_integration_id
+  soc_routing_key         = var.soc_routing_key
+  region                  = lookup(var.aws_region, var.region)
+  environment             = var.environment
 }
 
 module "vpc" {
@@ -61,19 +63,17 @@ module "eks" {
   smart_agent_version     = var.smart_agent_version
   access_token            = var.access_token
   realm                   = var.realm
-
   vpc_id                  = module.vpc.vpc_id
   vpc_cidr_block          = var.vpc_cidr_block
   public_subnet_ids       = module.vpc.public_subnet_ids
   aws_access_key_id       = var.aws_access_key_id
   aws_secret_access_key   = var.aws_secret_access_key
-  
   instance_type           = var.instance_type
   ami                     = data.aws_ami.latest-ubuntu.id
   key_name                = var.key_name
   private_key_path        = var.private_key_path
 
-  eks_cluster_name        = var.eks_cluster_name
+  eks_cluster_name        = join("-",[var.environment,"eks"])
 }
 
 provider "helm" {
