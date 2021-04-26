@@ -37,11 +37,6 @@ resource "aws_instance" "eks_admin_server" {
     destination = "/home/ubuntu/deployment.yaml"
   }
 
-  # provisioner "file" {
-  #   source      = "${path.module}/config_files/values.yaml"
-  #   destination = "/home/ubuntu/values.yaml"
-  # }
-
   depends_on = [aws_eks_cluster.demo]
 
   # provisioner "file" {
