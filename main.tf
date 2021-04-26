@@ -5,10 +5,15 @@ provider "aws" {
   secret_key              = var.aws_secret_access_key
 }
 
-# SignalFx Provider
 provider "signalfx" {
   auth_token              = var.access_token
   api_url                 = var.api_url
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
 }
 
 module "dashboards" {
@@ -72,14 +77,7 @@ module "eks" {
   ami                     = data.aws_ami.latest-ubuntu.id
   key_name                = var.key_name
   private_key_path        = var.private_key_path
-
   eks_cluster_name        = join("-",[var.environment,"eks"])
-}
-
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
-  }
 }
 
 module "phone_shop" {
@@ -198,25 +196,9 @@ output "splunk_url" {
 
 
 ### EKS Outputs ###
-output "eks_cluster_endpoint" {
-  value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_endpoint : null
-}
+# output "eks_cluster_endpoint" {
+#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_endpoint : null
+# }
 output "eks_admin_server" {
   value = var.eks_cluster_enabled ? module.eks.*.eks_admin_server_details : null
 }
-
-# output "eks_cluster_id" {
-#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_id : null
-# }
-# output "eks_cluster_security_group_id" {
-#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_security_group_id : null
-# }
-# output "eks_kubectl_config" {
-#   value = var.eks_cluster_enabled ? module.eks.*.eks_kubectl_config : null
-# }
-# output "eks_config_map_aws_auth" {
-#   value = var.eks_cluster_enabled ? module.eks.*.eks_config_map_aws_auth : null
-# }
-# output "eks_cluster_name" {
-#   value = var.eks_cluster_enabled ? module.eks.*.eks_cluster_name : null
-# }
