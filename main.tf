@@ -80,6 +80,17 @@ module "eks" {
   eks_cluster_name        = join("-",[var.environment,"eks"])
 }
 
+module "eks_fargate" {
+  source                    = "./modules/eks_fargate"
+  count                     = var.eks_fargate_cluster_enabled ? 1 : 0
+  region                    = lookup(var.aws_region, var.region)
+  environment               = var.environment
+  smart_agent_version       = var.smart_agent_version
+  access_token              = var.access_token
+  realm                     = var.realm
+  eks_fargate_cluster_name  = join("-",[var.environment,"eks-fargate"])
+}
+
 module "phone_shop" {
   source                  = "./modules/phone_shop"
   count                   = var.phone_shop_enabled ? 1 : 0

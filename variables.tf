@@ -2,6 +2,9 @@
 variable "eks_cluster_enabled" {
   default = []
 }
+variable "eks_fargate_cluster_enabled" {
+  default = []
+}
 variable "ecs_cluster_enabled" {
   default = []
 }
@@ -68,6 +71,11 @@ variable "aws_api_gateway_deployment_retailorder_invoke_url" {
 
 ## EKS Variables ##
 variable "eks_cluster_name" {
+  default = {}
+}
+
+## EKS-Fargate Variables ##
+variable "eks_fargate_cluster_name" {
   default = {}
 }
 
