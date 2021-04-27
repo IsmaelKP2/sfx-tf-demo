@@ -41,3 +41,5 @@ lambda_function.py
 index.js
 
 **/.vscode/*
+
+.terraform.lock.hcl
