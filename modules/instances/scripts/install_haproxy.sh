@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # Download and Install the Latest Updates for the OS
-apt-get update
-apt-get upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 # Add haproxy Repo
 sudo add-apt-repository ppa:vbernat/haproxy-2.0 -y
@@ -72,4 +72,4 @@ EOT
 
 
 # restart haproxy Service
-service haproxy restart
+sudo service haproxy restart
