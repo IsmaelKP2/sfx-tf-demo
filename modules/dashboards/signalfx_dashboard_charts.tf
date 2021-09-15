@@ -88,10 +88,21 @@ resource "signalfx_single_value_chart" "active_haproxy_servers" {
   name = "Active HAProxy Servers"
 
     program_text = <<-EOF
-        A = data('haproxy_requests', filter=filter('plugin', 'haproxy')).count().publish(label='A')
+        A = data('ps_data', filter=filter('plugin_instance', 'haproxy')).count().publish(label='A')
         EOF
 
     description = "Number of running HAProxy Servers"
+}
+
+# Create Splunk Servers Chart
+resource "signalfx_single_value_chart" "active_splunk_servers" {
+  name = "Active Splunk Servers"
+
+    program_text = <<-EOF
+        A = data('ps_data', filter=filter('plugin_instance', 'splunkd')).count().publish(label='A')
+        EOF
+
+    description = "Number of running Splunk Servers"
 }
 
 # # Create Active SmartGateway Chart
@@ -113,7 +124,7 @@ resource "signalfx_time_chart" "disk_space_xvda10" {
   name = "Disk Space XVDA1"
 
     program_text = <<-EOF
-        A = data('df_complex.free', filter=filter('plugin', 'df') and filter('plugin_instance', 'xvda1')).publish(label='A')
+        A = data('df_complex.free', filter=filter('device', '/dev/xvda1')).publish(label='A')
         EOF
 
     description = "Disk space of XVDA1"
@@ -124,7 +135,7 @@ resource "signalfx_time_chart" "disk_space_xvdg10" {
   name = "Disk Space XVDG1"
 
     program_text = <<-EOF
-        A = data('df_complex.free', filter=filter('plugin', 'df') and filter('plugin_instance', 'xvdg1')).publish(label='A')
+        A = data('df_complex.free', filter=filter('device', '/dev/xvdg1')).publish(label='A')
         EOF
 
     description = "Disk space of XVDG1"
