@@ -89,6 +89,14 @@ resource "signalfx_dashboard" "mydashboard0" {
         column = 6
     }
 
+    chart {
+        chart_id = signalfx_single_value_chart.active_splunk_servers.id
+        width = 3
+        height = 1
+        row = 6
+        column = 9
+    }
+
 ### Row 9 ###
     chart {
         chart_id = signalfx_time_chart.write_io_xvda10.id
