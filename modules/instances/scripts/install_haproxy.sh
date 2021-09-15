@@ -19,7 +19,7 @@ global
         log /dev/log    local0
         log /dev/log    local1 notice
         chroot /var/lib/haproxy
-        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+        stats socket localhost:9000
         stats timeout 30s
         user haproxy
         group haproxy
@@ -50,26 +50,26 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 
+frontend stats_frontend
+    bind *:9001
+    stats uri /stats
+    stats refresh 10s
+    stats admin if LOCALHOST
 
 frontend Local_Server
     bind 0.0.0.0:80
     mode http
-    default_backend My_Web_Servers
+    default_backend My_Stats_Server
 
-
-backend My_Web_Servers
+backend My_Stats_Server
     mode http
     balance roundrobin
     option forwardfor
     http-request set-header X-Forwarded-Port %[dst_port]
     http-request add-header X-Forwarded-Proto https if { ssl_fc }
     option httpchk HEAD / HTTP/1.1rnHost:localhost
-    server web1.example.com  192.168.1.101:80
-    server web2.example.com  192.168.1.102:80
-    server web3.example.com  192.168.1.103:80
+    server localhost 0.0.0.0:9001/stats
 EOT
-
-
 
 # restart haproxy Service
 sudo service haproxy restart
