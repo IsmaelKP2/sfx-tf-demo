@@ -156,10 +156,10 @@ variable "mysql_ids" {
   default = []
 }
 
-variable "wordpress_count" {
+variable "apache_web_count" {
   default = {}
 }
-variable "wordpress_ids" {
+variable "apache_web_ids" {
   default = []
 }
 
