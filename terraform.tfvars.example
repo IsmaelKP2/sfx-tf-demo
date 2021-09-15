@@ -34,11 +34,11 @@ mysql_ids = [
   "mysql3"
   ]
 
-wordpress_count = "1" # min 0 : max = subnet_count
-wordpress_ids = [
-  "wordpress1",
-  "wordpress2",
-  "wordpress3"
+apache_count = "1" # min 0 : max = subnet_count
+apache_ids = [
+  "apache1",
+  "apache2",
+  "apache3"
   ]
 
 splunk_ent_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
