@@ -8,13 +8,7 @@ resource "aws_instance" "eks_admin_server" {
   ]
  
   tags = {
-    # Name = "eks_admin"
     Name = "${var.environment}_eks_admin"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/scripts/install_sfx_agent.sh"
-    destination = "/tmp/install_sfx_agent.sh"
   }
 
   provisioner "file" {
@@ -39,21 +33,6 @@ resource "aws_instance" "eks_admin_server" {
 
   depends_on = [aws_eks_cluster.demo]
 
-  # provisioner "file" {
-  #   source      = "${path.module}/scripts/update_sfx_environment.sh"
-  #   destination = "/tmp/update_sfx_environment.sh"
-  # }
-
-  # provisioner "file" {
-  #   source      = "${path.module}/scripts/locustfile.py"
-  #   destination = "/tmp/locustfile.py"
-  # }
-
-  # provisioner "file" {
-  #   source      = "${path.module}/config_files/locust.service"
-  #   destination = "/tmp/locust.service"
-  # }
-
 # remote-exec
   provisioner "remote-exec" {
     inline = [
@@ -65,18 +44,9 @@ resource "aws_instance" "eks_admin_server" {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
 
-    ## Install SignalFx
-      "TOKEN=${var.access_token}",
-      "REALM=${var.realm}",
-      "HOSTNAME=${self.tags.Name}",
-      "AGENTVERSION=${var.smart_agent_version}",
-      "ENVIRONMENT=${var.environment}",
-
-      "sudo chmod +x /tmp/install_sfx_agent.sh",
-      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
-      
-      # "sudo chmod +x /tmp/update_sfx_environment.sh",
-      # "sudo /tmp/update_sfx_environment.sh $ENVIRONMENT",
+    ## Install Otel Agent
+      "sudo curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh",
+      "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm}  -- ${var.access_token} --mode agent --without-fluentd",
 
     ## Setup AWS Cli
       "sudo curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscliv2.zip",
@@ -96,16 +66,21 @@ resource "aws_instance" "eks_admin_server" {
       "sudo chmod +x /tmp/generate_values.sh",
       "/tmp/generate_values.sh $ENVIRONMENT",
 
-    ## Deploy SFX Agent into Cluster using Helm
+    ## Setup eksutils
       "AWS_DEFAULT_REGION=${var.region}",
       "AWS_DEFAULT_OUTPUT=json",
       "EKS_CLUSTER_NAME=${var.eks_cluster_name}",
       "eksctl utils write-kubeconfig --cluster=$EKS_CLUSTER_NAME",
       "eksctl get clusters",
       "aws eks update-kubeconfig --name $EKS_CLUSTER_NAME",
-      "helm repo add signalfx https://dl.signalfx.com/helm-repo",
+
+    ## Install K8S Integration using OTEL
+      "TOKEN=${var.access_token}",
+      "REALM=${var.realm}",
+      "EKS_CLUSTER_NAME=${var.eks_cluster_name}",
+      "helm repo add splunk-otel-collector-chart https://signalfx.github.io/splunk-otel-collector-chart",
       "helm repo update",
-      "helm install --set signalFxAccessToken=$TOKEN --set clusterName=$EKS_CLUSTER_NAME --set signalFxRealm=$REALM --set kubeletAPI.url=https://localhost:10250 --set traceEndpointUrl=https://ingest.$REALM.signalfx.com/v2/trace signalfx-agent signalfx/signalfx-agent -f /home/ubuntu/values.yaml",
+      "helm install --set provider='aws' --set distro='eks' --set splunkAccessToken=$TOKEN --set clusterName=$EKS_CLUSTER_NAME --set splunkRealm=$REALM --set otelCollector.enabled='false' --set logsEnabled='false' --generate-name splunk-otel-collector-chart/splunk-otel-collector",
 
     ## Deploy Hot Rod
       "kubectl apply -f /home/ubuntu/deployment.yaml",
@@ -123,9 +98,6 @@ resource "aws_instance" "eks_admin_server" {
       "sudo curl -s https://raw.githubusercontent.com/signalfx/observability-workshop/master/cloud-init/motd -o /etc/motd",
       "sudo chmod -x /etc/update-motd.d/*",
 
-    ## Add Cluster Details to S3
-      # "BUCKET=${aws_s3_bucket.eksurl.id}",
-      # "kubectl get svc hotrod | grep hotrod | tr -s ' ' | cut -d ' ' -f 4 | aws s3 cp - s3://$BUCKET/eksurl.txt",
     ]
   }
 
