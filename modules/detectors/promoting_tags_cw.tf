@@ -4,7 +4,7 @@ resource "signalfx_detector" "promote_tags_cw" {
   max_delay    = 1
   program_text = <<-EOF
     A = data('^aws.ec2.cpu.utilization').promote('aws_tag_Name', 'aws_tag_Environment', allow_missing=True).publish(label='A')
-    detect(when(A > threshold(50))).publish('Promoting Tags CW')
+    detect(when(A > threshold(80))).publish('Promoting Tags CW')
   EOF
   rule {
     description           = "Promoting Tags CW"

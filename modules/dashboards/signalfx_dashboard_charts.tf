@@ -1,5 +1,5 @@
 # Create Memory Used Chart Graph
-resource "signalfx_time_chart" "mem_used_chart_graph0" {
+resource "signalfx_time_chart" "mem_used_chart_graph" {
   name = "Memory Used %"
 
     program_text = <<-EOF
@@ -13,7 +13,7 @@ resource "signalfx_time_chart" "mem_used_chart_graph0" {
 }
 
 # Create CPU Used Chart Graph
-resource "signalfx_time_chart" "cpu_used_chart_graph0" {
+resource "signalfx_time_chart" "cpu_used_chart_graph" {
   name = "CPU Used %"
 
     program_text = <<-EOF
@@ -39,6 +39,18 @@ resource "signalfx_single_value_chart" "active_hosts" {
         EOF
 
     description = "Number of running Hosts"
+}
+
+# Create Hosts Above 80 Chart
+resource "signalfx_single_value_chart" "cpu_above_80" {
+  name = "CPU Above 80"
+
+    program_text = <<-EOF
+        A = data('cpu.utilization').above(80, inclusive=True).count().publish(label='A')
+        B = alerts(detector_id='${var.det_prom_tags_id[0]}').publish(label='B')  
+        EOF
+
+    description = "Number of Hosts with CPU Greater than 80%"
 }
 
 # Active Collectors Chart
