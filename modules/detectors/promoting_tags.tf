@@ -15,3 +15,8 @@ resource "signalfx_detector" "promote_tags" {
     parameterized_body    = var.message_body_promote
   }
 }
+
+output "detector_promoting_tags_id" {
+  value = signalfx_detector.promote_tags.id
+  description = "ID of the Promoting Tags Detector"
+}

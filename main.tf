@@ -21,6 +21,7 @@ module "dashboards" {
   count                   = var.dashboards_enabled ? 1 : 0
   region                  = lookup(var.aws_region, var.region)
   environment             = var.environment
+  det_prom_tags_id        = module.detectors.*.detector_promoting_tags_id
 }
 
 module "detectors" {
@@ -206,6 +207,11 @@ output "splunk_url" {
   value = var.instances_enabled ? module.instances.*.splunk_ent_urls : null
 }
 
+
+### Detector Outputs
+output "detector_promoting_tags_id" {
+  value = var.detectors_enabled ? module.detectors.*.detector_promoting_tags_id : null
+}
 
 ### EKS Outputs ###
 # output "eks_cluster_endpoint" {

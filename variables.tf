@@ -265,6 +265,10 @@ variable "ballast" {
   default = []
 }
 
+variable "detector_promoting_tags_id" {
+  default = {}
+}
+
 ### Splunk Enterprise Variables ###
 variable "splunk_ent_filename" {
   default = {}

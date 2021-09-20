@@ -18,6 +18,7 @@ resource "signalfx_time_chart" "cpu_used_chart_graph0" {
 
     program_text = <<-EOF
         A = data('cpu.utilization').publish(label='A')
+        B = alerts(detector_id='${var.det_prom_tags_id[0]}').publish(label='B')       
         EOF
         
     plot_type = "LineChart"
