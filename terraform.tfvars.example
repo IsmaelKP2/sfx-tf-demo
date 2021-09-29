@@ -34,8 +34,8 @@ mysql_ids = [
   "mysql3"
   ]
 
-apache_count = "1" # min 0 : max = subnet_count
-apache_ids = [
+apache_web_count = "1" # min 0 : max = subnet_count
+apache_web_ids = [
   "apache1",
   "apache2",
   "apache3"
