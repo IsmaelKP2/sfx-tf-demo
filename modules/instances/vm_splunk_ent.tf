@@ -1,7 +1,7 @@
-resource "random_password" "splunk_password" {
+resource "random_string" "splunk_password" {
   length           = 12
-  special          = true
-  override_special = "@£$"
+  special          = false
+  # override_special = "@£$"
 }
 
 resource "aws_instance" "splunk_ent" {
@@ -22,30 +22,20 @@ resource "aws_instance" "splunk_ent" {
   tags = {
     Name = lower(join("_",[var.environment,element(var.splunk_ent_ids, count.index)]))
   }
- 
-  provisioner "file" {
-    source      = "${path.module}/scripts/install_sfx_agent.sh"
-    destination = "/tmp/install_sfx_agent.sh"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/scripts/update_signalfx_config.sh"
-    destination = "/tmp/update_signalfx_config.sh"
-  }
 
   provisioner "file" {
     source      = "${path.module}/scripts/install_splunk.sh"
     destination = "/tmp/install_splunk.sh"
   }
 
-  provisioner "file" {
-    source      = "${path.module}/agents/splunk.yaml"
-    destination = "/tmp/splunk.yaml"
+    provisioner "file" {
+    source      = "${path.module}/config_files/splunkent_agent_config.yaml"
+    destination = "/tmp/splunkent_agent_config.yaml"
   }
 
   provisioner "file" {
-    source      = "${path.module}/agents/free_disk.yaml"
-    destination = "/tmp/free_disk.yaml"
+    source      = "${path.module}/scripts/update_splunk_otel_collector.sh"
+    destination = "/tmp/update_splunk_otel_collector.sh"
   }
 
   provisioner "remote-exec" {
@@ -58,11 +48,11 @@ resource "aws_instance" "splunk_ent" {
       "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
-      "AGENTVERSION=${var.smart_agent_version}",
+      #"AGENTVERSION=${var.smart_agent_version}",
       "LBURL=${aws_lb.collector-lb.dns_name}",
       
     ## Create Splunk Ent Vars
-      "SPLUNK_PASSWORD=${random_password.splunk_password.result}",
+      "SPLUNK_PASSWORD=${random_string.splunk_password.result}",
       "SPLUNK_ENT_VERSION=${var.splunk_ent_version}",
       "SPLUNK_FILENAME=${var.splunk_ent_filename}",
 
@@ -70,22 +60,20 @@ resource "aws_instance" "splunk_ent" {
       "echo $SPLUNK_PASSWORD > /tmp/splunk_password",
       "echo $SPLUNK_ENT_VERSION > /tmp/splunk_ent_version",
       "echo $SPLUNK_FILENAME > /tmp/splunk_filename",
+      "echo $LBURL > /tmp/lburl",
 
     ## Install Splunk
       "sudo chmod +x /tmp/install_splunk.sh",
       "sudo /tmp/install_splunk.sh $SPLUNK_PASSWORD $SPLUNK_ENT_VERSION $SPLUNK_FILENAME",
-    
-    ## Install SignalFX Agent
-      "sudo chmod +x /tmp/install_sfx_agent.sh",
-      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
-      "sudo chmod +x /tmp/update_signalfx_config.sh",
-      "sudo /tmp/update_signalfx_config.sh $LBURL",
 
-    ## Add Monitors
-      "sudo mkdir /etc/signalfx/monitors",
-      "sudo mv /tmp/splunk.yaml /etc/signalfx/monitors/splunk.yaml",
-      "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
-      "sudo chown root:root /etc/signalfx/monitors/*.*",
+    ## Install Otel Agent
+      "sudo curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh",
+      "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm}  -- ${var.access_token} --mode agent --without-fluentd",
+      "sudo chmod +x /tmp/update_splunk_otel_collector.sh",
+      "sudo /tmp/update_splunk_otel_collector.sh $LBURL",
+      "sudo mv /etc/otel/collector/agent_config.yaml /etc/otel/collector/agent_config.bak",
+      "sudo mv /tmp/splunkent_agent_config.yaml /etc/otel/collector/agent_config.yaml",
+      "sudo systemctl restart splunk-otel-collector",
     ]
   }
 
@@ -116,5 +104,5 @@ output "splunk_ent_urls" {
 }
 
 output "splunk_password" {
-  value = random_password.splunk_password.result
+  value = random_string.splunk_password.result
 }

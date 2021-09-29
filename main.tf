@@ -21,6 +21,7 @@ module "dashboards" {
   count                   = var.dashboards_enabled ? 1 : 0
   region                  = lookup(var.aws_region, var.region)
   environment             = var.environment
+  det_prom_tags_id        = module.detectors.*.detector_promoting_tags_id
 }
 
 module "detectors" {
@@ -78,6 +79,17 @@ module "eks" {
   key_name                = var.key_name
   private_key_path        = var.private_key_path
   eks_cluster_name        = join("-",[var.environment,"eks"])
+}
+
+module "eks_fargate" {
+  source                    = "./modules/eks_fargate"
+  count                     = var.eks_fargate_cluster_enabled ? 1 : 0
+  region                    = lookup(var.aws_region, var.region)
+  environment               = var.environment
+  smart_agent_version       = var.smart_agent_version
+  access_token              = var.access_token
+  realm                     = var.realm
+  eks_fargate_cluster_name  = join("-",[var.environment,"eks-fargate"])
 }
 
 module "phone_shop" {
@@ -144,8 +156,8 @@ module "instances" {
   haproxy_ids             = var.haproxy_ids
   mysql_count             = var.mysql_count
   mysql_ids               = var.mysql_ids
-  wordpress_count         = var.wordpress_count
-  wordpress_ids           = var.wordpress_ids
+  apache_web_count        = var.apache_web_count
+  apache_web_ids          = var.apache_web_ids
   splunk_ent_count        = var.splunk_ent_count
   splunk_ent_ids          = var.splunk_ent_ids
   splunk_ent_version      = var.splunk_ent_version
@@ -154,17 +166,17 @@ module "instances" {
 }
 
 ### Instances Outputs ###
-output "Collectors" {
+output "OTEL_Gateway_Servers" {
   value = var.instances_enabled ? module.instances.*.collector_details : null
 }
-output "HAProxies" {
+output "HAProxy_Servers" {
   value = var.instances_enabled ? module.instances.*.haproxy_details : null
 }
 output "MySQL_Servers" {
   value = var.instances_enabled ? module.instances.*.mysql_details : null
 }
-output "WordPress_Servers" {
-  value = var.instances_enabled ? module.instances.*.wordpress_details : null
+output "Apache_Web_Servers" {
+  value = var.instances_enabled ? module.instances.*.apache_web_details : null
 }
 output "collector_lb_dns" {
   value = var.instances_enabled ? module.instances.*.collector_lb_int_dns : null
@@ -189,11 +201,17 @@ output "Splunk_Enterprise_Server" {
 }
 output "splunk_password" {
   value = var.instances_enabled ? module.instances.*.splunk_password : null
+  # sensitive = true
 }
 output "splunk_url" {
   value = var.instances_enabled ? module.instances.*.splunk_ent_urls : null
 }
 
+
+### Detector Outputs
+output "detector_promoting_tags_id" {
+  value = var.detectors_enabled ? module.detectors.*.detector_promoting_tags_id : null
+}
 
 ### EKS Outputs ###
 # output "eks_cluster_endpoint" {

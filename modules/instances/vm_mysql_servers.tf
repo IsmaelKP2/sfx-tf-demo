@@ -11,28 +11,18 @@ resource "aws_instance" "mysql" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/scripts/install_sfx_agent.sh"
-    destination = "/tmp/install_sfx_agent.sh"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/scripts/update_signalfx_config.sh"
-    destination = "/tmp/update_signalfx_config.sh"
-  }
-
-  provisioner "file" {
     source      = "${path.module}/scripts/install_mysql.sh"
     destination = "/tmp/install_mysql.sh"
   }
 
   provisioner "file" {
-    source      = "${path.module}/agents/mysql.yaml"
-    destination = "/tmp/mysql.yaml"
+    source      = "${path.module}/scripts/update_splunk_otel_collector.sh"
+    destination = "/tmp/update_splunk_otel_collector.sh"
   }
 
   provisioner "file" {
-    source      = "${path.module}/agents/free_disk.yaml"
-    destination = "/tmp/free_disk.yaml"
+    source      = "${path.module}/config_files/mysql_agent_config.yaml"
+    destination = "/tmp/mysql_agent_config.yaml"
   }
 
   provisioner "remote-exec" {
@@ -45,22 +35,32 @@ resource "aws_instance" "mysql" {
       "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
-      "AGENTVERSION=${var.smart_agent_version}",
+      #"AGENTVERSION=${var.smart_agent_version}",
       "LBURL=${aws_lb.collector-lb.dns_name}",
 
-      "sudo chmod +x /tmp/install_sfx_agent.sh",
-      "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
-      "sudo chmod +x /tmp/update_signalfx_config.sh",
-      "sudo /tmp/update_signalfx_config.sh $LBURL",
+      # "sudo chmod +x /tmp/install_sfx_agent.sh",
+      # "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
+      # "sudo chmod +x /tmp/update_signalfx_config.sh",
+      # "sudo /tmp/update_signalfx_config.sh $LBURL",
 
-      "sudo mkdir /etc/signalfx/monitors",
-      "sudo mv /tmp/mysql.yaml /etc/signalfx/monitors/mysql.yaml",
-      "sudo chown root:root /etc/signalfx/monitors/mysql.yaml",
-      "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
-      "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
+      # "sudo mkdir /etc/signalfx/monitors",
+      # "sudo mv /tmp/mysql.yaml /etc/signalfx/monitors/mysql.yaml",
+      # "sudo chown root:root /etc/signalfx/monitors/mysql.yaml",
+      # "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
+      # "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
 
+    ## Install MySQL
       "sudo chmod +x /tmp/install_mysql.sh",
       "sudo /tmp/install_mysql.sh",
+    
+    ## Install Otel Agent
+      "sudo curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh",
+      "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm}  -- ${var.access_token} --mode agent --without-fluentd",
+      "sudo chmod +x /tmp/update_splunk_otel_collector.sh",
+      "sudo /tmp/update_splunk_otel_collector.sh $LBURL",
+      "sudo mv /etc/otel/collector/agent_config.yaml /etc/otel/collector/agent_config.bak",
+      "sudo mv /tmp/mysql_agent_config.yaml /etc/otel/collector/agent_config.yaml",
+      "sudo systemctl restart splunk-otel-collector",
     ]
   }
 

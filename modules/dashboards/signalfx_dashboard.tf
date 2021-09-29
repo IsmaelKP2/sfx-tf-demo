@@ -8,7 +8,7 @@ resource "signalfx_dashboard" "mydashboard0" {
 
 # Row 0 ###
     chart {
-        chart_id = signalfx_time_chart.mem_used_chart_graph0.id
+        chart_id = signalfx_time_chart.mem_used_chart_graph.id
         width = 6
         height = 1
         row = 0
@@ -24,7 +24,7 @@ resource "signalfx_dashboard" "mydashboard0" {
     }
 
     chart {
-        chart_id = signalfx_single_value_chart.active_collector_containers.id
+        chart_id = signalfx_single_value_chart.cpu_above_80.id
         width = 3
         height = 1
         row = 0
@@ -33,7 +33,7 @@ resource "signalfx_dashboard" "mydashboard0" {
 
 ### Row 3 ###
     chart {
-        chart_id = signalfx_time_chart.cpu_used_chart_graph0.id
+        chart_id = signalfx_time_chart.cpu_used_chart_graph.id
         width = 6
         height = 1
         row = 3
@@ -89,6 +89,14 @@ resource "signalfx_dashboard" "mydashboard0" {
         column = 6
     }
 
+    chart {
+        chart_id = signalfx_single_value_chart.active_splunk_servers.id
+        width = 3
+        height = 1
+        row = 6
+        column = 9
+    }
+
 ### Row 9 ###
     chart {
         chart_id = signalfx_time_chart.write_io_xvda10.id
@@ -104,6 +112,14 @@ resource "signalfx_dashboard" "mydashboard0" {
         height = 1
         row = 9
         column = 3
+    }
+
+    chart {
+        chart_id = signalfx_single_value_chart.active_collector_containers.id
+        width = 3
+        height = 1
+        row = 9
+        column = 6
     }
 
 

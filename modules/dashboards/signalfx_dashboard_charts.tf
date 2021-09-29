@@ -1,5 +1,5 @@
 # Create Memory Used Chart Graph
-resource "signalfx_time_chart" "mem_used_chart_graph0" {
+resource "signalfx_time_chart" "mem_used_chart_graph" {
   name = "Memory Used %"
 
     program_text = <<-EOF
@@ -13,11 +13,12 @@ resource "signalfx_time_chart" "mem_used_chart_graph0" {
 }
 
 # Create CPU Used Chart Graph
-resource "signalfx_time_chart" "cpu_used_chart_graph0" {
+resource "signalfx_time_chart" "cpu_used_chart_graph" {
   name = "CPU Used %"
 
     program_text = <<-EOF
         A = data('cpu.utilization').publish(label='A')
+        B = alerts(detector_id='${var.det_prom_tags_id[0]}').publish(label='B')       
         EOF
         
     plot_type = "LineChart"
@@ -38,6 +39,18 @@ resource "signalfx_single_value_chart" "active_hosts" {
         EOF
 
     description = "Number of running Hosts"
+}
+
+# Create Hosts Above 80 Chart
+resource "signalfx_single_value_chart" "cpu_above_80" {
+  name = "CPU Above 80"
+
+    program_text = <<-EOF
+        A = data('cpu.utilization').above(80, inclusive=True).count().publish(label='A')
+        B = alerts(detector_id='${var.det_prom_tags_id[0]}').publish(label='B')  
+        EOF
+
+    description = "Number of Hosts with CPU Greater than 80%"
 }
 
 # Active Collectors Chart
@@ -88,10 +101,21 @@ resource "signalfx_single_value_chart" "active_haproxy_servers" {
   name = "Active HAProxy Servers"
 
     program_text = <<-EOF
-        A = data('haproxy_requests', filter=filter('plugin', 'haproxy')).count().publish(label='A')
+        A = data('ps_data', filter=filter('plugin_instance', 'haproxy')).count().publish(label='A')
         EOF
 
     description = "Number of running HAProxy Servers"
+}
+
+# Create Splunk Servers Chart
+resource "signalfx_single_value_chart" "active_splunk_servers" {
+  name = "Active Splunk Servers"
+
+    program_text = <<-EOF
+        A = data('ps_data', filter=filter('plugin_instance', 'splunkd')).count().publish(label='A')
+        EOF
+
+    description = "Number of running Splunk Servers"
 }
 
 # # Create Active SmartGateway Chart
@@ -113,7 +137,7 @@ resource "signalfx_time_chart" "disk_space_xvda10" {
   name = "Disk Space XVDA1"
 
     program_text = <<-EOF
-        A = data('df_complex.free', filter=filter('plugin', 'df') and filter('plugin_instance', 'xvda1')).publish(label='A')
+        A = data('df_complex.free', filter=filter('device', '/dev/xvda1')).publish(label='A')
         EOF
 
     description = "Disk space of XVDA1"
@@ -124,7 +148,7 @@ resource "signalfx_time_chart" "disk_space_xvdg10" {
   name = "Disk Space XVDG1"
 
     program_text = <<-EOF
-        A = data('df_complex.free', filter=filter('plugin', 'df') and filter('plugin_instance', 'xvdg1')).publish(label='A')
+        A = data('df_complex.free', filter=filter('device', '/dev/xvdg1')).publish(label='A')
         EOF
 
     description = "Disk space of XVDG1"

@@ -77,11 +77,11 @@ mysql_ids = [
   "mysql3"
   ]
 
-wordpress_count = "1" # min 0 : max = subnet_count
-wordpress_ids = [
-  "wordpress1",
-  "wordpress2",
-  "wordpress3"
+apache_count = "1" # min 0 : max = subnet_count
+apache_ids = [
+  "apache1",
+  "apache2",
+  "apache3"
   ]
 
 splunk_ent_count = "0" # min 0 : max = 1 as only one is required, used as a yes/no parameter
@@ -181,7 +181,7 @@ The following EC2 Instances can be deployed:
 - Collectors
 - HAProxy
 - MySQL
-- Wordpress (just a basic Apache server in reality)
+- apache (just a basic Apache server in reality)
 - Splunk Enterprise
 
 Each Instance has Infrastructure Monitoring 'monitors' configured to match the services running on them.  The configuration for each monitor is deployed into /etc/signalfx/monitors/xxx.yaml, this means the /etc/signalfx/agent.yaml file is the same regardless of role.

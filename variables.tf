@@ -2,6 +2,9 @@
 variable "eks_cluster_enabled" {
   default = []
 }
+variable "eks_fargate_cluster_enabled" {
+  default = []
+}
 variable "ecs_cluster_enabled" {
   default = []
 }
@@ -68,6 +71,11 @@ variable "aws_api_gateway_deployment_retailorder_invoke_url" {
 
 ## EKS Variables ##
 variable "eks_cluster_name" {
+  default = {}
+}
+
+## EKS-Fargate Variables ##
+variable "eks_fargate_cluster_name" {
   default = {}
 }
 
@@ -148,10 +156,10 @@ variable "mysql_ids" {
   default = []
 }
 
-variable "wordpress_count" {
+variable "apache_web_count" {
   default = {}
 }
-variable "wordpress_ids" {
+variable "apache_web_ids" {
   default = []
 }
 
@@ -255,6 +263,10 @@ variable "otelcol_version" {
 }
 variable "ballast" {
   default = []
+}
+
+variable "detector_promoting_tags_id" {
+  default = {}
 }
 
 ### Splunk Enterprise Variables ###
