@@ -34,6 +34,13 @@ mysql_ids = [
   "mysql3"
   ]
 
+ms_sql_count = "1" # min 0 : max = subnet_count
+ms_sql_ids = [
+  "ms_sql1",
+  "ms_sql2",
+  "ms_sql3"
+  ]
+
 apache_web_count = "1" # min 0 : max = subnet_count
 apache_web_ids = [
   "apache1",
@@ -78,6 +85,7 @@ ecs_agent_url           = "https://raw.githubusercontent.com/geoffhigginbottom/s
 otelcol_version         = "0.20.0"
 ballast                 = "683"
 collector_instance_type = "t2.small"
+ms_sql_instance_type    = "t3.xlarge"
 
 ### Splunk Enterprise Variables ###
 splunk_ent_filename     = "splunk-8.0.0-1357bef0a7f6-linux-2.6-amd64.deb"

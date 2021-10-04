@@ -19,6 +19,22 @@ resource "aws_security_group" "instances_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ## Allow RDP - Enable Windows Remote Desktop
+  ingress {
+    from_port   = 3389
+    to_port     = 3389
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ## Allow WinRM - Enable Windows Remote Desktop
+  ingress {
+    from_port   = 5985
+    to_port     = 5985
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   ## Allow HTTP
   ingress {
     from_port   = 80

@@ -65,6 +65,9 @@ variable "instance_type" {
 variable "collector_instance_type" {
   default = []
 }
+variable "ms_sql_instance_type" {
+  default = []
+}
 variable "aws_api_gateway_deployment_retailorder_invoke_url" {
   default = {}
 }
@@ -117,7 +120,7 @@ variable "ecs_app_count" {
   default     = 3
 }
 
-## AMI ##
+## Ubuntu AMI ##
 data "aws_ami" "latest-ubuntu" {
   most_recent = true
   owners      = ["099720109477"] # This is the owner id of Canonical who owns the official aws ubuntu images
@@ -133,6 +136,27 @@ data "aws_ami" "latest-ubuntu" {
     values = ["hvm"]
   }
 }
+
+# aws ec2 describe-images --owners
+# owerver id 801119661308
+
+## MS SQL Server AMI ##
+data "aws_ami" "ms-sql-server" {
+  most_recent = true
+  owners      = ["801119661308"]
+
+  filter {
+    name   = "name"
+    values = ["Windows_Server-2019-English-Full-SQL_2019_Standard-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+
 
 ### Instance Count Variables ###
 variable "collector_count" {
@@ -153,6 +177,12 @@ variable "mysql_count" {
   default = {}
 }
 variable "mysql_ids" {
+  default = []
+}
+variable "ms_sql_count" {
+  default = {}
+}
+variable "ms_sql_ids" {
   default = []
 }
 

@@ -48,7 +48,6 @@ The quantities of each EC2 Instance deployed as part of the 'Instances' Module a
 
 ### Enable / Disable Modules
 eks_cluster_enabled         = false
-ecs_cluster_enabled         = false
 instances_enabled           = false
 phone_shop_enabled          = false
 lambda_sqs_dynamodb_enabled = false
@@ -75,6 +74,13 @@ mysql_ids = [
   "mysql1",
   "mysql2",
   "mysql3"
+  ]
+
+ms_sql_count = "1" # min 0 : max = subnet_count
+ms_sql_ids = [
+  "ms_sql1",
+  "ms_sql2",
+  "ms_sql3"
   ]
 
 apache_count = "1" # min 0 : max = subnet_count
@@ -181,7 +187,8 @@ The following EC2 Instances can be deployed:
 - Collectors
 - HAProxy
 - MySQL
-- apache (just a basic Apache server in reality)
+- MS SQL
+- Apache (just a basic Apache server in reality)
 - Splunk Enterprise
 
 Each Instance has Infrastructure Monitoring 'monitors' configured to match the services running on them.  The configuration for each monitor is deployed into /etc/signalfx/monitors/xxx.yaml, this means the /etc/signalfx/agent.yaml file is the same regardless of role.
