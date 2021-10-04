@@ -149,13 +149,17 @@ module "instances" {
   private_key_path        = var.private_key_path
   instance_type           = var.instance_type
   collector_instance_type = var.collector_instance_type
+  ms_sql_instance_type    = var.ms_sql_instance_type
   ami                     = data.aws_ami.latest-ubuntu.id
+  ms_sql_ami              = data.aws_ami.ms-sql-server.id
   collector_count         = var.collector_count
   collector_ids           = var.collector_ids
   haproxy_count           = var.haproxy_count
   haproxy_ids             = var.haproxy_ids
   mysql_count             = var.mysql_count
   mysql_ids               = var.mysql_ids
+  ms_sql_count            = var.ms_sql_count
+  ms_sql_ids              = var.ms_sql_ids
   apache_web_count        = var.apache_web_count
   apache_web_ids          = var.apache_web_ids
   splunk_ent_count        = var.splunk_ent_count
@@ -175,6 +179,9 @@ output "HAProxy_Servers" {
 output "MySQL_Servers" {
   value = var.instances_enabled ? module.instances.*.mysql_details : null
 }
+output "MS_SQL_Servers" {
+  value = var.instances_enabled ? module.instances.*.ms_sql_details : null
+}
 output "Apache_Web_Servers" {
   value = var.instances_enabled ? module.instances.*.apache_web_details : null
 }
@@ -184,6 +191,11 @@ output "collector_lb_dns" {
 output "SQS_Test_Server" {
   value = var.lambda_sqs_dynamodb_enabled ? module.lambda_sqs_dynamodb.*.sqs_test_server_details : null
 }
+
+output "MS_SQL_Administrator_Password"{
+  value = var.instances_enabled ? module.instances.*.Administrator_Password : null
+}
+
 
 ### Phone Shop Outputs ###
 output "Phone_Shop_Server" {

@@ -23,7 +23,13 @@ variable "instance_type" {
 variable "collector_instance_type" {
   default = []
 }
+variable "ms_sql_instance_type" {
+  default = []
+}
 variable "ami" {
+  default = {}
+}
+variable "ms_sql_ami" {
   default = {}
 }
 
@@ -49,7 +55,6 @@ variable "ballast" {
 variable "environment" {
   default = []
 }
-
 variable "collector_count" {
   default = {}
 }
@@ -68,13 +73,21 @@ variable "mysql_count" {
 variable "mysql_ids" {
   default = []
 }
+variable "ms_sql_count" {
+  default = {}
+}
+variable "ms_sql_ids" {
+  default = []
+}
 variable "apache_web_count" {
   default = {}
 }
 variable "apache_web_ids" {
   default = []
 }
-
+variable "branch" {
+  default = []
+}
 
 
 ### Splunk Enterprise Variables ###
