@@ -40,7 +40,6 @@ resource "aws_instance" "ms_sql" {
   </powershell>
   EOF
 
-ms_sql_agent_url
     # New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER' -Value signalfxagent
     # New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER_PWD' -Value P@ssword123
 
