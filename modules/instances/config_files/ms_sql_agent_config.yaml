@@ -65,7 +65,7 @@ receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:4317
+        endpoint: 0.0.0.0:4318
       http:
         endpoint: 0.0.0.0:55681
   # This section is used to collect the OpenTelemetry Collector metrics
@@ -148,7 +148,7 @@ exporters:
     sourcetype: "otel"
   # Send to gateway
   otlp:
-    endpoint: "${SPLUNK_GATEWAY_URL}:4317"
+    endpoint: "${SPLUNK_GATEWAY_URL}:4318"
     insecure: true
   # Debug
   logging:
