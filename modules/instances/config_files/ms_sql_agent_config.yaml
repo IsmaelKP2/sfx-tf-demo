@@ -18,9 +18,9 @@ extensions:
     ingress:
       endpoint: 0.0.0.0:6060
     egress:
-      endpoint: "${SPLUNK_API_URL}"
+      # endpoint: "${SPLUNK_API_URL}"
       # Use instead when sending to gateway
-      # endpoint: "${SPLUNK_GATEWAY_URL}"
+      endpoint: "${SPLUNK_GATEWAY_URL}"
   smartagent:
     bundleDir: "${SPLUNK_BUNDLE_DIR}"
     collectd:
@@ -147,8 +147,10 @@ exporters:
     source: "otel"
     sourcetype: "otel"
   # Send to gateway
+  otlphttp:
+    endpoint: http://${SPLUNK_GATEWAY_URL}:4318
   otlp:
-    endpoint: "http://${SPLUNK_GATEWAY_URL}:4318"
+    endpoint: "${SPLUNK_GATEWAY_URL}:4317"
     insecure: true
   # Debug
   logging:
@@ -166,25 +168,25 @@ service:
       #- resource/add_environment
       #exporters: [sapm, signalfx]
       # Use instead when sending to gateway
-      exporters: [otlp, signalfx]
+      exporters: [otlphttp, signalfx]
     metrics:
       receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder, smartagent/sqlserver]
       processors: [memory_limiter, batch, resourcedetection]
       #exporters: [signalfx]
       # Use instead when sending to gateway
-      exporters: [otlp]
+      exporters: [otlphttp]
     metrics/internal:
       receivers: [prometheus/internal]
       processors: [memory_limiter, batch, resourcedetection/internal]
       #exporters: [signalfx]
       # Use instead when sending to gateway
-      exporters: [otlp]
+      exporters: [otlphttp]
     logs/signalfx:
       receivers: [signalfx]
       processors: [memory_limiter, batch]
       #exporters: [signalfx]
       # Use instead when sending to gateway
-      exporters: [otlp]
+      exporters: [otlphttp]
     logs:
       receivers: [fluentforward, otlp]
       processors:
@@ -193,4 +195,4 @@ service:
       - resourcedetection
       #- resource/add_environment
       #exporters: [splunk_hec]
-      exporters: [otlp]
+      exporters: [otlphttp]
