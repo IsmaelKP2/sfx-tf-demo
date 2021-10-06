@@ -194,5 +194,6 @@ service:
       - batch
       - resourcedetection
       #- resource/add_environment
-      #exporters: [splunk_hec]
+      # exporters: [splunk_hec]
+      # Use instead when sending to gateway
       exporters: [otlphttp]
