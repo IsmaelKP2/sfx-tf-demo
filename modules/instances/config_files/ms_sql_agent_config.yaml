@@ -148,7 +148,7 @@ exporters:
     sourcetype: "otel"
   # Send to gateway
   otlp:
-    endpoint: "${SPLUNK_GATEWAY_URL}:4317"
+    endpoint: "http://${SPLUNK_GATEWAY_URL}:4318"
     insecure: true
   # Debug
   logging:
