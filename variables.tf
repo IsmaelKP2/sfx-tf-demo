@@ -68,6 +68,10 @@ variable "collector_instance_type" {
 variable "ms_sql_instance_type" {
   default = []
 }
+variable "ms_sql_agent_url" {
+  description = "Path to the agent file to be used for MS SQL Servers"
+  default     = {}  
+}
 variable "aws_api_gateway_deployment_retailorder_invoke_url" {
   default = {}
 }
@@ -165,14 +169,12 @@ variable "collector_count" {
 variable "collector_ids" {
   default = []
 }
-
 variable "haproxy_count" {
   default = {}
 }
 variable "haproxy_ids" {
   default = []
 }
-
 variable "mysql_count" {
   default = {}
 }
@@ -185,14 +187,18 @@ variable "ms_sql_count" {
 variable "ms_sql_ids" {
   default = []
 }
-
+variable "ms_sql_user" {
+  default = []
+}
+variable "ms_sql_user_pwd" {
+  default = []
+}
 variable "apache_web_count" {
   default = {}
 }
 variable "apache_web_ids" {
   default = []
 }
-
 variable "splunk_ent_count" {
   default = {}
 }
@@ -294,11 +300,9 @@ variable "otelcol_version" {
 variable "ballast" {
   default = []
 }
-
 variable "detector_promoting_tags_id" {
   default = {}
 }
-
 ### Splunk Enterprise Variables ###
 variable "splunk_ent_filename" {
   default = {}

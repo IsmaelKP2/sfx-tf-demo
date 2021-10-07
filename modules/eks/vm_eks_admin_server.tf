@@ -105,7 +105,7 @@ resource "aws_instance" "eks_admin_server" {
   #   when = destroy
   #   on_failure = continue
   #   inline = [
-  #     "kubectl delete -f deployment.yaml",
+  #     "kubectl delete -f /home/ubuntu/deployment.yaml"
   #   ]
   # }
 
@@ -114,6 +114,7 @@ resource "aws_instance" "eks_admin_server" {
     type = "ssh"
     user = "ubuntu"
     private_key = file(var.private_key_path)
+    # private_key = file("~/.ssh/id_rsa")
     agent = "true"
   }
 }
@@ -125,3 +126,13 @@ output "eks_admin_server_details" {
     aws_instance.eks_admin_server.*.public_ip,
   )
 }
+
+# resource "null_resource" "kubectl_apply" {
+#   triggers = {
+#     k8s_yaml_contents = ${path.module}/config_files/deployment.yaml
+#   }
+
+#   provisioner "local-exec" {
+#     command = "ssh ubuntu@self.public_ip kubectl apply -f /home/ubuntu/deployment.yaml"
+#   }
+# }

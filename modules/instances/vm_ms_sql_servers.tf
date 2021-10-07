@@ -31,7 +31,9 @@ resource "aws_instance" "ms_sql" {
     mode = "agent"};
     Invoke-Command -ScriptBlock ([scriptblock]::Create(". {$script} $(&{$args} @params)"))}
 
-    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_GATEWAY_URL' -Value http://${aws_lb.collector-lb.dns_name}
+    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER' -Value signalfxagent
+    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER_PWD' -Value P@ssword123
+    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_GATEWAY_URL' -Value ${aws_lb.collector-lb.dns_name}
 
     Invoke-WebRequest -Uri ${var.ms_sql_agent_url} -OutFile "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
     Stop-Service splunk-otel-collector
@@ -40,8 +42,7 @@ resource "aws_instance" "ms_sql" {
   </powershell>
   EOF
 
-    # New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER' -Value signalfxagent
-    # New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER_PWD' -Value P@ssword123
+
 
     # Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_API_URL' -Value http://${aws_lb.collector-lb.dns_name}:6060
     # Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_INGEST_URL' -Value http://${aws_lb.collector-lb.dns_name}:9943

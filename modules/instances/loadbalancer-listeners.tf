@@ -26,8 +26,6 @@ resource "aws_lb_listener_rule" "rule-9411" {
 
 
 
-
-
 resource "aws_lb_listener" "collector-lb-listener-9943" {
   default_action {
     target_group_arn = aws_lb_target_group.collector-lb-tg-9943.arn
@@ -53,6 +51,8 @@ resource "aws_lb_listener_rule" "rule-9943" {
     }
   }
 }
+
+
 
 resource "aws_lb_listener" "collector-lb-listener-6060" {
   default_action {
@@ -98,6 +98,63 @@ resource "aws_lb_listener_rule" "rule-7276" {
 
   action {
     target_group_arn = aws_lb_target_group.collector-lb-tg-7276.arn
+    type = "forward"
+  }
+
+  condition {
+    path_pattern {
+      values = ["/static/*"]
+    }
+  }
+}
+
+
+
+resource "aws_lb_listener" "collector-lb-listener-4318" {
+  default_action {
+    target_group_arn = aws_lb_target_group.collector-lb-tg-4318.arn
+    type = "forward"
+  }
+  load_balancer_arn = aws_lb.collector-lb.arn
+  port = 4318
+  protocol = "HTTP"
+}
+
+resource "aws_lb_listener_rule" "rule-4318" {
+  listener_arn = aws_lb_listener.collector-lb-listener-4318.id
+  priority = 100
+
+  action {
+    target_group_arn = aws_lb_target_group.collector-lb-tg-4318.arn
+    type = "forward"
+  }
+
+  condition {
+    path_pattern {
+      values = ["/static/*"]
+    }
+  }
+}
+
+
+
+
+resource "aws_lb_listener" "collector-lb-listener-55681" {
+  default_action {
+    target_group_arn = aws_lb_target_group.collector-lb-tg-55681.arn
+    type = "forward"
+  }
+  load_balancer_arn = aws_lb.collector-lb.arn
+  port = 55681
+  protocol = "HTTP"
+}
+
+resource "aws_lb_listener_rule" "rule-55681" {
+  listener_arn = aws_lb_listener.collector-lb-listener-55681.id
+  priority = 100
+
+  action {
+    target_group_arn = aws_lb_target_group.collector-lb-tg-55681.arn
     type = "forward"
   }
 
