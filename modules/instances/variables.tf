@@ -79,6 +79,15 @@ variable "ms_sql_count" {
 variable "ms_sql_ids" {
   default = []
 }
+variable "ms_sql_user" {
+  default = []
+}
+variable "ms_sql_user_pwd" {
+  default = []
+}
+variable "ms_sql_agent_url" {
+  default = []
+}
 variable "apache_web_count" {
   default = {}
 }

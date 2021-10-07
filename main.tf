@@ -160,6 +160,9 @@ module "instances" {
   mysql_ids               = var.mysql_ids
   ms_sql_count            = var.ms_sql_count
   ms_sql_ids              = var.ms_sql_ids
+  ms_sql_user             = var.ms_sql_user
+  ms_sql_user_pwd         = var.ms_sql_user_pwd
+  ms_sql_agent_url        = var.ms_sql_agent_url
   apache_web_count        = var.apache_web_count
   apache_web_ids          = var.apache_web_ids
   splunk_ent_count        = var.splunk_ent_count
@@ -192,9 +195,9 @@ output "SQS_Test_Server" {
   value = var.lambda_sqs_dynamodb_enabled ? module.lambda_sqs_dynamodb.*.sqs_test_server_details : null
 }
 
-output "MS_SQL_Administrator_Password"{
-  value = var.instances_enabled ? module.instances.*.Administrator_Password : null
-}
+# output "MS_SQL_Administrator_Password"{
+#   value = var.instances_enabled ? module.instances.*.Administrator_Password : null
+# }
 
 
 ### Phone Shop Outputs ###

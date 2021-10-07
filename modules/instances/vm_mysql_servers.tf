@@ -35,19 +35,7 @@ resource "aws_instance" "mysql" {
       "TOKEN=${var.access_token}",
       "REALM=${var.realm}",
       "HOSTNAME=${self.tags.Name}",
-      #"AGENTVERSION=${var.smart_agent_version}",
       "LBURL=${aws_lb.collector-lb.dns_name}",
-
-      # "sudo chmod +x /tmp/install_sfx_agent.sh",
-      # "sudo /tmp/install_sfx_agent.sh $TOKEN $REALM $AGENTVERSION",
-      # "sudo chmod +x /tmp/update_signalfx_config.sh",
-      # "sudo /tmp/update_signalfx_config.sh $LBURL",
-
-      # "sudo mkdir /etc/signalfx/monitors",
-      # "sudo mv /tmp/mysql.yaml /etc/signalfx/monitors/mysql.yaml",
-      # "sudo chown root:root /etc/signalfx/monitors/mysql.yaml",
-      # "sudo mv /tmp/free_disk.yaml /etc/signalfx/monitors/free_disk.yaml",
-      # "sudo chown root:root /etc/signalfx/monitors/free_disk.yaml",
 
     ## Install MySQL
       "sudo chmod +x /tmp/install_mysql.sh",
@@ -55,7 +43,7 @@ resource "aws_instance" "mysql" {
     
     ## Install Otel Agent
       "sudo curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh",
-      "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm}  -- ${var.access_token} --mode agent --without-fluentd",
+      "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm}  -- ${var.access_token} --mode agent",
       "sudo chmod +x /tmp/update_splunk_otel_collector.sh",
       "sudo /tmp/update_splunk_otel_collector.sh $LBURL",
       "sudo mv /etc/otel/collector/agent_config.yaml /etc/otel/collector/agent_config.bak",

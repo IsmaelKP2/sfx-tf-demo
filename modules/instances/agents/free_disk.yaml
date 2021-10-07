@@ -1,3 +1,0 @@
----
-  - type: collectd/df
-    reportByDevice: yes

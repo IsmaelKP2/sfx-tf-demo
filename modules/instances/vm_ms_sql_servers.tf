@@ -5,7 +5,7 @@ resource "aws_instance" "ms_sql" {
   subnet_id                 = element(var.public_subnet_ids, count.index)
   key_name                  = var.key_name
   vpc_security_group_ids    = [aws_security_group.instances_sg.id]
-  get_password_data         = "true"
+  # get_password_data         = "true"
 
   user_data = <<EOF
   <powershell>
@@ -20,22 +20,9 @@ resource "aws_instance" "ms_sql" {
     $s.Alter()
     Restart-Service -Name MSSQLSERVER -f
 
-    $Value = 'signalfxagent'
-    $Type = [Microsoft.Win32.RegistryValueKind]::String
-    $Hive = [Microsoft.Win32.RegistryHive]::LocalMachine
-    $KeyPath = 'System\CurrentControlSet\Control\Session Manager\Environment'
-    $Name = 'SPLUNK_SQL_USER'
-    $key = $reg.OpenSubKey($KeyPath, $true)
-    $key.SetValue($Name,$Value,$Type)
-
-    $Value = 'P@ssword123'
-    $Name = 'SPLUNK_SQL_USER_PWD'
-    $key = $reg.OpenSubKey($KeyPath, $true)
-    $key.SetValue($Name,$Value,$Type)
-    
-    Invoke-Sqlcmd -Query "CREATE LOGIN [signalfxagent] WITH PASSWORD = 'P@ssword123';" -ServerInstance localhost
-    Invoke-Sqlcmd -Query "GRANT VIEW SERVER STATE TO [signalfxagent];" -ServerInstance localhost
-    Invoke-Sqlcmd -Query "GRANT VIEW ANY DEFINITION TO [signalfxagent];" -ServerInstance localhost
+    Invoke-Sqlcmd -Query "CREATE LOGIN [signalfxagent] WITH PASSWORD = '${var.ms_sql_user_pwd}';" -ServerInstance localhost
+    Invoke-Sqlcmd -Query "GRANT VIEW SERVER STATE TO [${var.ms_sql_user}];" -ServerInstance localhost
+    Invoke-Sqlcmd -Query "GRANT VIEW ANY DEFINITION TO [${var.ms_sql_user}];" -ServerInstance localhost
 
 	  & {Set-ExecutionPolicy Bypass -Scope Process -Force;
     $script = ((New-Object System.Net.WebClient).DownloadString('https://dl.signalfx.com/splunk-otel-collector.ps1'));
@@ -44,12 +31,25 @@ resource "aws_instance" "ms_sql" {
     mode = "agent"};
     Invoke-Command -ScriptBlock ([scriptblock]::Create(". {$script} $(&{$args} @params)"))}
 
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/Master/modules/instances/config_files/ms_sql_agent_config.yaml" -OutFile "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
+    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER' -Value signalfxagent
+    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_SQL_USER_PWD' -Value P@ssword123
+    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_GATEWAY_URL' -Value ${aws_lb.collector-lb.dns_name}
+
+    Invoke-WebRequest -Uri ${var.ms_sql_agent_url} -OutFile "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
     Stop-Service splunk-otel-collector
     Start-Service splunk-otel-collector
 
   </powershell>
   EOF
+
+
+
+    # Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_API_URL' -Value http://${aws_lb.collector-lb.dns_name}:6060
+    # Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_INGEST_URL' -Value http://${aws_lb.collector-lb.dns_name}:9943
+    # Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_TRACE_URL' -Value http://${aws_lb.collector-lb.dns_name}:7276/v2/trace
+    # Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_HEC_URL' -Value http://${aws_lb.collector-lb.dns_name}:9943/v1/log
+
+    # Invoke-WebRequest -Uri "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/master/modules/instances/config_files/ms_sql_agent_config.yaml" -OutFile "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
 
   tags = {
     Name = lower(join("_",[var.environment,element(var.ms_sql_ids, count.index)]))
@@ -87,9 +87,9 @@ output "ms_sql_details" {
   )
 }
 
-output "Administrator_Password" {
-   value = [
-     for g in aws_instance.ms_sql : rsadecrypt(g.password_data,file(var.private_key_path))
-   ]
- }
+# output "Administrator_Password" {
+#    value = [
+#      for g in aws_instance.ms_sql : rsadecrypt(g.password_data,file(var.private_key_path))
+#    ]
+#  }
  

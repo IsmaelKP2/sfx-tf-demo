@@ -1,3 +1,0 @@
----
-  - type: haproxy
-    url: "unix://var/run/haproxy/admin.sock"
