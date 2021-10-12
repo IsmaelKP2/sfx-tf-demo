@@ -80,7 +80,8 @@ resource "aws_instance" "eks_admin_server" {
       "EKS_CLUSTER_NAME=${var.eks_cluster_name}",
       "helm repo add splunk-otel-collector-chart https://signalfx.github.io/splunk-otel-collector-chart",
       "helm repo update",
-      "helm install --set provider='aws' --set distro='eks' --set splunkAccessToken=$TOKEN --set clusterName=$EKS_CLUSTER_NAME --set splunkRealm=$REALM --set otelCollector.enabled='false' --set logsEnabled='false' --generate-name splunk-otel-collector-chart/splunk-otel-collector",
+      # "helm install --set provider='aws' --set distro='eks' --set splunkAccessToken=$TOKEN --set clusterName=$EKS_CLUSTER_NAME --set splunkRealm=$REALM --set otelCollector.enabled='false' --set logsEnabled='false' --generate-name splunk-otel-collector-chart/splunk-otel-collector",
+      "helm install --set provider='aws' --set distro='eks' --set splunkObservability.accessToken=$TOKEN --set clusterName=$EKS_CLUSTER_NAME --set splunkObservability.realm=$REALM --set otelCollector.enabled='false' --set splunkObservability.logsEnabled='true' --generate-name splunk-otel-collector-chart/splunk-otel-collector",
 
     ## Deploy Hot Rod
       "kubectl apply -f /home/ubuntu/deployment.yaml",
