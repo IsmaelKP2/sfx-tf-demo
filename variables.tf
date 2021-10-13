@@ -72,6 +72,13 @@ variable "ms_sql_agent_url" {
   description = "Path to the agent file to be used for MS SQL Servers"
   default     = {}  
 }
+variable "windows_server_instance_type" {
+  default = []
+}
+variable "windows_server_agent_url" {
+  description = "Path to the agent file to be used for Windows Servers"
+  default     = {}  
+}
 variable "aws_api_gateway_deployment_retailorder_invoke_url" {
   default = {}
 }
@@ -142,7 +149,7 @@ data "aws_ami" "latest-ubuntu" {
 }
 
 # aws ec2 describe-images --owners
-# owerver id 801119661308
+# owner id 801119661308
 
 ## MS SQL Server AMI ##
 data "aws_ami" "ms-sql-server" {
@@ -159,6 +166,23 @@ data "aws_ami" "ms-sql-server" {
     values = ["hvm"]
   }
 }
+
+## Windows Server AMI ##
+data "aws_ami" "windows-server" {
+  most_recent = true
+  owners      = ["801119661308"]
+
+  filter {
+    name   = "name"
+    values = ["Windows_Server-2019-English-Full-ContainersLatest-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 
 
 
@@ -191,6 +215,12 @@ variable "ms_sql_user" {
   default = []
 }
 variable "ms_sql_user_pwd" {
+  default = []
+}
+variable "windows_server_count" {
+  default = {}
+}
+variable "windows_server_ids" {
   default = []
 }
 variable "apache_web_count" {
