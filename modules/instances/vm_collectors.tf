@@ -27,27 +27,21 @@ resource "aws_instance" "collector" {
     ## Install Otel Agent     
       "sudo curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh",
       "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm} -- ${var.access_token} --mode gateway",
-      "sudo chmod +x /tmp/update_splunk_otel_collector.sh",
       ## Move gateway_config.yaml to /etc/otel/collector and update permissions,
       "sudo cp /etc/otel/collector/gateway_config.yaml /etc/otel/collector/gateway_config.bak",
       "sudo cp /tmp/gateway_config.yaml /etc/otel/collector/gateway_config.yaml",
       "sudo chown -R splunk-otel-collector:splunk-otel-collector /etc/otel/collector/gateway_config.yaml",
       "sudo systemctl restart splunk-otel-collector",
-      # "sudo /tmp/update_splunk_otel_collector.sh $LBURL",
-      # "sudo systemctl restart splunk-otel-collector",
 
     ## Configure motd
-      # "sudo apt install curl -y",
       "sudo curl -s https://raw.githubusercontent.com/signalfx/observability-workshop/master/cloud-init/motd -o /etc/motd",
       "sudo chmod -x /etc/update-motd.d/*",
 
     ## Splunk Forwarder
-      "sudo wget -O /tmp/splunkforwarder-8.1.2-545206cc9f70-Linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.1.2&product=universalforwarder&filename=splunkforwarder-8.1.2-545206cc9f70-Linux-x86_64.tgz&wget=true'",
-      "sudo tar -zxvf /tmp/splunkforwarder-8.1.2-545206cc9f70-Linux-x86_64.tgz -C /opt",
-      "sudo /opt/splunkforwarder/bin/splunk cmd splunkd rest --noauth POST /services/authentication/users 'name=admin&password=password&roles=admin'",
-      "sudo /opt/splunkforwarder/bin/splunk start --accept-license",
-      # "sudo /opt/splunkforwarder/bin/splunk add forward-server ${aws_instance.splunk_ent[count.index].public_ip}:9997 -auth admin:password",
-      # "sudo /opt/splunkforwarder/bin/splunk add monitor /var/log",
+      # "sudo wget -O /tmp/splunkforwarder-8.1.2-545206cc9f70-Linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.1.2&product=universalforwarder&filename=splunkforwarder-8.1.2-545206cc9f70-Linux-x86_64.tgz&wget=true'",
+      # "sudo tar -zxvf /tmp/splunkforwarder-8.1.2-545206cc9f70-Linux-x86_64.tgz -C /opt",
+      # "sudo /opt/splunkforwarder/bin/splunk cmd splunkd rest --noauth POST /services/authentication/users 'name=admin&password=password&roles=admin'",
+      # "sudo /opt/splunkforwarder/bin/splunk start --accept-license",
     ]
   }
 

@@ -10,7 +10,7 @@ resource "aws_instance" "windows_server" {
   user_data = <<EOF
   <powershell>
 
-    Get-LocalUser -Name "Administrator" | Set-LocalUser -Password (ConvertTo-SecureString -AsPlainText "f7t67G^&(g78g^&)" -Force)
+    Get-LocalUser -Name "Administrator" | Set-LocalUser -Password (ConvertTo-SecureString -AsPlainText "${var.windows_server_administrator_pwd}" -Force)
 
 	  & {Set-ExecutionPolicy Bypass -Scope Process -Force;
     $script = ((New-Object System.Net.WebClient).DownloadString('https://dl.signalfx.com/splunk-otel-collector.ps1'));

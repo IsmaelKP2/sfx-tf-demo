@@ -205,6 +205,12 @@ variable "mysql_count" {
 variable "mysql_ids" {
   default = []
 }
+variable "mysql_user" {
+  default = []
+}
+variable "mysql_user_pwd" {
+  default = []
+}
 variable "ms_sql_count" {
   default = {}
 }
@@ -217,11 +223,17 @@ variable "ms_sql_user" {
 variable "ms_sql_user_pwd" {
   default = []
 }
+variable "ms_sql_administrator_pwd" {
+  default =[]
+}
 variable "windows_server_count" {
   default = {}
 }
 variable "windows_server_ids" {
   default = []
+}
+variable "windows_server_administrator_pwd" {
+  default =[]
 }
 variable "apache_web_count" {
   default = {}

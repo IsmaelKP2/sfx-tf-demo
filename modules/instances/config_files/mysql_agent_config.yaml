@@ -94,8 +94,8 @@ receivers:
     port: 3306
     databases:
       - name:
-    username: root
-    password: root
+    username: signalfxagent
+    password: P@ssword123
 
 processors:
   batch:
