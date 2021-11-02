@@ -88,6 +88,21 @@ receivers:
     endpoint: 0.0.0.0:9943
   zipkin:
     endpoint: 0.0.0.0:9411
+  smartagent/processes:
+    type: telegraf/win_services
+    serviceNames:
+      - fluentdwinsvc
+      - Dnscache
+      - Dhcp
+      - LanmanServer
+      - LanmanWorkstation
+      - SessionEnv
+      - EventLog
+      - lmhosts
+      - PlugPlay
+      - RpcEptMapper
+      - MSDTC
+      - SamSs
 
 processors:
   batch:
@@ -163,7 +178,7 @@ service:
       # Use instead when sending to gateway
       exporters: [otlphttp, signalfx]
     metrics:
-      receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder]
+      receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder, smartagent/processes]
       processors: [memory_limiter, batch, resourcedetection]
       #exporters: [signalfx]
       # Use instead when sending to gateway
