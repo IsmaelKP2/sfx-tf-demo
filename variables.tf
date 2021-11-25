@@ -11,6 +11,9 @@ variable "ecs_cluster_enabled" {
 variable "instances_enabled" {
   default = []
 }
+variable "proxied_instances_enabled" {
+  default = []
+}
 variable "phone_shop_enabled" {
   default = []
 }
@@ -245,6 +248,20 @@ variable "splunk_ent_count" {
   default = {}
 }
 variable "splunk_ent_ids" {
+  default = []
+}
+
+variable "proxied_apache_web_count" {
+  default = {}
+}
+variable "proxied_apache_web_ids" {
+  default = []
+}
+
+variable "proxy_server_count" {
+  default = {}
+}
+variable "proxy_server_ids" {
   default = []
 }
 

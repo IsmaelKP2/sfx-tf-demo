@@ -131,6 +131,28 @@ module "lambda_sqs_dynamodb" {
   ami                     = data.aws_ami.latest-ubuntu.id
 }
 
+module "proxied_instances" {
+  source                           = "./modules/proxied_instances"
+  count                            = var.proxied_instances_enabled ? 1 : 0
+  access_token                     = var.access_token
+  api_url                          = var.api_url
+  realm                            = var.realm
+  ballast                          = var.ballast
+  environment                      = var.environment
+  region                           = lookup(var.aws_region, var.region)
+  vpc_id                           = module.vpc.vpc_id
+  vpc_cidr_block                   = var.vpc_cidr_block
+  public_subnet_ids                = module.vpc.public_subnet_ids
+  key_name                         = var.key_name
+  private_key_path                 = var.private_key_path
+  instance_type                    = var.instance_type
+  ami                              = data.aws_ami.latest-ubuntu.id
+  proxied_apache_web_count         = var.proxied_apache_web_count
+  proxied_apache_web_ids           = var.proxied_apache_web_ids
+  proxy_server_count               = var.proxy_server_count
+  proxy_server_ids                 = var.proxy_server_ids
+}
+
 module "instances" {
   source                           = "./modules/instances"
   count                            = var.instances_enabled ? 1 : 0
@@ -210,6 +232,15 @@ output "Windows_Servers" {
 #   value = var.instances_enabled ? module.instances.*.Administrator_Password : null
 # }
 
+
+### Proxied Instances Outputs ###
+output "Proxied_Apache_Web_Servers" {
+  value = var.proxied_instances_enabled ? module.proxied_instances.*.proxied_apache_web_details : null
+}
+
+output "Proxy_Server" {
+  value = var.proxied_instances_enabled ? module.proxied_instances.*.proxy_server_details : null
+}
 
 ### Phone Shop Outputs ###
 output "Phone_Shop_Server" {
