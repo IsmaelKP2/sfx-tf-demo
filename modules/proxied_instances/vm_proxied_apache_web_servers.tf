@@ -20,10 +20,23 @@ resource "aws_instance" "proxied_apache_web" {
     destination = "/tmp/apache_web_agent_config.yaml"
   }
 
+  provisioner "file" {
+    source      = "${path.module}/config_files/service-proxy.conf"
+    destination = "/tmp/service-proxy.conf"
+  }
+
   provisioner "remote-exec" {
     inline = [
+    ## Update Env Vars - Set Proxy
+      "sudo sed -i '$ a http_proxy=http://${aws_instance.proxy_server[0].private_ip}:8080/' /etc/environment",
+      "sudo sed -i '$ a https_proxy=http://${aws_instance.proxy_server[0].private_ip}:8080/' /etc/environment",
+      "sudo sed -i '$ a no_proxy=169.254.169.254' /etc/environment",
+
+    ## Set Hostname
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
+
+    ## Apply Updates
       "sudo apt-get update",
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
@@ -36,18 +49,16 @@ resource "aws_instance" "proxied_apache_web" {
       "sudo chmod +x /tmp/install_apache_web_server.sh",
       "sudo /tmp/install_apache_web_server.sh",
 
-    ## Update Env Vars
-      "sudo sed -i '$ a http_proxy=http://${aws_instance.proxy_server[0].private_ip}:8080/' /etc/environment",
-      "sudo sed -i '$ a https_proxy=http://${aws_instance.proxy_server[0].private_ip}:8080/' /etc/environment",
-      "sudo sed -i '$ a no_proxy=169.254.169.254' /etc/environment",
-
     ## Install Otel Agent
       "sudo curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh",
       "sudo sh /tmp/splunk-otel-collector.sh --realm ${var.realm}  -- ${var.access_token} --mode agent",
       "sudo mv /etc/otel/collector/agent_config.yaml /etc/otel/collector/agent_config.bak",
       "sudo mv /tmp/apache_web_agent_config.yaml /etc/otel/collector/agent_config.yaml",
-      "sudo sed -i '$ a http_proxy=http://${aws_instance.proxy_server[0].private_ip}:8080/' /etc/otel/collector/splunk-otel-collector.conf",
-      "sudo sed -i '$ a https_proxy=http://${aws_instance.proxy_server[0].private_ip}:8080/' /etc/otel/collector/splunk-otel-collector.conf",
+      "sudo chown root:root /tmp/service-proxy.conf",
+      "sudo mv /tmp/service-proxy.conf /etc/systemd/system/splunk-otel-collector.service.d/service-proxy.conf",
+      "sudo sed -i '$ a Environment=\"HTTP_PROXY=http://${aws_instance.proxy_server[0].private_ip}:8080\"' /etc/systemd/system/splunk-otel-collector.service.d/service-proxy.conf",
+      "sudo sed -i '$ a Environment=\"HTTPS_PROXY=http://${aws_instance.proxy_server[0].private_ip}:8080\"' /etc/systemd/system/splunk-otel-collector.service.d/service-proxy.conf",
+      "sudo systemctl daemon-reload",
       "sudo systemctl restart splunk-otel-collector",
     ]
   }
