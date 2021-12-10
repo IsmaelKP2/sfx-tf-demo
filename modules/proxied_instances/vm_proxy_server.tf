@@ -7,7 +7,7 @@ resource "aws_instance" "proxy_server" {
   vpc_security_group_ids    = [aws_security_group.proxy_server.id]
 
   tags = {
-    Name = lower(join("_",[var.environment,element(var.proxy_server_ids, count.index)]))
+    Name = lower(join("-",[var.environment,element(var.proxy_server_ids, count.index)]))
   }
  
   provisioner "file" {
@@ -17,16 +17,15 @@ resource "aws_instance" "proxy_server" {
 
   provisioner "remote-exec" {
     inline = [
+    ## Set Hostname
       "sudo sed -i 's/127.0.0.1.*/127.0.0.1 ${self.tags.Name}.local ${self.tags.Name} localhost/' /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
+
+    ## Apply Updates
       "sudo apt-get update",
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
-
-      "TOKEN=${var.access_token}",
-      "REALM=${var.realm}",
-      "HOSTNAME=${self.tags.Name}",
-   
+  
     ## Install Proxy Server
       "sudo apt-get install squid -y",
       "sudo mv /etc/squid/squid.conf /etc/squid/squid.bak",
@@ -50,8 +49,9 @@ resource "aws_instance" "proxy_server" {
 
 output "proxy_server_details" {
   value =  formatlist(
-    "%s, %s", 
+    "%s, %s, %s", 
     aws_instance.proxy_server.*.tags.Name,
     aws_instance.proxy_server.*.public_ip,
+    aws_instance.proxy_server.*.private_ip,
   )
 }

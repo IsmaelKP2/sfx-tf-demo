@@ -7,7 +7,7 @@ resource "aws_instance" "proxied_apache_web" {
   vpc_security_group_ids    = [aws_security_group.proxied_instances_sg.id]
 
   tags = {
-    Name = lower(join("_",[var.environment,element(var.proxied_apache_web_ids, count.index)]))
+    Name = lower(join("-",[var.environment,element(var.proxied_apache_web_ids, count.index)]))
   }
  
   provisioner "file" {
@@ -40,10 +40,6 @@ resource "aws_instance" "proxied_apache_web" {
       "sudo apt-get update",
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
-      
-      "TOKEN=${var.access_token}",
-      "REALM=${var.realm}",
-      "HOSTNAME=${self.tags.Name}",
    
     ## Install Apache
       "sudo chmod +x /tmp/install_apache_web_server.sh",

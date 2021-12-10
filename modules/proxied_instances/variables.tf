@@ -23,6 +23,15 @@ variable "instance_type" {
 variable "ami" {
   default = {}
 }
+variable "windows_server_instance_type" {
+  default = []
+}
+variable "windows_server_ami" {
+  default = {}
+}
+variable "windows_server_administrator_pwd" {
+  default =[]
+}
 
 ### SignalFX Variables ###
 variable "access_token" {
@@ -34,13 +43,7 @@ variable "api_url" {
 variable "realm" {
   default = []
 }
-variable "smart_agent_version" {
-  default = []
-}
-variable "otelcol_version" {
-  default = []
-}
-variable "ballast" {
+variable "collector_version" {
   default = []
 }
 variable "environment" {
@@ -51,6 +54,13 @@ variable "proxied_apache_web_count" {
   default = {}
 }
 variable "proxied_apache_web_ids" {
+  default = []
+}
+
+variable "proxied_windows_server_count" {
+  default = {}
+}
+variable "proxied_windows_server_ids" {
   default = []
 }
 

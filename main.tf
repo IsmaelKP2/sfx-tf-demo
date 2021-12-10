@@ -137,7 +137,6 @@ module "proxied_instances" {
   access_token                     = var.access_token
   api_url                          = var.api_url
   realm                            = var.realm
-  ballast                          = var.ballast
   environment                      = var.environment
   region                           = lookup(var.aws_region, var.region)
   vpc_id                           = module.vpc.vpc_id
@@ -149,6 +148,12 @@ module "proxied_instances" {
   ami                              = data.aws_ami.latest-ubuntu.id
   proxied_apache_web_count         = var.proxied_apache_web_count
   proxied_apache_web_ids           = var.proxied_apache_web_ids
+  proxied_windows_server_count     = var.proxied_windows_server_count
+  proxied_windows_server_ids       = var.proxied_windows_server_ids
+  windows_server_administrator_pwd = var.windows_server_administrator_pwd
+  windows_server_instance_type     = var.windows_server_instance_type
+  windows_server_ami               = data.aws_ami.windows-server.id
+  collector_version                = var.collector_version
   proxy_server_count               = var.proxy_server_count
   proxy_server_ids                 = var.proxy_server_ids
 }
@@ -160,7 +165,6 @@ module "instances" {
   api_url                          = var.api_url
   realm                            = var.realm
   smart_agent_version              = var.smart_agent_version
-  ballast                          = var.ballast
   environment                      = var.environment
   region                           = lookup(var.aws_region, var.region)
   vpc_id                           = module.vpc.vpc_id
@@ -236,6 +240,10 @@ output "Windows_Servers" {
 ### Proxied Instances Outputs ###
 output "Proxied_Apache_Web_Servers" {
   value = var.proxied_instances_enabled ? module.proxied_instances.*.proxied_apache_web_details : null
+}
+
+output "Proxied_Windows_Servers" {
+  value = var.proxied_instances_enabled ? module.proxied_instances.*.proxied_windows_server_details : null
 }
 
 output "Proxy_Server" {
