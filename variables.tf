@@ -11,6 +11,9 @@ variable "ecs_cluster_enabled" {
 variable "instances_enabled" {
   default = []
 }
+variable "proxied_instances_enabled" {
+  default = []
+}
 variable "phone_shop_enabled" {
   default = []
 }
@@ -248,6 +251,27 @@ variable "splunk_ent_ids" {
   default = []
 }
 
+variable "proxied_apache_web_count" {
+  default = {}
+}
+variable "proxied_apache_web_ids" {
+  default = []
+}
+
+variable "proxied_windows_server_count" {
+  default = {}
+}
+variable "proxied_windows_server_ids" {
+  default = []
+}
+
+variable "proxy_server_count" {
+  default = {}
+}
+variable "proxy_server_ids" {
+  default = []
+}
+
 # variable "xxx _count" {
 #   default = {}
 # }
@@ -339,7 +363,10 @@ variable "environment" {
 variable "otelcol_version" {
   default = []
 }
-variable "ballast" {
+variable "windows_msi_url" {
+  default = []
+}
+variable "collector_version" {
   default = []
 }
 variable "detector_promoting_tags_id" {
