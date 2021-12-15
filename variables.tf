@@ -26,6 +26,9 @@ variable "dashboards_enabled" {
 variable "detectors_enabled" {
   default = []
 }
+variable "itsi_o11y_cp_enabled" {
+  default = []
+}
 
 
 ### AWS Variables ###
@@ -250,28 +253,30 @@ variable "splunk_ent_count" {
 variable "splunk_ent_ids" {
   default = []
 }
-
 variable "proxied_apache_web_count" {
   default = {}
 }
 variable "proxied_apache_web_ids" {
   default = []
 }
-
 variable "proxied_windows_server_count" {
   default = {}
 }
 variable "proxied_windows_server_ids" {
   default = []
 }
-
 variable "proxy_server_count" {
   default = {}
 }
 variable "proxy_server_ids" {
   default = []
 }
-
+variable "splunk_itsi_count" {
+  default = {}
+}
+variable "splunk_itsi_ids" {
+  default = []
+}
 # variable "xxx _count" {
 #   default = {}
 # }
@@ -380,5 +385,34 @@ variable "splunk_ent_version" {
   default = {}
 }
 variable "splunk_ent_inst_type" {
+  default = {}
+}
+
+### Splunk ITSI Variables ###
+variable "splunk_itsi_filename" {
+  default = {}
+}
+variable "splunk_itsi_version" {
+  default = {}
+}
+variable "splunk_itsi_inst_type" {
+  default = {}
+}
+variable "splunk_itsi_files_local_path" {
+  default = {}
+}
+variable "splunk_itsi_license_filename" {
+  default = {}
+}
+variable "splunk_app_for_content_packs_filename" {
+  default = {}
+}
+variable "splunk_it_service_intelligence_filename" {
+  default = {}
+}
+variable "splunk_synthetic_monitoring_add_on_filename" {
+  default = {}
+}
+variable "splunk_infrastructure_monitoring_add_on_filename" {
   default = {}
 }

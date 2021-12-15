@@ -7,6 +7,8 @@
 eks_cluster_enabled         = false
 ecs_cluster_enabled         = false
 instances_enabled           = false
+proxied_instances_enabled   = false
+itsi_o11y_cp_enabled        = false
 phone_shop_enabled          = false
 lambda_sqs_dynamodb_enabled = false
 dashboards_enabled          = false
@@ -57,7 +59,35 @@ apache_web_ids = [
 
 splunk_ent_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
 splunk_ent_ids = [
-  "splunk_ent1"
+  "splunk-ent"
+  ]
+
+## Proxied Instances Quantities ##
+
+proxy_server_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
+proxy_server_ids = [
+  "proxy-server"
+  ]
+
+proxied_apache_web_count = "1" # min 0 : max = subnet_count
+proxied_apache_web_ids = [
+  "proxied-apache_1",
+  "proxied-apache_2",
+  "proxied-apache_3"
+  ]
+
+proxied_windows_server_count = "1" # min 0 : max = subnet_count
+proxied_windows_server_ids = [
+  "proxied-windows1",
+  "proxied-windows2",
+  "proxied-windows3"
+  ]
+
+## ITSI Quantities ##
+
+splunk_itsi_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
+splunk_itsi_ids = [
+  "splunk-itsi"
   ]
 
 ### AWS Variables ###
@@ -88,27 +118,38 @@ smart_agent_version      = "" # Optional - If left blank, latest will be install
 ecs_agent_url            = "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/master/modules/aws_ecs/agent_fargate.yaml"
 ms_sql_agent_url         = "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/Master/modules/instances/config_files/ms_sql_agent_config.yaml"
 windows_server_agent_url = "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/Master/modules/instances/config_files/windows_server_agent_config.yaml"
+collector_version        = "0.40.0"
 
 ### Collector Variables ###
 ### https://quay.io/repository/signalfx/splunk-otel-collector?tab=tags
-ballast                      = "683"
 collector_instance_type      = "t2.small"
-ms_sql_instance_type         = "t3.xlarge"
-windows_server_instance_type = "t3.xlarge"
 
 ### Splunk Enterprise Variables ###
-splunk_ent_filename     = "splunk-8.0.0-1357bef0a7f6-linux-2.6-amd64.deb"
-splunk_ent_version      = "8.0.0"
+splunk_ent_filename     = "splunk-8.2.3-cd0848707637-linux-2.6-amd64"
+splunk_ent_version      = "8.2.3"
 splunk_ent_inst_type    = "t2.large"
 
+### Splunk ITSI Variables ###
+splunk_itsi_inst_type                             = "t2.large"
+splunk_itsi_version                               = "8.2.3"
+splunk_itsi_filename                              = "splunk-8.2.3-cd0848707637-linux-2.6-amd64.deb"
+splunk_itsi_files_local_path                      = "~/Downloads" # path where itsi files resides on your local machine 
+splunk_itsi_license_filename                      = "Splunk_ITSI_NFR_FY23.lic" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_app_for_content_packs_filename             = "splunk-app-for-content-packs_140.spl" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_it_service_intelligence_filename           = "splunk-it-service-intelligence_493.spl" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_synthetic_monitoring_add_on_filename       = "splunk-synthetic-monitoring-add-on_107.tgz" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_infrastructure_monitoring_add_on_filename  = "splunk-infrastructure-monitoring-add-on_121.tgz" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+
 ### MS SQL Server Variables ###
-ms_sql_user              = "signalfxagent"
-ms_sql_user_pwd          = "P@ssword123"
-ms_sql_administrator_pwd = "f7t67G^&(g78g^&)"
+ms_sql_user                   = "signalfxagent"
+ms_sql_user_pwd               = "<STRONG_PWD>"
+ms_sql_administrator_pwd      = "<STRONG_PWD>"
+ms_sql_instance_type          = "t3.xlarge"
 
 ### Windows Server Variables ###
-windows_server_administrator_pwd = "f7t67G^&(g78g^&)"
+windows_server_administrator_pwd  = "<STRONG_PWD>"
+windows_server_instance_type      = "t3.xlarge"
 
 ### MySQL Server Variables ###
 mysql_user             = "signalfxagent"
-mysql_user_pwd         = "P@ssword123"
+mysql_user_pwd         = "<STRONG_PWD>"

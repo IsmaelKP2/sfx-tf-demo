@@ -43,3 +43,5 @@ index.js
 **/.vscode/*
 
 .terraform.lock.hcl
+
+*.lic
