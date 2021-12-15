@@ -212,7 +212,6 @@ module "instances" {
   access_token                                      = var.access_token
   api_url                                           = var.api_url
   realm                                             = var.realm
-  otelcol_version                                   = var.otelcol_version
   environment                                       = var.environment
   region                                            = lookup(var.aws_region, var.region)
   vpc_id                                            = module.vpc.vpc_id

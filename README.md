@@ -36,26 +36,29 @@ There are a number of core modules which are always deployed such as VPC and Sec
 
 You will find more information about each Module at the end of this document.
 
-There are no interdependencies between modules, so you can deploy any combination.  The 'EKS Cluster', 'ECS Cluster' and 'Phone Shop' modules all have APM enabled and are instrumented to emit Traces.
+There are generally no interdependencies between modules, so you can deploy almost any combination, but if enabling Dashboards, you should also enable Detectors.  The 'EKS Cluster', 'ECS Cluster' and 'Phone Shop' modules all have APM enabled and are instrumented to emit Traces.
 
-The quantities of each EC2 Instance deployed as part of the 'Instances' Module are also controlled here. You can deploy between 0 & 3 of most types, but you should always deploy at least 1 Collector, which gets deployed behind an AWS ALB, and is used by the Instances to send in their metrics to the Splunk IM Platform.
+The quantities of each EC2 Instance deployed as part of the 'Instances & Proxied Instances' Modules are also controlled here. You can deploy between 0 & 3 of most types, but you should always deploy at least 1 Collector (Instances Module), which gets deployed behind an AWS ALB, and is used by the Instances to send in their metrics to the Splunk IM Platform.
 
 ```yaml
 # This file contains all the settings which are unique to each deployment and it
 # should NOT be stored in a public source control system as it contains sensitive information
-# If values commented out, you will be prompted for them at run time, this way you 
-# can choose to store the information in here, or enter it at run time.
+# If values are commented out, you will be prompted for them at run time, this way you 
+# can choose to store the information in this file, or enter it at run time.
 
 ### Enable / Disable Modules
 eks_cluster_enabled         = false
+ecs_cluster_enabled         = false
 instances_enabled           = false
+proxied_instances_enabled   = false
+itsi_o11y_cp_enabled        = false
 phone_shop_enabled          = false
 lambda_sqs_dynamodb_enabled = false
 dashboards_enabled          = false
 detectors_enabled           = false
 
 ## Instance Quantities ##
-collector_count = "2" # min 1 : max = subnet_count
+collector_count = "2" # min 1 : max = subnet_count - there should always be at least one as Target Groups require one
 collector_ids = [
   "Collector1",
   "Collector2",
@@ -83,16 +86,51 @@ ms_sql_ids = [
   "ms_sql3"
   ]
 
-apache_count = "1" # min 0 : max = subnet_count
-apache_ids = [
+windows_server_count = "1" # min 0 : max = subnet_count
+windows_server_ids = [
+  "windows1",
+  "windows2",
+  "windows3"
+  ]
+
+apache_web_count = "1" # min 0 : max = subnet_count
+apache_web_ids = [
   "apache1",
   "apache2",
   "apache3"
   ]
 
-splunk_ent_count = "0" # min 0 : max = 1 as only one is required, used as a yes/no parameter
+splunk_ent_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
 splunk_ent_ids = [
-  "splunk_ent1"
+  "splunk-ent"
+  ]
+
+## Proxied Instances Quantities ##
+
+proxy_server_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
+proxy_server_ids = [
+  "proxy-server"
+  ]
+
+proxied_apache_web_count = "1" # min 0 : max = subnet_count
+proxied_apache_web_ids = [
+  "proxied-apache_1",
+  "proxied-apache_2",
+  "proxied-apache_3"
+  ]
+
+proxied_windows_server_count = "1" # min 0 : max = subnet_count
+proxied_windows_server_ids = [
+  "proxied-windows1",
+  "proxied-windows2",
+  "proxied-windows3"
+  ]
+
+## ITSI Quantities ##
+
+splunk_itsi_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
+splunk_itsi_ids = [
+  "splunk-itsi"
   ]
 ```
 
@@ -117,7 +155,7 @@ When you run the deployment terraform will prompt you for a Region, however if y
 
 #### VPC Settings
 
-A new VPC is created and is used by the EKS Cluster, Instances, Phone Shop & Lambda SQS Dynamo DB modules (the ECS Cluster Module creates its own VPC).  The number of subnets is controlled by the 'subnet_count' parameter, and defaults to 2 which should be sufficient for most test cases.
+A new VPC is created and is used by all the modules with the exception of the the ECS Cluster Module creates its own VPC.  The number of subnets is controlled by the 'subnet_count' parameter, and defaults to 2 which should be sufficient for most test cases.
 
 Two sets of subnets will be created, a Private and a Public Subnet, so by default 4 subnets will be created. Each Subnet will be created using a CIDR allocated from the 'vpc_cidr_block', so by default the 1st subnet will use 172.32.0.0/24, the 2nd subnet will use 172.32.1.0/24 etc.
 
@@ -128,14 +166,14 @@ Note: The ECS Cluster Module will create its own unique VPC and Subnets and crea
 #region = "<REGION>"
 
 ## VPC Settings ##
-vpc_cidr_block = "172.32.0.0/16"
-subnet_count   = "2" 
+vpc_cidr_block        = "172.32.0.0/16"
+subnet_count          = "2" 
 
 ## Auth Settings ##
-key_name = "<NAME>"
-private_key_path = "~/.ssh/id_rsa"
-instance_type = "t2.micro"
-aws_access_key_id = "<ACCCESS_KEY_ID>>"
+key_name              = "<NAME>"
+private_key_path      = "~/.ssh/id_rsa"
+instance_type         = "t2.micro"
+aws_access_key_id     = "<ACCCESS_KEY_ID>>"
 aws_secret_access_key = "<SECRET_ACCESS_KEY>>"
 ```
 
@@ -145,25 +183,30 @@ Settings used by the Splunk On-Call Integration within Splunk IM/APM to create I
 
 ```yaml
 ### SOC Variables ###
-soc_integration_id = "<ID>"
-soc_routing_key = "<ROUTING_KEY>"
+soc_integration_id  = "<ID>"
+soc_routing_key     = "<ROUTING_KEY>"
 ```
 
 ### Splunk IM/APM Variables
 
 Settings used by Splunk IM/APM for authentication, notifications and APM Environment.  An example of an Environment value would be "TF Demo", it's a simple tag used to identify and link the various components within the Splunk APM UI.
 
-Optionally you can specify a version for the smart_agent, but if left blank the latest will be used, which is the recommended option.
+Optionally you can specify a version for the smart_agent, but if left blank the latest will be used, which is the recommended option, however as OTEL is replacing the SmartAgent this setting will soon be retired.
+
+The collector_version is currently only used by the Proxied Instances module as it leverages an offline installation method which requires the version number to be specified, all other modules that use OTEL will use the latest by default.
 
 ```yaml
-### SignalFX Variables ###
-access_token = "<ACCESS_TOKEN>"
-api_url = "https://api.<REALM>.signalfx.com"
-realm = "<REALM>"
-environment = "<ENVIRONMENT>"
-notification_email = "<EMAIL>"
-
-smart_agent_version = "" # Optional - If left blank, latest will be installed - example value would be "5.7.1-1"
+### Splunk IM/APM Variables ###
+access_token             = "<ACCESS_TOKEN>"
+api_url                  = "https://api.<REALM>.signalfx.com"
+realm                    = "<REALM>"
+environment              = "<ENVIRONMENT>"
+notification_email       = "<EMAIL>"
+smart_agent_version      = "" # Optional - If left blank, latest will be installed - example value would be "5.7.1-1"
+ecs_agent_url            = "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/master/modules/aws_ecs/agent_fargate.yaml"
+ms_sql_agent_url         = "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/Master/modules/instances/config_files/ms_sql_agent_config.yaml"
+windows_server_agent_url = "https://raw.githubusercontent.com/geoffhigginbottom/sfx-tf-demo/Master/modules/instances/config_files/windows_server_agent_config.yaml"
+collector_version        = "0.40.0"
 ```
 
 ### Collector Variables
@@ -173,25 +216,96 @@ One or more OpenTelemetry Collectors are deployed as part of the Instances Modul
 ```yaml
 ### Collector Variables ###
 ### https://quay.io/repository/signalfx/splunk-otel-collector?tab=tags
-otelcol_version = "0.21.1"
-ballast = "683"
 collector_instance_type = "t2.small"
 ```
 
+### Splunk Enterprise Variables
+
+The instances module can also deploy a Splunk Enterprise VM but you need to provide the file name and version of the release you want to use as hosted on https://www.splunk.com/en_us/download/splunk-enterprise.html
+
+```yaml
+### Splunk Enterprise Variables ###
+splunk_ent_filename     = "splunk-8.2.3-cd0848707637-linux-2.6-amd64"
+splunk_ent_version      = "8.2.3"
+splunk_ent_inst_type    = "t2.large"
+```
+
+### Splunk ITSI Variables
+
+The Splunk ITSI Module requires various files that cannot be included in this repo and need to be downloaded from https://splunkbase.splunk.com/ then their locations specified in this section
+
+```yaml
+### Splunk ITSI Variables ###
+splunk_itsi_inst_type                             = "t2.large"
+splunk_itsi_version                               = "8.2.3"
+splunk_itsi_filename                              = "splunk-8.2.3-cd0848707637-linux-2.6-amd64.deb"
+splunk_itsi_files_local_path                      = "~/Downloads" # path where itsi files resides on your local machine 
+splunk_itsi_license_filename                      = "Splunk_ITSI_NFR_FY23.lic" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_app_for_content_packs_filename             = "splunk-app-for-content-packs_140.spl" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_it_service_intelligence_filename           = "splunk-it-service-intelligence_493.spl" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_synthetic_monitoring_add_on_filename       = "splunk-synthetic-monitoring-add-on_107.tgz" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+splunk_infrastructure_monitoring_add_on_filename  = "splunk-infrastructure-monitoring-add-on_121.tgz" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
+```
+
+## Windows SQL Servers Variables
+
+The Microsoft SQL Server Instance requires Windows and SQL Admin Passwords to be set
+
+```yaml
+### MS SQL Server Variables ###
+ms_sql_user                   = "signalfxagent"
+ms_sql_user_pwd               = "<STRONG_PWD>"
+ms_sql_administrator_pwd      = "<STRONG_PWD>"
+ms_sql_instance_type          = "t3.xlarge"
+```
+
+## Windows Servers Variables
+
+The Microsoft Windows Server Instance requires Windows Admin Password to be set
+
+```yaml
+### Windows Server Variables ###
+windows_server_administrator_pwd  = "<STRONG_PWD>"
+windows_server_instance_type      = "t3.xlarge"
+```
+
+## MySQL Server Variables
+
+The MySQL Server Instance requires SQL User Password to be set
+
+```yaml
+### MySQL Server Variables ###
+mysql_user             = "signalfxagent"
+mysql_user_pwd         = "<STRONG_PWD>"
+```
+
+# Modules
+
+Details about each module can be found below
+
 ## Instances
 
-This module deploys some example EC2 Instances, with Splunk IM Monitors matching their role, as well as Otel Collectors. Each instance is deployed with a smart_agent to enable Infrastructure Monitoring and is configured to send all metrics via the cluster of Otel Collectors, fronted by an AWS Load Balancer.
+This module deploys some example EC2 Instances, with Splunk IM Monitors matching their role, as well as Otel Collectors. Each instance is deployed with an otel collector running in agent mode to enable Infrastructure Monitoring and is configured to send all metrics via the cluster of Otel Collectors, fronted by an AWS Load Balancer.
 
 The following EC2 Instances can be deployed:
 
 - Collectors
 - HAProxy
 - MySQL
-- MS SQL
-- Apache (just a basic Apache server in reality)
+- Microsoft SQL Server
+- Microsoft Windows Server
+- Apache
 - Splunk Enterprise
 
-Each Instance has Infrastructure Monitoring 'monitors' configured to match the services running on them.  The configuration for each monitor is deployed into /etc/signalfx/monitors/xxx.yaml, this means the /etc/signalfx/agent.yaml file is the same regardless of role.
+Each Instance has Infrastructure Monitoring 'recievers' configured to match the services running on them.  The configuration for each monitor is deployed via its own specific agent_config.yaml file.
+
+## Proxied Instances
+
+This module deploys some sample instances which are deployed with no internet access, and are forced to use an inline-proxy for sending their metrics back to the splunk endpoints.  This introduces a number of challenges which are addressed in this module.
+
+## Splunk ITSI
+
+This module deploys a Splunk ITSI Instance, and sets up a number of content packs and add-ons, which are all automatically installed and configured.
 
 ## Phone Shop
 
