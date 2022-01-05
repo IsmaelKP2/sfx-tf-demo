@@ -151,6 +151,7 @@ module "proxied_instances" {
   proxied_windows_server_count     = var.proxied_windows_server_count
   proxied_windows_server_ids       = var.proxied_windows_server_ids
   windows_server_administrator_pwd = var.windows_server_administrator_pwd
+  windows_proxied_server_agent_url = var.windows_proxied_server_agent_url
   windows_server_instance_type     = var.windows_server_instance_type
   windows_server_ami               = data.aws_ami.windows-server.id
   collector_version                = var.collector_version

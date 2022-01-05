@@ -64,6 +64,10 @@ variable "proxied_windows_server_ids" {
   default = []
 }
 
+variable "windows_proxied_server_agent_url" {
+  default = {}
+}
+
 variable "proxy_server_count" {
   default = {}
 }

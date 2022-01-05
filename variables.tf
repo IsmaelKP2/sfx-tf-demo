@@ -371,6 +371,9 @@ variable "otelcol_version" {
 variable "windows_msi_url" {
   default = []
 }
+variable "windows_proxied_server_agent_url" {
+  default = {}
+}
 variable "collector_version" {
   default = []
 }

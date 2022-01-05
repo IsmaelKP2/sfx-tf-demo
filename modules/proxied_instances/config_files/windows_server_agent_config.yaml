@@ -88,10 +88,9 @@ receivers:
     endpoint: 0.0.0.0:9943
   zipkin:
     endpoint: 0.0.0.0:9411
-  smartagent/processes:
+  smartagent/win_services:
     type: telegraf/win_services
     serviceNames:
-      - fluentdwinsvc
       - Dnscache
       - Dhcp
       - LanmanServer
@@ -103,6 +102,11 @@ receivers:
       - RpcEptMapper
       - MSDTC
       - SamSs
+  smartagent/procstat-docker:
+    type: telegraf/procstat
+    exe: dockerd.exe
+    pattern: docker
+    WinService: docker
 
 processors:
   batch:
@@ -178,7 +182,7 @@ service:
       # Use instead when sending to gateway
       exporters: [otlphttp, signalfx]
     metrics:
-      receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder, smartagent/processes]
+      receivers: [hostmetrics, otlp, signalfx, smartagent/signalfx-forwarder, smartagent/win_services, smartagent/procstat-docker]
       processors: [memory_limiter, batch, resourcedetection]
       #exporters: [signalfx]
       # Use instead when sending to gateway
