@@ -33,7 +33,6 @@ resource "aws_instance" "proxied_windows_server" {
     New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_MEMORY_TOTAL_MIB' -Value "512"
     New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_REALM' -Value ${var.realm}
     New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name 'SPLUNK_TRACE_URL' -Value "https://ingest.${var.realm}.signalfx.com/v2/trace"
-    Start-Service -Name "splunk-otel-collector"
 
     Invoke-WebRequest -Uri ${var.windows_proxied_server_agent_url} -OutFile "C:\ProgramData\Splunk\OpenTelemetry Collector\agent_config.yaml"
     Start-Service splunk-otel-collector
