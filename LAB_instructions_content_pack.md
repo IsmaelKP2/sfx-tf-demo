@@ -94,6 +94,36 @@ Do you want to perform these actions?
 ```
 Enter yes
 
+Note if you get an error run terraform destroy and restart the installation.
+
+You should get the output below:
+```
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+
+Outputs:
+
+Splunk_ITSI_Password = [
+  "xxx.xxx.xxx.xxx",
+]
+Splunk_ITSI_Server = [
+  tolist([
+    "ipapa_splunk-itsi, xxx.xxx.xxx.xxx",
+  ]),
+]
+Splunk_ITSI_URL = [
+  tolist([
+    "http://xxx.xxx.xxx.xxx:8000",
+  ]),
+]
+```
+
+Login to your newly created splunk instance using:
+the address -> Splunk_ITSI_URL 
+username -> admin
+password -> Splunk_ITSI_Password
+
+
+
 Configure the Splunk Infrastructure Monitoring and Splunk Synthetic Monitoring Add-ons. 
 Configure the ITSI content pack.
 Import your entities.
