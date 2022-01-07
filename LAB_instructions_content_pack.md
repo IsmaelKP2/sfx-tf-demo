@@ -25,11 +25,60 @@ realm                    = "<REALM>"
 environment              = "<ENVIRONMENT>"
 ```
 
-## 2 o2##
+## 2 review the variable for ITSI ##
 
 
-Install and configure the Splunk Infrastructure Monitoring and Splunk Synthetic Monitoring Add-ons. 
-Install the ITSI content pack.
+### Splunk ITSI Variables
+
+The Splunk ITSI Module requires various files that cannot be included in this repo and need to be downloaded from https://splunkbase.splunk.com/ then their locations specified in this section
+
+
+### Download the files via the link provided by the instructor and install it locally 
+
+on MAC in ~Downloads 
+on Windows in ...
+
+### Deploy the instance
+
+go into sfx-tf-demo
+
+run
+```terraform init```
+
+run
+```terraform plan``` 
+
+```
+var.region
+  Select region (1:eu-west-1, 2:eu-west-3, 3:eu-central-1, 4:us-east-1, 5:us-east-2, 6:us-west-1, 7:us-west-2, 8:ap-southeast-1, 9:ap-southeast-2, 10:sa-east-1 )
+
+  Enter a value:
+```
+
+enter 1 for the region
+
+At the bottom of your editor you should get the output
+```
+Plan: 10 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + Splunk_ITSI_Password = [
+      + (known after apply),
+    ]
+  + Splunk_ITSI_Server   = [
+      + [
+          + (known after apply),
+        ],
+    ]
+  + Splunk_ITSI_URL      = [
+      + [
+          + (known after apply),
+        ],
+    ]
+```
+
+Configure the Splunk Infrastructure Monitoring and Splunk Synthetic Monitoring Add-ons. 
+Configure the ITSI content pack.
 Import your entities.
 
 
