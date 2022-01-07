@@ -122,6 +122,17 @@ the address -> Splunk_ITSI_URL
 username -> admin
 password -> Splunk_ITSI_Password
 
+### destroy all of your good work 
+
+```
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value:
+```
+
+Enter yes
 
 
 Configure the Splunk Infrastructure Monitoring and Splunk Synthetic Monitoring Add-ons. 
