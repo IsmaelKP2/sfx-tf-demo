@@ -43,9 +43,11 @@ on Windows in ...
 go into sfx-tf-demo
 
 run
+
 ```terraform init```
 
 run
+
 ```terraform plan``` 
 
 ```
@@ -76,6 +78,21 @@ Changes to Outputs:
         ],
     ]
 ```
+
+Note If you get an error review the previous steps.
+
+run
+
+```terraform apply```
+
+```
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value:
+```
+Enter yes
 
 Configure the Splunk Infrastructure Monitoring and Splunk Synthetic Monitoring Add-ons. 
 Configure the ITSI content pack.
