@@ -1,5 +1,18 @@
-Terraform deployment + script
-	cp terraform.tfvars.example terraform.tfvars
+Prerequisites:
+
+to perform this lab you need :
+
+Terraform installed 
+
+AWS credentials (AWS console ?) AWS Account aws_access_key_id | aws_secret_access_key
+SSH Key 
+
+Open sfx-tf-demo in your preferred code editor.
+
+```
+cp terraform.tfvars.example terraform.tfvars
+```
+
 Lab 
 ## 1 Modify terraform.tfvars file ##
 In section Enable / Disable Modules
