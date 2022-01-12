@@ -7,7 +7,11 @@ Terraform installed
 AWS credentials (AWS console ?) AWS Account aws_access_key_id | aws_secret_access_key
 SSH Key 
 
-An observability cloud organisation ID. Have data ingested in the environmment for this workshop we deploy the online boutique of the observability workshop available here 
+An observability cloud organisation ID. 
+
+Have data ingested in the environmment for this workshop:
+we have deploy the online boutique of the observability workshop on a aws instance available here https://signalfx.github.io/observability-workshop/v3.13/
+we have connected our AWS instance to the observability suite
 
 Open sfx-tf-demo in your preferred code editor.
 
