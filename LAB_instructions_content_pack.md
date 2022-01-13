@@ -277,7 +277,8 @@ Configuration -> Entity management -> Entity Types <br />
 	  Enter the search below and click run search <br />
 
 ```
-| mstats avg(*) span=5m WHERE "index"="sim_metrics" AND sf_streamLabel="thruput_avg_rate" GROUPBY sf_service sf_environment | rename avg(service.request.count) as "val"```
+| mstats avg(*) span=5m WHERE "index"="sim_metrics" AND sf_streamLabel="thruput_avg_rate" GROUPBY sf_service sf_environment | rename avg(service.request.count) as "val"
+```
 
 Entity matching field sf_service  <br />
 (note: verify that you are matching entities 10 entities matched in last hour)  <br />
@@ -288,7 +289,8 @@ Save Entity Type  <br />
 
 your UI should look like this should look like this <br />
 
-<img width="815" alt="Screenshot 2022-01-13 at 16 01 03" src="https://user-images.githubusercontent.com/34278157/149364762-4a5ea2e3-31e9-424b-8c98-32e562c01488.png">
+<img width="246" alt="Screenshot 2022-01-13 at 15 50 46" src="https://user-images.githubusercontent.com/34278157/149379166-bcbbe8f1-0190-41e5-ac60-d48808ffa25d.png">
+
 
 ### destroy all of your good work 
 
