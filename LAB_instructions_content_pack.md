@@ -68,8 +68,9 @@ splunk-infrastructure-monitoring-add-on_121.tgz <br />
 
 ### Download the files via the link provided by the instructor or from downloading the apps from splunkbase.com and install it locally 
 
-place the file on MAC in ~Downloads <br />
-on Windows in ...
+place the file 
+on MAC in ~/Downloads <br />
+on Windows in %USERPROFILE%\Downloads note you also nee to change the terraform.tfvars line 139 to  %USERPROFILE%\Downloads
 
 ### Deploy the instance
 
