@@ -10,8 +10,9 @@ SSH Key
 An observability cloud organisation ID. 
 
 Have data ingested in the environmment for this workshop:
-we have deploy the online boutique of the observability workshop on a aws instance available here https://signalfx.github.io/observability-workshop/v3.13/
-we have connected our AWS instance to the observability suite
+we have deploy the online boutique of the observability workshop on a aws instance available here https://signalfx.github.io/observability-workshop/v3.13/ <br/>
+
+we have connected our AWS instance to the observability suite <br/>
 
 Open sfx-tf-demo in your preferred code editor.
 
@@ -49,8 +50,15 @@ environment              = "<ENVIRONMENT>"
 
 ### Splunk ITSI Variables
 
-The Splunk ITSI Module requires various files that cannot be included in this repo and need to be downloaded from https://splunkbase.splunk.com/ then their locations specified in this section
+The Splunk ITSI Module requires various files that cannot be included in this repo and need to be downloaded from https://splunkbase.splunk.com/ 
 
+itsi_license_filename <br />
+splunk-app-for-content-packs_140.spl <br />
+splunk-it-service-intelligence_493.spl <br />
+splunk-synthetic-monitoring-add-on_107.spl" <br />
+splunk-infrastructure-monitoring-add-on_121.tgz <br />
+
+(refer to README.md for details of the configuration)
 
 ### Download the files via the link provided by the instructor and install it locally 
 
