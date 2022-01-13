@@ -62,18 +62,18 @@ splunk-infrastructure-monitoring-add-on_121.tgz <br />
 
 ### Download the files via the link provided by the instructor and install it locally 
 
-on MAC in ~Downloads 
+on MAC in ~Downloads <br />
 on Windows in ...
 
 ### Deploy the instance
 
-go into sfx-tf-demo
+go into sfx-tf-demo <br />
 
-run
+run <br />
 
 ```terraform init```
 
-run
+run 
 
 ```terraform plan``` 
 
@@ -84,9 +84,9 @@ var.region
   Enter a value:
 ```
 
-enter 1 for the region
+enter 1 for the region <br />
 
-At the bottom of your editor you should get the output
+At the bottom of your editor you should get the output <br />
 ```
 Plan: 10 to add, 0 to change, 0 to destroy.
 
@@ -106,24 +106,24 @@ Changes to Outputs:
     ]
 ```
 
-Note If you get an error review the previous steps.
+Note If you get an error review the previous steps. <br />
 
 run
 
 ```terraform apply```
 
 ```
-Do you want to perform these actions?
+Do you want to perform these actions? 
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
 
   Enter a value:
 ```
-Enter yes
+Enter yes <br />
 
-Note if you get an error run terraform destroy and restart the installation.
+Note if you get an error run terraform destroy and restart the installation. <br />
 
-You should get the output below:
+You should get the output below: <br />
 ```
 Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
 
@@ -144,43 +144,43 @@ Splunk_ITSI_URL = [
 ]
 ```
 
-Login to your newly created splunk instance using:
-the address -> Splunk_ITSI_URL 
-username -> admin
-password -> Splunk_ITSI_Password
+Login to your newly created splunk instance using: <br />
+the address -> Splunk_ITSI_URL <br />
+username -> admin <br />
+password -> Splunk_ITSI_Password <br />
 
 ### Configuration of the Add-on and Content Pack
 
-Configure the Infrastructure Add-on documentation can be found here 
+Configure the Infrastructure Add-on documentation can be found here <br />
 
-Configure the Content Pack for Observability documentation can be found here 
+Configure the Content Pack for Observability documentation can be found here <br />
 
-Note: import as disabled do no use prefix and do not use a backfill to accelerate the deployment process. 
+Note: import as disabled do no use prefix and do not use a backfill to accelerate the deployment process. <br />
 
 ### Hands-on create a custom service 
 
-Open the EBS Dashboard -> open Total Ops/Reporting Interval -> view signalflow
+Open the EBS Dashboard -> open Total Ops/Reporting Interval -> view signalflow <br />
 
-You hould see the following :
+You hould see the following : <br />
 ```
 A = data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A')
 B = data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='B')
 ```
-Let's change the signalflow to create our query in Splunk Enterprise :
+Let's change the signalflow to create our query in Splunk Enterprise : <br />
 
 ```
 data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A');
 data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='B')
 ```
-In Splunk Enterprise open Search and Reporting :
+In Splunk Enterprise open Search and Reporting : <br />
 
-run the following command:
+run the following command: <br />
 
 ```
 | sim flow query=data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A');
 data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='B')
 ```
-if you want to build a chart 
+if you want to build a chart <br />
 
 ```
 | sim flow query=data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A');
@@ -188,47 +188,103 @@ data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 
 | timechart max(VolumeReadOps) max(VolumeWriteOps)
 ```
 
-Let's create our EBS service 
+Let's create our EBS service <br />
 
-Service -> new service EBS volumes
+Service -> new service EBS volumes <br />
 
-KPI new generic KPI 
+KPI new generic KPI <br />
 
-past the SIM command we just created
+enter the SIM command we just created <br />
 
-click next 
+click next <br />
 
-add threshold manually
+add threshold manually <br />
 
-save on the bottom of the page
+save on the bottom of the page <br />
 
-Let's attach our standalone to the AWS service
+Let's attach our standalone to the AWS service <br />
 
-go to Service open AWS service
+go to Service open AWS service <br />
 
-go to dependencies 
+go to dependencies <br />
 
-add EBS volumes
+add EBS volumes <br />
+ 
+go to Service Analyzer -> Default Analyzer <br />
 
-go to Service Analyzer -> Default Analyzer 
-
-review what you built
-
+review what you built <br />
 
 ### Working with Entity types
 
-Splunk APM Entity type
+Splunk APM Entity type <br />
 
-Enable Modular Input for APM error rate and APM thruput
+Enable Modular Input for APM error rate and APM thruput <br />
 
-Enable APM Service 4 service to enable.
+Enable APM Service 4 service to enable. <br />
+
+1. Application Duration 
+2. Application Error Rate 
+3. Application Performance Monitoring 
+4. Application Rate (Throughput) 
+
 
 Enable Cloud Entity Search for APM 
 
-Add a Dashboards Navigation
+Go to Settings -> Searches, Reports, and Alerts  <br />
 
-Add Key Vital metrics for Splunk APM.
+Select App Splunk Observability Cloud | Owner All  <br />
 
+Find the line ITSI Import Objects - Splunk-APM Application Entity Search -> (Actions) Edit -> Enable  <br />
+
+NOTE those searches are called Cloud Entity Searches  <br />
+
+Open ITSI ->  Infrastructure Overview  <br />
+
+Verify that you have your entities are showing up <br />
+
+Note: there isn't any out of the box Key vital metrics so the visualisation will look like this <br />
+
+<img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="https://user-images.githubusercontent.com/34278157/149363052-ca443f77-5c01-466f-bb91-53c1b8059799.png"> <br />
+
+
+Add a Dashboards Navigation <br />
+
+Configuration -> Entity management -> Entity Types <br />
+			  Find SplunkAPM -> Edit <br />
+			  Open Navigations type <br />
+				Navigation Name: Traces View <br />
+        URL <br />
+        Save navigation !! <br />
+        Save Entity type <br />
+        
+In Service Analyzer open a Splunk APM entity and test your new navigation suggestion <br />
+
+<img width="809" alt="Screenshot 2022-01-13 at 15 54 49" src="https://user-images.githubusercontent.com/34278157/149363707-0ccd43b6-e53b-4144-a130-57f92e9bfd37.png">
+
+Add Key Vital metrics for Splunk APM. <br />
+
+
+Configuration -> Entity management -> Entity Types <br />
+          Find SplunkAPM -> Edit <br />
+          Open Vital Metrics <br />
+          Enter a name  <br />
+          Add a metric  <br />
+
+          Enter the search below and click run search <br />
+```
+| mstats avg(*) span=5m WHERE "index"="sim_metrics" AND sf_streamLabel="thruput_avg_rate" GROUPBY sf_service sf_environment | rename avg(service.request.count) as "val"
+```
+
+          Entity matching field sf_service  <br />
+          (note: verify that you are matching entities 10 entities matched in last hour)  <br />
+          Unit of Display Percent (%)  <br />
+          Choose a Key Metric Select Application Rate Thruput  <br />
+          Save Application Rate  <br />
+          Save Entity Type  <br />
+
+your UI should look like this should look like this <br />
+
+<img width="815" alt="Screenshot 2022-01-13 at 16 01 03" src="https://user-images.githubusercontent.com/34278157/149364762-4a5ea2e3-31e9-424b-8c98-32e562c01488.png">
 
 ### destroy all of your good work 
 
@@ -241,12 +297,4 @@ Do you really want to destroy all resources?
 ```
 
 Enter yes
-
-
-Configure the Splunk Infrastructure Monitoring and Splunk Synthetic Monitoring Add-ons. 
-Configure the ITSI content pack.
-Import your entities.
-
-
-
 
