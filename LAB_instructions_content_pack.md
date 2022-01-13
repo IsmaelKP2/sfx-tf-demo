@@ -206,11 +206,13 @@ Screenshot
 	KPI -> new -> Generic KPI <br />
 	Click Next <br />
 	Paste the command below in the textboxwe just created <br />
+
 ```
 | sim flow query="data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()"
 | rename _value as VolumeReadOps
 ```
-	In the treshold field enter ```VolumeReadOps``` (you can keep everything default for the rest of the configuration)
+ <br />
+	In the treshold field enter VolumeReadOps (you can keep everything default for the rest of the configuration)  <br />
 	click next <br />
 	click next <br />
 	click next <br />
