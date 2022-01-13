@@ -2,25 +2,31 @@ Prerequisites:
 
 to perform this lab you need :
 
-Terraform installed 
+1. Terraform installed https://www.terraform.io/
+2. AWS credentials (AWS console ?) 
+	AWS Account aws_access_key_id 
+	aws_secret_access_key
+	SSH Key 
+3. An observability cloud organisation ID. 
+4. Have data ingested in the environmment for this workshop
 
-AWS credentials (AWS console ?) AWS Account aws_access_key_id | aws_secret_access_key
-SSH Key 
+note: we have deploy the online boutique of the observability workshop on a aws instance available here https://signalfx.github.io/observability-workshop/v3.13/ <br/>
 
-An observability cloud organisation ID. 
-
-Have data ingested in the environmment for this workshop:
-we have deploy the online boutique of the observability workshop on a aws instance available here https://signalfx.github.io/observability-workshop/v3.13/ <br/>
 
 we have connected our AWS instance to the observability suite <br/>
 
-Open sfx-tf-demo in your preferred code editor.
+the environnement used for this workshop looks like this 
+
+<img width="1192" alt="Screenshot 2022-01-13 at 16 16 44" src="https://user-images.githubusercontent.com/34278157/149367458-ab52468b-c916-4e82-be53-63e389fde927.png">
+
+Open sfx-tf-demo in your preferred code editor. <br/>
 
 ```
 cp terraform.tfvars.example terraform.tfvars
 ```
 
-Lab 
+### Hands on:
+
 ## 1 Modify terraform.tfvars file ##
 In section Enable / Disable Modules
 ```
@@ -60,9 +66,9 @@ splunk-infrastructure-monitoring-add-on_121.tgz <br />
 
 (refer to README.md for details of the configuration)
 
-### Download the files via the link provided by the instructor and install it locally 
+### Download the files via the link provided by the instructor or from downloading the apps from splunkbase.com and install it locally 
 
-on MAC in ~Downloads <br />
+place the file on MAC in ~Downloads <br />
 on Windows in ...
 
 ### Deploy the instance
@@ -151,68 +157,72 @@ password -> Splunk_ITSI_Password <br />
 
 ### Configuration of the Add-on and Content Pack
 
-Configure the Infrastructure Add-on documentation can be found here <br />
+Configure the Infrastructure Add-on documentation can be found here https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/InstallOverview <br />
 
-Configure the Content Pack for Observability documentation can be found here <br />
+Configure the Content Pack for Observability documentation can be found here https://docs.splunk.com/Documentation/CPObservability/latest/CP/Install <br />
 
 Note: import as disabled do no use prefix and do not use a backfill to accelerate the deployment process. <br />
 
-### Hands-on create a custom service 
+### Create a custom service 
 
 Open the EBS Dashboard -> open Total Ops/Reporting Interval -> view signalflow <br />
 
-You hould see the following : <br />
+<img width="1379" alt="Screenshot 2022-01-13 at 16 20 45" src="https://user-images.githubusercontent.com/34278157/149368157-22e4a1ab-d88a-41b5-ae81-97f29b22b40f.png">
+
+You should see the following : <br />
 ```
 A = data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A')
 B = data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='B')
 ```
-Let's change the signalflow to create our query in Splunk Enterprise : <br />
+Let's change the signalflow to create a simple query for VolumeReadOps in Splunk Enterprise : <br />
 
 ```
-data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A');
-data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='B')
+data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()
 ```
+
 In Splunk Enterprise open Search and Reporting : <br />
 
 run the following command: <br />
 
 ```
-| sim flow query=data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A');
-data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='B')
+| sim flow query="data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()"
 ```
-if you want to build a chart <br />
+
+if you want to build a chart run <br />
 
 ```
-| sim flow query=data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='A');
-data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').scale(60).sum().publish(label='B')
-| timechart max(VolumeReadOps) max(VolumeWriteOps)
+| sim flow query="data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()"
+| timechart max(_value) span=5m
 ```
 
 Let's create our EBS service <br />
 
-Service -> new service EBS volumes <br />
+	Service -> Create services -> Create service <br />
+	Enter Title: EBS volumes <br />
+	Select Manually add service content <br />
 
-KPI new generic KPI <br />
+Screenshot
 
-enter the SIM command we just created <br />
-
-click next <br />
-
-add threshold manually <br />
-
-save on the bottom of the page <br />
-
-Let's attach our standalone to the AWS service <br />
-
-go to Service open AWS service <br />
-
-go to dependencies <br />
-
-add EBS volumes <br />
- 
-go to Service Analyzer -> Default Analyzer <br />
-
-review what you built <br />
+	KPI -> new -> Generic KPI <br />
+	Click Next <br />
+	Paste the command below in the textboxwe just created <br />
+```
+| sim flow query="data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()"
+| rename _value as VolumeReadOps
+```
+	In the treshold field enter ```VolumeReadOps``` (you can keep everything default for the rest of the configuration)
+	click next <br />
+	click next <br />
+	click next <br />
+	add threshold manually (if nothing is happening on the Disk it might show close to 0 as a number) <br />
+	save on the bottom of the page !!! <br />
+	Let's attach our standalone to the AWS service <br />
+	go to Service open AWS service <br />
+	go to Service Dependencies tab <br />
+	Add Dependencies <br />
+	Use the filter to select EBS volumes <br />
+	go to Service Analyzer -> Default Analyzer <br />
+	review what you built <br />
 
 ### Working with Entity types
 
@@ -228,21 +238,16 @@ Enable APM Service 4 service to enable. <br />
 4. Application Rate (Throughput) 
 
 
-Enable Cloud Entity Search for APM 
+Enable Cloud Entity Search for APM  <br />
 
 Go to Settings -> Searches, Reports, and Alerts  <br />
 
-Select App Splunk Observability Cloud | Owner All  <br />
-
-Find the line ITSI Import Objects - Splunk-APM Application Entity Search -> (Actions) Edit -> Enable  <br />
-
-NOTE those searches are called Cloud Entity Searches  <br />
-
-Open ITSI ->  Infrastructure Overview  <br />
-
-Verify that you have your entities are showing up <br />
-
-Note: there isn't any out of the box Key vital metrics so the visualisation will look like this <br />
+	Select App Splunk Observability Cloud | Owner All  <br />
+	Find the line ITSI Import Objects - Splunk-APM Application Entity Search -> (Actions) Edit -> Enable  <br />
+	NOTE those searches are called Cloud Entity Searches  <br />
+	Open ITSI ->  Infrastructure Overview  <br />
+	Verify that you have your entities are showing up <br />
+	Note: there isn't any out of the box Key vital metrics so the visualisation will look like this <br />
 
 <img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="https://user-images.githubusercontent.com/34278157/149363052-ca443f77-5c01-466f-bb91-53c1b8059799.png"> <br />
 
@@ -250,9 +255,9 @@ Note: there isn't any out of the box Key vital metrics so the visualisation will
 Add a Dashboards Navigation <br />
 
 Configuration -> Entity management -> Entity Types <br />
-			  Find SplunkAPM -> Edit <br />
-			  Open Navigations type <br />
-				Navigation Name: Traces View <br />
+	Find SplunkAPM -> Edit <br />
+	Open Navigations type <br />
+	Navigation Name: Traces View <br />
         URL <br />
         Save navigation !! <br />
         Save Entity type <br />
