@@ -156,13 +156,46 @@ the address -> Splunk_ITSI_URL <br />
 username -> admin <br />
 password -> Splunk_ITSI_Password <br />
 
-### Configuration of the Add-on and Content Pack
+### Configuration of the Add-on and Content Pack ### 
+
+## Set up the Splunk Infrastructure Monitoring Add-on and enable the enable the content pack ##
 
 Configure the Infrastructure Add-on documentation can be found here https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/InstallOverview <br />
 
 Configure the Content Pack for Observability documentation can be found here https://docs.splunk.com/Documentation/CPObservability/latest/CP/Install <br />
 
-Note: import as disabled do no use prefix and do not use a backfill to accelerate the deployment process. <br />
+Note: import as disabled do no use prefix and do not use a backfill to accelerate the deployment process and have a more step by step approach to the install.
+also not that the modular inputs are already included in the terraform script to save time on the config <br />
+
+## Import your  entities  ##
+
+
+Go to Settings -> Searches, Reports, and Alerts 
+
+Select App Splunk Observability Cloud | Owner All
+
+Find the line ITSI Import Objects - Get_OS_Hosts -> (Actions) Edit -> Enable
+
+NOTE those searches are called Cloud Entity Searches relevant 
+
+Open ITSI ->  Infrastructure Overview
+
+##  Enable the ITSI Services from the content packs  ##
+
+Go to Configuration -> Services
+
+Enable the services in the status column  :
+
+1. OS Hosts 
+2. Infrastructure Monitoring
+3. My Data Center Hosts 
+4. Splunk Observability Cloud
+5. AWS 
+6. AWS EC2 
+
+Go to ITSI Service Analyzers -> Default Service Analyzer (Check your services status)
+
+NOTE: It can take a few minutes for the service to show up in the UI
 
 ### Create a custom service 
 
