@@ -277,15 +277,14 @@ Configuration -> Entity management -> Entity Types <br />
 	  Enter the search below and click run search <br />
 
 ```
-| mstats avg(*) span=5m WHERE "index"="sim_metrics" AND sf_streamLabel="thruput_avg_rate" GROUPBY sf_service sf_environment | rename avg(service.request.count) as "val"
-```
+| mstats avg(*) span=5m WHERE "index"="sim_metrics" AND sf_streamLabel="thruput_avg_rate" GROUPBY sf_service sf_environment | rename avg(service.request.count) as "val"```
 
-          Entity matching field sf_service  <br />
-	  (note: verify that you are matching entities 10 entities matched in last hour)  <br />
-          Unit of Display Percent (%)  <br />
-          Choose a Key Metric Select Application Rate Thruput  <br />
-          Save Application Rate  <br />
-          Save Entity Type  <br />
+Entity matching field sf_service  <br />
+(note: verify that you are matching entities 10 entities matched in last hour)  <br />
+Unit of Display Percent (%)  <br />
+Choose a Key Metric Select Application Rate Thruput  <br />
+Save Application Rate  <br />
+Save Entity Type  <br />
 
 your UI should look like this should look like this <br />
 
