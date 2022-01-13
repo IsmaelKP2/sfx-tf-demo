@@ -274,8 +274,8 @@ Configuration -> Entity management -> Entity Types <br />
           Open Vital Metrics <br />
           Enter a name  <br />
           Add a metric  <br />
+	  Enter the search below and click run search <br />
 
-          Enter the search below and click run search <br />
 ```
 | mstats avg(*) span=5m WHERE "index"="sim_metrics" AND sf_streamLabel="thruput_avg_rate" GROUPBY sf_service sf_environment | rename avg(service.request.count) as "val"
 ```
