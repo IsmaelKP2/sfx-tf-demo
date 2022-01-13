@@ -281,7 +281,7 @@ Configuration -> Entity management -> Entity Types <br />
 ```
 
           Entity matching field sf_service  <br />
-          (note: verify that you are matching entities 10 entities matched in last hour)  <br />
+	  (note: verify that you are matching entities 10 entities matched in last hour)  <br />
           Unit of Display Percent (%)  <br />
           Choose a Key Metric Select Application Rate Thruput  <br />
           Save Application Rate  <br />
