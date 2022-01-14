@@ -156,9 +156,9 @@ the address -> Splunk_ITSI_URL <br />
 username -> admin <br />
 password -> Splunk_ITSI_Password <br />
 
-### Configuration of the Add-on and Content Pack ### 
+## 3. Configuration of the Add-on and Content Pack ##
 
-## Set up the Splunk Infrastructure Monitoring Add-on and enable the enable the content pack ##
+### Set up the Splunk Infrastructure Monitoring Add-on and enable the enable the content pack ###
 
 Configure the Infrastructure Add-on documentation can be found here https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/InstallOverview <br />
 
@@ -167,7 +167,7 @@ Configure the Content Pack for Observability documentation can be found here htt
 Note: import as disabled do no use prefix and do not use a backfill to accelerate the deployment process and have a more step by step approach to the install.
 also not that the modular inputs are already included in the terraform script to save time on the config <br />
 
-## Import your  entities  ##
+### Import your  entities  ###
 
 
 Go to Settings -> Searches, Reports, and Alerts 
@@ -180,7 +180,7 @@ NOTE those searches are called Cloud Entity Searches relevant
 
 Open ITSI ->  Infrastructure Overview
 
-##  Enable the ITSI Services from the content packs  ##
+###  Enable the ITSI Services from the content packs  ###
 
 Go to Configuration -> Services
 
@@ -197,7 +197,9 @@ Go to ITSI Service Analyzers -> Default Service Analyzer (Check your services st
 
 NOTE: It can take a few minutes for the service to show up in the UI
 
-### Create a custom service 
+## 4. Create a custom service 
+
+### Built a KPI search the fast way
 
 Open the EBS Dashboard -> open Total Ops/Reporting Interval -> view signalflow <br />
 
@@ -229,7 +231,7 @@ if you want to build a chart run <br />
 | timechart max(_value) span=5m
 ```
 
-Let's create our EBS service <br />
+###  Let's create our EBS service <br />
 
 Service -> Create services -> Create service <br />
 Enter Title: EBS volumes <br />
@@ -260,11 +262,9 @@ Paste the command below in the textbox <br />
 	go to Service Analyzer -> Default Analyzer <br />
 	review what you built <br />
 
-### Working with Entity types
+## 5. Working with Entity types
 
-Splunk APM Entity type <br />
-
-Enable Modular Input for APM error rate and APM thruput <br />
+### Enable the Splunk APM Services
 
 Enable APM Service 4 service to enable. <br />
 
@@ -273,8 +273,7 @@ Enable APM Service 4 service to enable. <br />
 3. Application Performance Monitoring 
 4. Application Rate (Throughput) 
 
-
-Enable Cloud Entity Search for APM  <br />
+###  Enable Cloud Entity Search for APM  <br />
 
 Go to Settings -> Searches, Reports, and Alerts  <br />
 
@@ -288,7 +287,7 @@ Note: there isn't any out of the box Key vital metrics so the visualisation will
 <img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="https://user-images.githubusercontent.com/34278157/149363052-ca443f77-5c01-466f-bb91-53c1b8059799.png"> <br />
 
 
-Add a Dashboards Navigation <br />
+###  Add a dashboard Navigation <br />
 
 Configuration -> Entity management -> Entity Types <br />
 Find SplunkAPM -> Edit <br />
@@ -302,7 +301,7 @@ In Service Analyzer open a Splunk APM entity and test your new navigation sugges
 
 <img width="809" alt="Screenshot 2022-01-13 at 15 54 49" src="https://user-images.githubusercontent.com/34278157/149363707-0ccd43b6-e53b-4144-a130-57f92e9bfd37.png">
 
-Add Key Vital metrics for Splunk APM. <br />
+###  Add Key Vital metrics for Splunk APM. <br />
 
 
 Configuration -> Entity management -> Entity Types <br />
@@ -328,7 +327,7 @@ your UI should look like this should look like this <br />
 <img width="246" alt="Screenshot 2022-01-13 at 15 50 46" src="https://user-images.githubusercontent.com/34278157/149379166-bcbbe8f1-0190-41e5-ac60-d48808ffa25d.png">
 
 
-### destroy all of your good work 
+## 6. destroy all of your good work 
 
 ```
 Do you really want to destroy all resources?
