@@ -231,15 +231,15 @@ if you want to build a chart run <br />
 
 Let's create our EBS service <br />
 
-	Service -> Create services -> Create service <br />
-	Enter Title: EBS volumes <br />
-	Select Manually add service content <br />
+Service -> Create services -> Create service <br />
+Enter Title: EBS volumes <br />
+Select Manually add service content <br />
 
-Screenshot
+<img width="589" alt="Screenshot 2022-01-14 at 10 16 37" src="https://user-images.githubusercontent.com/34278157/149499220-63ad5524-7328-46f5-becb-c75acb3d62e7.png">
 
-	KPI -> new -> Generic KPI <br />
-	Click Next <br />
-	Paste the command below in the textboxwe just created <br />
+KPI -> new -> Generic KPI <br />
+Click Next <br />
+Paste the command below in the textboxwe just created <br />
 
 ```
 | sim flow query="data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()"
