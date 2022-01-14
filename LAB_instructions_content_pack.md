@@ -278,12 +278,12 @@ Enable Cloud Entity Search for APM  <br />
 
 Go to Settings -> Searches, Reports, and Alerts  <br />
 
-	Select App Splunk Observability Cloud | Owner All  <br />
-	Find the line ITSI Import Objects - Splunk-APM Application Entity Search -> (Actions) Edit -> Enable  <br />
-	NOTE those searches are called Cloud Entity Searches  <br />
-	Open ITSI ->  Infrastructure Overview  <br />
-	Verify that you have your entities are showing up <br />
-	Note: there isn't any out of the box Key vital metrics so the visualisation will look like this <br />
+Select App Splunk Observability Cloud | Owner All  <br />
+Find the line ITSI Import Objects - Splunk-APM Application Entity Search -> (Actions) Edit -> Enable  <br />
+NOTE those searches are called Cloud Entity Searches  <br />
+Open ITSI ->  Infrastructure Overview  <br />
+Verify that you have your entities are showing up <br />
+Note: there isn't any out of the box Key vital metrics so the visualisation will look like this <br />
 
 <img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="https://user-images.githubusercontent.com/34278157/149363052-ca443f77-5c01-466f-bb91-53c1b8059799.png"> <br />
 
@@ -291,12 +291,12 @@ Go to Settings -> Searches, Reports, and Alerts  <br />
 Add a Dashboards Navigation <br />
 
 Configuration -> Entity management -> Entity Types <br />
-	Find SplunkAPM -> Edit <br />
-	Open Navigations type <br />
-	Navigation Name: Traces View <br />
-        URL <br />
-        Save navigation !! <br />
-        Save Entity type <br />
+Find SplunkAPM -> Edit <br />
+Open Navigations type <br />
+Navigation Name: Traces View <br />
+URL <br />
+Save navigation !! <br />
+Save Entity type <br />
         
 In Service Analyzer open a Splunk APM entity and test your new navigation suggestion <br />
 
