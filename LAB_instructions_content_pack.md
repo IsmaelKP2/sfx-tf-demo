@@ -239,7 +239,7 @@ Select Manually add service content <br />
 
 KPI -> new -> Generic KPI <br />
 Click Next <br />
-Paste the command below in the textboxwe just created <br />
+Paste the command below in the textbox <br />
 
 ```
 | sim flow query="data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()"
