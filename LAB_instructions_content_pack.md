@@ -176,7 +176,7 @@ Select App Splunk Observability Cloud | Owner All
 
 Find the line ITSI Import Objects - Get_OS_Hosts -> (Actions) Edit -> Enable
 
-NOTE those searches are called Cloud Entity Searches relevant 
+NOTE those searches are called Cloud Entity Searches 
 
 Open ITSI ->  Infrastructure Overview
 
