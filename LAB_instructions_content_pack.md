@@ -233,7 +233,8 @@ if you want to build a chart run <br />
 
 ###  Let's create our EBS service <br />
 
-Service -> Create services -> Create service <br />
+Make sure to go into Splunk IT Service Intelligence.
+Configuration -> Service -> Create services -> Create service <br />
 Enter Title: EBS volumes <br />
 Select Manually add service content <br />
 
@@ -259,6 +260,7 @@ Paste the command below in the textbox <br />
 	go to Service Dependencies tab <br />
 	Add Dependencies <br />
 	Use the filter to select EBS volumes <br />
+	Select the service health score  <br />
 	go to Service Analyzer -> Default Analyzer <br />
 	review what you built <br />
 
