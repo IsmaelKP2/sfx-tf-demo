@@ -233,7 +233,7 @@ if you want to build a chart run <br />
 
 ###  Let's create our EBS service <br />
 
-Make sure to go into Splunk IT Service Intelligence.
+Make sure to go into Splunk IT Service Intelligence. <br />
 Configuration -> Service -> Create services -> Create service <br />
 Enter Title: EBS volumes <br />
 Select Manually add service content <br />
