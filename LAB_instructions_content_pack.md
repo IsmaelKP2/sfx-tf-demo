@@ -295,7 +295,7 @@ Configuration -> Entity management -> Entity Types <br />
 Find SplunkAPM -> Edit <br />
 Open Navigations type <br />
 Navigation Name: Traces View <br />
-URL <br />
+URL : https://app.${sf_realm}.signalfx.com/#/apm/traces<br />
 Save navigation !! <br />
 Save Entity type <br />
         
