@@ -36,9 +36,9 @@ There are a number of core modules which are always deployed such as VPC and Sec
 
 You will find more information about each Module at the end of this document.
 
-There are generally no interdependencies between modules, so you can deploy almost any combination, but if enabling Dashboards, you should also enable Detectors.  The 'EKS Cluster', 'ECS Cluster' and 'Phone Shop' modules all have APM enabled and are instrumented to emit Traces.
+There are generally no interdependencies between modules, so you can deploy almost any combination.
 
-The quantities of each EC2 Instance deployed as part of the 'Instances & Proxied Instances' Modules are also controlled here. You can deploy between 0 & 3 of most types, but you should always deploy at least 1 Collector (Instances Module), which gets deployed behind an AWS ALB, and is used by the Instances to send in their metrics to the Splunk IM Platform.
+The quantities of each EC2 Instance deployed as part of the 'Instances & Proxied Instances' Modules are also controlled here. You can deploy as many itsi instance as participants 0 & 3 of most types, but you should always deploy at least 1 Collector (Instances Module), which gets deployed behind an AWS ALB, and is used by the Instances to send in their metrics to the Splunk IM Platform.
 
 ```yaml
 # This file contains all the settings which are unique to each deployment and it
@@ -47,90 +47,13 @@ The quantities of each EC2 Instance deployed as part of the 'Instances & Proxied
 # can choose to store the information in this file, or enter it at run time.
 
 ### Enable / Disable Modules
-eks_cluster_enabled         = false
-ecs_cluster_enabled         = false
-instances_enabled           = false
-proxied_instances_enabled   = false
 itsi_o11y_cp_enabled        = false
-phone_shop_enabled          = false
-lambda_sqs_dynamodb_enabled = false
-dashboards_enabled          = false
-detectors_enabled           = false
-
-## Instance Quantities ##
-collector_count = "2" # min 1 : max = subnet_count - there should always be at least one as Target Groups require one
-collector_ids = [
-  "Collector1",
-  "Collector2",
-  "Collector3"
-  ]
-
-haproxy_count = "1" # min 0 : max = subnet_count
-haproxy_ids = [
-  "haproxy1",
-  "haproxy2",
-  "haproxy3"
-  ]
-
-mysql_count = "1" # min 0 : max = subnet_count
-mysql_ids = [
-  "mysql1",
-  "mysql2",
-  "mysql3"
-  ]
-
-ms_sql_count = "1" # min 0 : max = subnet_count
-ms_sql_ids = [
-  "ms_sql1",
-  "ms_sql2",
-  "ms_sql3"
-  ]
-
-windows_server_count = "1" # min 0 : max = subnet_count
-windows_server_ids = [
-  "windows1",
-  "windows2",
-  "windows3"
-  ]
-
-apache_web_count = "1" # min 0 : max = subnet_count
-apache_web_ids = [
-  "apache1",
-  "apache2",
-  "apache3"
-  ]
-
-splunk_ent_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
-splunk_ent_ids = [
-  "splunk-ent"
-  ]
-
-## Proxied Instances Quantities ##
-
-proxy_server_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
-proxy_server_ids = [
-  "proxy-server"
-  ]
-
-proxied_apache_web_count = "1" # min 0 : max = subnet_count
-proxied_apache_web_ids = [
-  "proxied-apache_1",
-  "proxied-apache_2",
-  "proxied-apache_3"
-  ]
-
-proxied_windows_server_count = "1" # min 0 : max = subnet_count
-proxied_windows_server_ids = [
-  "proxied-windows1",
-  "proxied-windows2",
-  "proxied-windows3"
-  ]
 
 ## ITSI Quantities ##
 
 splunk_itsi_count = "1" # min 0 : max = 1 as only one is required, used as a yes/no parameter
 splunk_itsi_ids = [
-  "splunk-itsi"
+  "splunk-itsi-001"
   ]
 ```
 
@@ -155,11 +78,9 @@ When you run the deployment terraform will prompt you for a Region, however if y
 
 #### VPC Settings
 
-A new VPC is created and is used by all the modules with the exception of the the ECS Cluster Module creates its own VPC.  The number of subnets is controlled by the 'subnet_count' parameter, and defaults to 2 which should be sufficient for most test cases.
+A new VPC is created and is used. The number of subnets is controlled by the 'subnet_count' parameter, and defaults to 2 which should be sufficient for most test cases.
 
 Two sets of subnets will be created, a Private and a Public Subnet, so by default 4 subnets will be created. Each Subnet will be created using a CIDR allocated from the 'vpc_cidr_block', so by default the 1st subnet will use 172.32.0.0/24, the 2nd subnet will use 172.32.1.0/24 etc.
-
-Note: The ECS Cluster Module will create its own unique VPC and Subnets and creates a Fargate deployment.  At present all the variables controlling this are contained within the ECS Cluster modules variables.tf file (modules/aws_ecs/variables.tf).
 
 ```yaml
 ### AWS Variables ###
@@ -175,16 +96,6 @@ private_key_path      = "~/.ssh/id_rsa"
 instance_type         = "t2.micro"
 aws_access_key_id     = "<ACCCESS_KEY_ID>>"
 aws_secret_access_key = "<SECRET_ACCESS_KEY>>"
-```
-
-### SOC Variables
-
-Settings used by the Splunk On-Call Integration within Splunk IM/APM to create Incidents from the Alerts generated by Splunk IM/APM.
-
-```yaml
-### SOC Variables ###
-soc_integration_id  = "<ID>"
-soc_routing_key     = "<ROUTING_KEY>"
 ```
 
 ### Splunk IM/APM Variables
@@ -209,27 +120,6 @@ windows_server_agent_url = "https://raw.githubusercontent.com/geoffhigginbottom/
 collector_version        = "0.40.0"
 ```
 
-### Collector Variables
-
-One or more OpenTelemetry Collectors are deployed as part of the Instances Module, behind an ELB, and are configured for both IM and APM.
-
-```yaml
-### Collector Variables ###
-### https://quay.io/repository/signalfx/splunk-otel-collector?tab=tags
-collector_instance_type = "t2.small"
-```
-
-### Splunk Enterprise Variables
-
-The instances module can also deploy a Splunk Enterprise VM but you need to provide the file name and version of the release you want to use as hosted on https://www.splunk.com/en_us/download/splunk-enterprise.html
-
-```yaml
-### Splunk Enterprise Variables ###
-splunk_ent_filename     = "splunk-8.2.3-cd0848707637-linux-2.6-amd64"
-splunk_ent_version      = "8.2.3"
-splunk_ent_inst_type    = "t2.large"
-```
-
 ### Splunk ITSI Variables
 
 The Splunk ITSI Module requires various files that cannot be included in this repo and need to be downloaded from https://splunkbase.splunk.com/ then their locations specified in this section
@@ -247,78 +137,10 @@ splunk_synthetic_monitoring_add_on_filename       = "splunk-synthetic-monitoring
 splunk_infrastructure_monitoring_add_on_filename  = "splunk-infrastructure-monitoring-add-on_121.tgz" # this file should NOT be included in the repo, and shoule be located in the itsi_files_local_path location
 ```
 
-## Windows SQL Servers Variables
-
-The Microsoft SQL Server Instance requires Windows and SQL Admin Passwords to be set
-
-```yaml
-### MS SQL Server Variables ###
-ms_sql_user                   = "signalfxagent"
-ms_sql_user_pwd               = "<STRONG_PWD>"
-ms_sql_administrator_pwd      = "<STRONG_PWD>"
-ms_sql_instance_type          = "t3.xlarge"
-```
-
-## Windows Servers Variables
-
-The Microsoft Windows Server Instance requires Windows Admin Password to be set
-
-```yaml
-### Windows Server Variables ###
-windows_server_administrator_pwd  = "<STRONG_PWD>"
-windows_server_instance_type      = "t3.xlarge"
-```
-
-## MySQL Server Variables
-
-The MySQL Server Instance requires SQL User Password to be set
-
-```yaml
-### MySQL Server Variables ###
-mysql_user             = "signalfxagent"
-mysql_user_pwd         = "<STRONG_PWD>"
-```
-
 # Modules
 
 Details about each module can be found below
 
-## Instances
-
-This module deploys some example EC2 Instances, with Splunk IM Monitors matching their role, as well as Otel Collectors. Each instance is deployed with an otel collector running in agent mode to enable Infrastructure Monitoring and is configured to send all metrics via the cluster of Otel Collectors, fronted by an AWS Load Balancer.
-
-The following EC2 Instances can be deployed:
-
-- Collectors
-- HAProxy
-- MySQL
-- Microsoft SQL Server
-- Microsoft Windows Server
-- Apache
-- Splunk Enterprise
-
-Each Instance has Infrastructure Monitoring 'recievers' configured to match the services running on them.  The configuration for each monitor is deployed via its own specific agent_config.yaml file.
-
-## Proxied Instances
-
-This module deploys some sample instances which are deployed with no internet access, and are forced to use an inline-proxy for sending their metrics back to the splunk endpoints.  This introduces a number of challenges which are addressed in this module.
-
 ## Splunk ITSI
 
 This module deploys a Splunk ITSI Instance, and sets up a number of content packs and add-ons, which are all automatically installed and configured.
-
-## Phone Shop
-
-This is based on the Lambda components of the [Splunk Observability Workshop](https://signalfx.github.io/observability-workshop/latest/), but unlike the workshop version, is fully configured for APM.  As well as deploying the Lambda Functions fully instrumented, and their required API Gateways, the EC2 Instance 'vm_phone_shop' is configured to automatically generate random load to ensure APM Traces are generated within a couple of minutes of deployment.
-
-## Lambda SQS DynamoDB
-
-This module deploys a Lambda function which is triggered by an SQS queue, storing the messages from the queue into a DynamoDB table.  An EC2 Instance 'vm_sqs_test_server' is deployed and this instance contains a helper script called 'generate_send_messages' which is deployed into the ubuntu users home folder.  When run, this script places random messages into SQS, triggering the Lambda function which then removes the messages placing them into the DynamoDB table.  This enables testing of SQS triggered Lambda functions when using APM.
-
-## Dashboards
-
-This module creates a new Dashboard Group with an example Dashboard generated by Terraform.  The aim of this module is to simply demonstrate the methods for creating new Dashboard Groups, Charts and Dashboards, using "Monitoring as Code", in parallel with your "Infrastructure as Code" via Terraform.
-
-## Detectors
-
-This module creates a couple of new Detectors as basic examples of creating detectors and leveraging the integration with Splunk On-Call.  A more comprehensive list of example detectors which can be deployed using Terraform can be found [here](https://github.com/signalfx/signalfx-jumpstart).
