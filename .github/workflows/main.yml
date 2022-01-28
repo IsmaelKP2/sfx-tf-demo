@@ -32,6 +32,6 @@ jobs:
           TAG=$(bumpversion --list "$FLAVOUR" | awk -F= '/new_version=/ { print $2 }')
           git fetch --tags origin
           git tag -a "v$TAG" -m "Version $TAG"
-          git push --follow-tags origin main || { echo 'Push failed. git pull --rebase from upstream and attempt another release.'; exit 1; }
+          git push --follow-tags origin standalone || { echo 'Push failed. git pull --rebase from upstream and attempt another release.'; exit 1; }
           git fetch origin gh-pages
           mike deploy --push --update-aliases v${TAG} latest
