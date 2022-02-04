@@ -34,7 +34,7 @@ variable "subnet_count" {
 variable "key_name" {
   default = []
 }
-variable "private_key_path"{
+variable "private_key_path" {
   default = []
 }
 variable "instance_type" {
@@ -50,7 +50,7 @@ data "aws_ami" "latest-ubuntu" {
   owners      = ["099720109477"] # This is the owner id of Canonical who owns the official aws ubuntu images
 
   filter {
-    name   = "name"
+    name = "name"
     # values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
     values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
@@ -82,18 +82,18 @@ variable "region" {
 
 variable "aws_region" {
   description = "Provide the desired region"
-    default = {
-      "1" = "eu-west-1"
-      "2" = "eu-west-3"
-      "3" = "eu-central-1"
-      "4" = "us-east-1"
-      "5" = "us-east-2"
-      "6" = "us-west-1"
-      "7" = "us-west-2"
-      "8" = "ap-southeast-1"
-      "9" = "ap-southeast-2"
-      "10" = "sa-east-1"
-    }
+  default = {
+    "1"  = "eu-west-1"
+    "2"  = "eu-west-3"
+    "3"  = "eu-central-1"
+    "4"  = "us-east-1"
+    "5"  = "us-east-2"
+    "6"  = "us-west-1"
+    "7"  = "us-west-2"
+    "8"  = "ap-southeast-1"
+    "9"  = "ap-southeast-2"
+    "10" = "sa-east-1"
+  }
 }
 
 ### SignalFX Variables ###
