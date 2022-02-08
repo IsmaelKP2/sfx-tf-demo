@@ -7,6 +7,9 @@ We deeply believe that the best way for you to familiarize yourself with the Spl
 1. Access the Instance List by clicking [**HERE**](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). 
 You should be able to see a Google spreadsheet that looks something like this: ![Screenshot_Instance_Sheet](../images/access_aws_instance/access_sheet.png)
 
+<!-- For some reason the src argument with the relative doesn't work in md -->
+<!-- <img src="../images/access_aws_instance/access_sheet.png" alt="access list" width="200"/> -->
+
 2. In the first column with the title **Name of Attendee** locate your name. Find your personal access link to the ITSI instance in the field on the right of your name
 and use it to reach the login page of Splunk Enterprise. It will look like this: ![Screenshot_Login](../images/access_aws_instance/login.png)
 
