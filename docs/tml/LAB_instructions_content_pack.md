@@ -29,7 +29,7 @@ Now that we have access to our instances, which bear the pre-installed Infrastru
 *Note: For additional information, see [Configure the Splunk Infrastructure Monitoring Add-on](https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/Configure).*
 
 1. After you accessed your instance, navigate to the **Splunk Infrastructure Monitoring Add-On** listed on the left under **Apps**. We want to set up an account, and we can do so by navigating to the **Configuration Tab** and clicking on the '**Connect an Account**'-Button. 
-<img src="../images/im_configure/account.JPG" alt="Connect Account" style="height: 200px;"/>
+<img src="https://ismaelkp2.github.io/sfx-tf-demo/tml/LAB_instructions_content_pack/" alt="Connect Account" style="height: 200px;"/>
 <!-- ![add_account](../images/im_configure/account.JPG) -->
 
 Once you clicked the 'Connect an Account'-Button, a dialogue appears, prompting you for the user credentials of your Observability Cloud account. These are the **Access Token** and the **Realm**, with which the Add-On can access the Oberservability Cloud. In the next steps, we are going to locate our Realm inside our individual Observability Cloud account and create a new Access Token. 
