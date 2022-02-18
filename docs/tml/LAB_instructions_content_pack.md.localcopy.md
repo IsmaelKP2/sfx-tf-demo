@@ -1,8 +1,6 @@
 <!---
 template for local testing:
 <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/>
-
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/>
 -->
 
 
@@ -15,16 +13,16 @@ We deeply believe that the best way for you to familiarize yourself with the Spl
  <span style="color:#FF5733">// Caution: Screenshot and actual Google spreadsheet are just placeholders for now (this side is under construction), and don't do anything!</span><br>
 1. Access the Instance List by clicking [**HERE**](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). 
 You should be able to see a Google spreadsheet that looks similar to the screenshotted example below: <br> 
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/access_aws_instance/access_sheet.png" alt="Spreadsheet" style="width: 50%;"/>
+<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/access_sheet.png" alt="Spreadsheet" style="width: 50%;"/>
 
 
 2. In the first column with the title *Name of Attendee* locate your name. **Find your personal access link to the instance on the right of your name** and use it to reach the login page of Splunk Enterprise. It looks like this: <br> 
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/access_aws_instance/login.png" alt="Login" style="width: 70%;"/>
+<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/login.png" alt="Login" style="width: 70%;"/>
 
 3. To log in, use the username **admin**. Use the password is provided for you in the [Instance List](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). Click the *Sign In*-Button.
 
 4. On a successful login, you might get greeted by pop-up windows showing tips, tutorials, and/or recommendations. These are not important for us right now. Feel free to ignore them by clicking the *Got it!*-Button, or respectively, the *Don't show me this again*-Button. Other than that, you should be able now to see Splunk Enterprise Home view, which initially looks like this: <br> 
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/access_aws_instance/home_view.png" alt="Homeview" style="width: 70%;"/>
+<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/home_view.png" alt="Homeview" style="width: 70%;"/>
 
 If you fail to see this home view, most likely something went wrong. Please do not hesitate to raise your hand in Zoom, or shoot us a short message in the Zoom channel. An assistent will be with you shortly. 
 
@@ -41,19 +39,19 @@ Now that we have access to our instances, which bear the pre-installed Infrastru
 *Note: For additional information, see [Configure the Splunk Infrastructure Monitoring Add-on](https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/Configure).*
 
 1. After you accessed your instance, navigate to the **Splunk Infrastructure Monitoring Add-On** listed on the left under **Apps**. We want to set up an account, and we can do so by navigating to the **Configuration Tab** and clicking on the '**Connect an Account**'-Button. 
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/>
+<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/>
 Once you clicked the 'Connect an Account'-Button, a dialogue appears, prompting you for the user credentials of your Observability Cloud account. These are the **Access Token** and the **Realm**, with which the Add-On can access the Oberservability Cloud. In the next steps, we are going to locate our Realm inside our individual Observability Cloud account and create a new Access Token. 
 
-2. **Realm**: Log in to your Splunk Observability account. In the menu on the left on the bottom click on the little <img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/gear.png" alt="Gear Icon" style="width: 3%; vertical-align:middle;"/> icon (<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/settings.png" alt="Settings Icon" style="width: 15%; vertical-align:middle;"/> respectively if the menu is expanded). On the very top of this menu, you should see your **username** right next to a profile picture. Click on it. You are now in the Account Settings, where you can find the Realm *(see screenshot below)*. <br>
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/account_settings.png" alt="Account Settings" style="width: 70%;"/> <br>
+2. **Realm**: Log in to your Splunk Observability account. In the menu on the left on the bottom click on the little <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/gear.png" alt="Gear Icon" style="width: 3%; vertical-align:middle;"/> icon (<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/settings.png" alt="Settings Icon" style="width: 15%; vertical-align:middle;"/> respectively if the menu is expanded). On the very top of this menu, you should see your **username** right next to a profile picture. Click on it. You are now in the Account Settings, where you can find the Realm *(see screenshot below)*. <br>
+<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/account_settings.png" alt="Account Settings" style="width: 70%;"/> <br>
 Copy and Paste the Realm into the Input Dialogue in your IM Add-On.
 
-3. **Access Token**: In the menu on the left in your Observability Cloud click on **Access Tokens**. Then click on the <img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/token.png" alt="Access Token" style="width: 9%;vertical-align:middle;"/>-button to create a new Access Token. In the appearing pop-up dialogue, specify a name (something like *splunk_itsi_integration_token*), and leave the *Permission* settings to default, and click *OK*. Now, your newly created Access Token should be visible in the list of available access tokens. Click on the **three little dots at the far right ent** of the token entry and select **Manage Token Limit**. Expand the **Advanced Settings** area in the appearing dialogue, edit the fields as shown in the screenshot below, and click on the **Update**-button.
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/token_limit.png" alt="Access Token Limit" style="width: 55%;"/> 
+3. **Access Token**: In the menu on the left in your Observability Cloud click on **Access Tokens**. Then click on the <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/token.png" alt="Access Token" style="width: 9%;vertical-align:middle;"/>-button to create a new Access Token. In the appearing pop-up dialogue, specify a name (something like *splunk_itsi_integration_token*), and leave the *Permission* settings to default, and click *OK*. Now, your newly created Access Token should be visible in the list of available access tokens. Click on the **three little dots at the far right ent** of the token entry and select **Manage Token Limit**. Expand the **Advanced Settings** area in the appearing dialogue, edit the fields as shown in the screenshot below, and click on the **Update**-button.
+<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/token_limit.png" alt="Access Token Limit" style="width: 55%;"/> 
 <br>
 After that, expand the information view of your token in the list by clicking on the little **>** on the left, and click on **Show Token**. Copy the string to your clipboard, and paste it into the Input Dialogue in your IM Add-On. 
 <br>
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/im_configure/show_token.png" alt="Show Token" style="width: 70%;"/> 
+<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/show_token.png" alt="Show Token" style="width: 70%;"/> 
 
 4. Once the Realm and Access Token have been inserted into the input dialogue, make sure to verify whether or not a connection to the Observability Cloud could be established by clicking on the **Check Connection**-button. If so, click submit. You can enable data collection for the account by selecting the *Data Collection* toggle.
 
