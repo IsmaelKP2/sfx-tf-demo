@@ -1,6 +1,7 @@
 <!---
 template for local testing:
 <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/>
+<img src="https://ismaelkp2.github.io/sfx-tf-demo/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/>
 -->
 
 
@@ -10,20 +11,15 @@ We deeply believe that the best way for you to familiarize yourself with the Spl
 
 **A successful connection to your instance can be established via executing the following steps:**
 
- <span style="color:#FF5733">// Caution: Screenshot and actual Google spreadsheet are just placeholders for now (this side is under construction), and don't do anything!</span><br>
+<span style="color:#FF5733">// Caution: Screenshot and actual Google spreadsheet are just placeholders for now (this webpage is under construction), and don't do anything!</span><br>
 1. Access the Instance List by clicking [**HERE**](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). 
-You should be able to see a Google spreadsheet that looks similar to the screenshotted example below: <br> 
-<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/access_sheet.png" alt="Spreadsheet" style="width: 50%;"/>
-
-
+You should be able to see a Google spreadsheet that looks similar to the screenshotted example below: 
+<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/access_sheet.png" alt="Spreadsheet" style="width: 50%;"/> <br>
 2. In the first column with the title *Name of Attendee* locate your name. **Find your personal access link to the instance on the right of your name** and use it to reach the login page of Splunk Enterprise. It looks like this: <br> 
-<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/login.png" alt="Login" style="width: 70%;"/>
-
-3. To log in, use the username **admin**. Use the password is provided for you in the [Instance List](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). Click the *Sign In*-Button.
-
+<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/login.png" alt="Login" style="width: 70%;"/> <br>
+3. To log in, use the username **admin**. Use the password is provided for you in the [Instance List](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). Click the *Sign In*-Button. <br>
 4. On a successful login, you might get greeted by pop-up windows showing tips, tutorials, and/or recommendations. These are not important for us right now. Feel free to ignore them by clicking the *Got it!*-Button, or respectively, the *Don't show me this again*-Button. Other than that, you should be able now to see Splunk Enterprise Home view, which initially looks like this: <br> 
-<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/home_view.png" alt="Homeview" style="width: 70%;"/>
-
+<img src="http://localhost:8000/sfx-tf-demo/images/access_aws_instance/home_view.png" alt="Homeview" style="width: 70%;"/> <br>
 If you fail to see this home view, most likely something went wrong. Please do not hesitate to raise your hand in Zoom, or shoot us a short message in the Zoom channel. An assistent will be with you shortly. 
 
 If that is not the case, we want to congratulate you! You successfully connected to your instance, and thus completed the first task!
@@ -36,32 +32,35 @@ Now that we have access to our instances, which bear the pre-installed Infrastru
 
 ### Task 2.1: Configuration of the Infrastructure Monitoring Add-on
 
-*Note: For additional information, see [Configure the Splunk Infrastructure Monitoring Add-on](https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/Configure).*
-
 1. After you accessed your instance, navigate to the **Splunk Infrastructure Monitoring Add-On** listed on the left under **Apps**. We want to set up an account, and we can do so by navigating to the **Configuration Tab** and clicking on the '**Connect an Account**'-Button. 
-<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/>
+<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/account.png" alt="Connect Account" style="width: 75%;"/> <br>
 Once you clicked the 'Connect an Account'-Button, a dialogue appears, prompting you for the user credentials of your Observability Cloud account. These are the **Access Token** and the **Realm**, with which the Add-On can access the Oberservability Cloud. In the next steps, we are going to locate our Realm inside our individual Observability Cloud account and create a new Access Token. 
 
-2. **Realm**: Log in to your Splunk Observability account. In the menu on the left on the bottom click on the little <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/gear.png" alt="Gear Icon" style="width: 3%; vertical-align:middle;"/> icon (<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/settings.png" alt="Settings Icon" style="width: 15%; vertical-align:middle;"/> respectively if the menu is expanded). On the very top of this menu, you should see your **username** right next to a profile picture. Click on it. You are now in the Account Settings, where you can find the Realm *(see screenshot below)*. <br>
+2. Locate your **Realm**: Log in to your Splunk Observability account. In the menu on the left on the bottom click on the little <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/gear.png" alt="Gear Icon" style="width: 3%; vertical-align:middle;"/> icon (<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/settings.png" alt="Settings Icon" style="width: 15%; vertical-align:middle;"/> respectively if the menu is expanded). On the very top of this menu, you should see your **username** right next to a profile picture. Click on it. You are now in the Account Settings, where you can find the Realm *(see screenshot below)*. <br>
 <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/account_settings.png" alt="Account Settings" style="width: 70%;"/> <br>
-Copy and Paste the Realm into the Input Dialogue in your IM Add-On.
+Copy and paste the Realm into the input field of of the dialogue in the IM Add-On.
 
-3. **Access Token**: In the menu on the left in your Observability Cloud click on **Access Tokens**. Then click on the <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/token.png" alt="Access Token" style="width: 9%;vertical-align:middle;"/>-button to create a new Access Token. In the appearing pop-up dialogue, specify a name (something like *splunk_itsi_integration_token*), and leave the *Permission* settings to default, and click *OK*. Now, your newly created Access Token should be visible in the list of available access tokens. Click on the **three little dots at the far right ent** of the token entry and select **Manage Token Limit**. Expand the **Advanced Settings** area in the appearing dialogue, edit the fields as shown in the screenshot below, and click on the **Update**-button.
-<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/token_limit.png" alt="Access Token Limit" style="width: 55%;"/> 
-<br>
-After that, expand the information view of your token in the list by clicking on the little **>** on the left, and click on **Show Token**. Copy the string to your clipboard, and paste it into the Input Dialogue in your IM Add-On. 
-<br>
-<img src="http://localhost:8000/sfx-tf-demo/images/im_configure/show_token.png" alt="Show Token" style="width: 70%;"/> 
+3. Locate your **Access Token**: Being still in your Account Settings, click on <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/generate_token.png" alt="Generate Token" style="width: 15%; vertical-align:middle;"/> to generate an access token, and subsequently on <img src="http://localhost:8000/sfx-tf-demo/images/im_configure/show_token.png" alt="Show Token" style="width: 13.5%; vertical-align:middle;"/> to show the associated string. Copy and paste that string into the input field of of the dialogue in the IM Add-On. 
 
 4. Once the Realm and Access Token have been inserted into the input dialogue, make sure to verify whether or not a connection to the Observability Cloud could be established by clicking on the **Check Connection**-button. If so, click submit. You can enable data collection for the account by selecting the *Data Collection* toggle.
 
+*For additional information on this topic, see [Configure the Splunk Infrastructure Monitoring Add-on](https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/Configure).*
+
 ### Task 2.2: Configure the Content Pack for Observability
 
-2. **Configure the Content Pack for Observability**, too. You can find help in our Documentation, in this article [**HERE**](https://docs.splunk.com/Documentation/CPObservability/1.0.0/CP/Install#Install_the_Content_Pack_for_Splunk_Observability_Cloud) to be precise. Once done, you will receive this:  <span style="color:red">// Big TODO</span>.
+1. As soon as we have successfully configured the Infrastructure Monitoring Add-On, we will continue by installing and configuring the Content Pack for Observability. The first step to accomplish that is to select the **IT Service Intelligence** app. Inside the app, click on the **Configuration** tab and select **Data Integrations** from the dopdown menu. <img src="http://localhost:8000/sfx-tf-demo/images/cp_configure/data_integrations.png" alt="Data Ingestions" style="width: 90%;"/>
 
- <span style="color:#FF5733">Please note</span>: import as disabled do no use prefix and do not use a backfill to accelerate the deployment process. 
+2. On the next screen, select *Add content packs* and choose *Splunk Observability Cloud*. <img src="http://localhost:8000/sfx-tf-demo/images/cp_configure/add.png" alt="Add Content Pack" style="width: 90%;"/>
 
-<br>
+3. Upon clicking on the *Splunk Observability Cloud*-tile, you are presented with an overview of what is included in the Content Pack. Review it, and finally click on <img src="http://localhost:8000/sfx-tf-demo/images/cp_configure/proceed_button.png" alt="Proceed Button" style="width: 7.5%; vertical-align:middle;"/>.
+
+4. Next, you are presented with a settings menu to configure the content pack. <span style="color:#FF5733">The following is important:</span><br> Please disable the *Import as enable*-option, leave the *Enter a prefix* input field blank, and disable the *Backfill service KPIs* option. <img src="http://localhost:8000/sfx-tf-demo/images/cp_configure/settings.png" alt="Settings" style="width: 70%;"/> <br>
+Finally, click on the [Install selected] button. 
+
+5. The *Splunk Observability Cloud* tile on the *Data Integrations* page should now have a little green checkmark on the upper right corner. This means that we are all set. Perfect! <img src="http://localhost:8000/sfx-tf-demo/images/cp_configure/checkmark.png" alt="Checkmark" style="width: 15%;"/>
+
+
+*For additional information on this topic, see [Install the Content Pack for Splunk Observability Cloud](https://docs.splunk.com/Documentation/CPObservability/1.0.0/CP/Install#Install_the_Content_Pack_for_Splunk_Observability_Cloud).*
 
 ## Task 3: Create a custom service
 
