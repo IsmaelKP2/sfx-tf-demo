@@ -89,13 +89,13 @@ extra:
       lang: en
 
 plugins:
-  - git-revision-date-localized:
-      type: date
   - i18n:
       default_language: en
       languages:
         en: English
       nav_translations:
+  - git-revision-date-localized:
+      type: date
 
 nav:
   - Observability Bootcamp: index.md
