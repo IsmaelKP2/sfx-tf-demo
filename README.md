@@ -1,3 +1,3 @@
 # Welcome to the Splunk Observability Bootcamp
 
-Go [here](https://ismaelkp2.github.io/sfx-tf-demo/v0.13/).
+Go [here](https://ismaelkp2.github.io/sfx-tf-demo/v0.17/).
