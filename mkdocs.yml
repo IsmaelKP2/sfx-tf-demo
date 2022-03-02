@@ -8,7 +8,7 @@ site_description: >-
   metrics, traces and spans.
 
 repo_name: ismaelkp2/sfx-tf-demo
-repo_url: https://ismaelkp2.github.io/sfx-tf-demo/
+repo_url: https://github.com/IsmaelKP2/sfx-tf-demo
 edit_uri: ""
 copyright: Copyright &copy; 2021 Splunk Inc. All rights reserved.
 remote_branch: gh-pages
