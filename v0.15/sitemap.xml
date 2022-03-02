@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/"/>
+         
+    </url>
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/resources/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/resources/"/>
+         
+    </url>
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/resources/cheatsheet/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/resources/cheatsheet/"/>
+         
+    </url>
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/resources/faq/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/resources/faq/"/>
+         
+    </url>
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/tml/LAB_instructions_content_pack/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/tml/LAB_instructions_content_pack/"/>
+         
+    </url>
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/tml/LAB_instructions_content_packLOCALHOST/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/tml/LAB_instructions_content_packLOCALHOST/"/>
+         
+    </url>
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/tml/lab-otel-apm/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/tml/lab-otel-apm/"/>
+         
+    </url>
+    <url>
+         <loc>https://ismaelkp2.github.io/sfx-tf-demo/v0.15/tml/lab-otel-gdi/</loc>
+         <lastmod>2022-03-02</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="https://ismaelkp2.github.io/sfx-tf-demo/v0.15/en/tml/lab-otel-gdi/"/>
+         
+    </url>
+</urlset>
