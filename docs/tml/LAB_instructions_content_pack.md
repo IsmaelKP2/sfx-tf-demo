@@ -16,10 +16,10 @@ We deeply believe that the best way for you to familiarize yourself with the Spl
 You should be able to see a Google spreadsheet that looks similar to the screenshotted example below: 
 <img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/access_aws_instance/access_sheet.png" alt="Spreadsheet" style="width: 50%;"/> <br>
 2. In the first column with the title *Name of Attendee* locate your name. **Find your personal access link to the instance on the right of your name** and use it to reach the login page of Splunk Enterprise. It looks like this: <br> 
-<img src="raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/access_aws_instance/login.png" alt="Login" style="width: 70%;"/> <br>
+<img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/access_aws_instance/login.png" alt="Login" style="width: 70%;"/> <br>
 3. To log in, use the username **admin**. Use the password is provided for you in the [Instance List](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). Click the *Sign In*-Button. <br>
 4. On a successful login, you might get greeted by pop-up windows showing tips, tutorials, and/or recommendations. These are not important for us right now. Feel free to ignore them by clicking the *Got it!*-Button, or respectively, the *Don't show me this again*-Button. Other than that, you should be able now to see Splunk Enterprise Home view, which initially looks like this: <br> 
-<img src="raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/access_aws_instance/home_view.png" alt="Homeview" style="width: 70%;"/> <br>
+<img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/access_aws_instance/home_view.png" alt="Homeview" style="width: 70%;"/> <br>
 If you fail to see this home view, most likely something went wrong. Please do not hesitate to raise your hand in Zoom, or shoot us a short message in the Zoom channel. An assistent will be with you shortly. 
 
 If that is not the case, we want to congratulate you! You successfully connected to your instance, and thus completed the first task!
@@ -40,9 +40,7 @@ Once you clicked the 'Connect an Account'-Button, a dialogue appears, prompting 
 <img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/im_configure/account_settings.png" alt="Account Settings" style="width: 70%;"/> <br>
 Copy and paste the Realm into the input field of of the dialogue in the IM Add-On.
 
-3. Locate your **Access Token**: Being still in your Account Settings, click on <img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/im_configure/generate_token.png" alt="Generate Token" style="width: 15%; vertical-align:middle;"/> to generate an access token, and subsequently on <img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/im_configure/show_token.png" alt="Show Token">
-4. 
-5. style="width: 13.5%; vertical-align:middle;"/> to show the associated string. Copy and paste that string into the input field of of the dialogue in the IM Add-On. 
+3. Locate your **Access Token**: Being still in your Account Settings, click on <img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/im_configure/generate_token.png" alt="Generate Token" style="width: 15%; vertical-align:middle;"/> to generate an access token, and subsequently on <img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/im_configure/show_token.png" alt="Show Token" style="width: 13.5%; vertical-align:middle;"/> to show the associated string. Copy and paste that string into the input field of of the dialogue in the IM Add-On. 
 
 4. Once the Realm and Access Token have been inserted into the input dialogue, make sure to verify whether or not a connection to the Observability Cloud could be established by clicking on the **Check Connection**-button. If so, click submit. You can enable data collection for the account by selecting the *Data Collection* toggle.
 
