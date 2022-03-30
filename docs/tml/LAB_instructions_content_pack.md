@@ -14,7 +14,7 @@ We deeply believe that the best way for you to familiarize yourself with the Spl
 <span style="color:#FF5733">// Caution: Screenshot and actual Google spreadsheet are just placeholders for now (this webpage is under construction), and don't do anything!</span><br>
 1. Access the Instance List by clicking [**HERE**](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). 
 You should be able to see a Google spreadsheet that looks similar to the screenshotted example below: 
-<img src="https://ismaelkp2.github.io/sfx-tf-demo/images/access_aws_instance/access_sheet.png" alt="Spreadsheet" style="width: 50%;"/> <br>
+<img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/access_aws_instance/access_sheet.png" alt="Spreadsheet" style="width: 50%;"/> <br>
 2. In the first column with the title *Name of Attendee* locate your name. **Find your personal access link to the instance on the right of your name** and use it to reach the login page of Splunk Enterprise. It looks like this: <br> 
 <img src="https://ismaelkp2.github.io/sfx-tf-demo/images/access_aws_instance/login.png" alt="Login" style="width: 70%;"/> <br>
 3. To log in, use the username **admin**. Use the password is provided for you in the [Instance List](https://docs.google.com/spreadsheets/d/1hc8tPm1xNGq_KkoPlV6BTmJbG0DJQWto_Jb1jAoKuOI/edit?usp=sharing). Click the *Sign In*-Button. <br>
