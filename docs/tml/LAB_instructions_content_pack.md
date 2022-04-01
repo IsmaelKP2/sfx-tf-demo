@@ -46,6 +46,21 @@ Copy and paste the Realm into the input field of of the dialogue in the IM Add-O
 
 *For additional information on this topic, see [Configure the Splunk Infrastructure Monitoring Add-on](https://docs.splunk.com/Documentation/SIMAddon/1.2.1/Install/Configure).*
 
+*Watch this video introducing the content pack concepts.
+
+<!-- The script tag should live in the head of your page if at all possible -->
+<script type="text/javascript" async src="https://play.vidyard.com/embed/v4.js"></script>
+
+<!-- Put this wherever you would like your player to appear -->
+<img
+  style="width: 100%; margin: auto; display: block;"
+  class="vidyard-player-embed"
+  src="https://play.vidyard.com/cB6Wq1dEy7hZGm7CjdSZm6.jpg"
+  data-uuid="cB6Wq1dEy7hZGm7CjdSZm6"
+  data-v="4"
+  data-type="inline"
+/>
+
 ### Task 2.2: Configure the Content Pack for Observability
 
 1. As soon as we have successfully configured the Infrastructure Monitoring Add-On, we will continue by installing and configuring the Content Pack for Observability. The first step to accomplish that is to select the **IT Service Intelligence** app. Inside the app, click on the **Configuration** tab and select **Data Integrations** from the dopdown menu. <img src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/im_configure/data_integrations.png" alt="Data Ingestions" style="width: 90%;"/>
