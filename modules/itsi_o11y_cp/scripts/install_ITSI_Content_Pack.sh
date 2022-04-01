@@ -4,16 +4,12 @@
 PASSWORD=$1
 VERSION=$2
 FILENAME=$3
-LICENSE_FILE=$6rt44
+LICENSE_FILE=$6
 
 wget -O /tmp/$FILENAME "https://download.splunk.com/products/splunk/releases/$VERSION/linux/$FILENAME"
 sudo dpkg -i /tmp/$FILENAME
 sudo /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt --seed-passwd $PASSWORD
 sudo /opt/splunk/bin/splunk enable boot-start
-
-# install ITSI NFR license
-curl -k -u admin:$PASSWORD https://localhost:8089/services/licenser/licenses -d "name=$LICENSE_FILE"
-sudo /opt/splunk/bin/splunk restart
 
 # install java
 sudo apt install -y default-jre
@@ -36,6 +32,11 @@ sudo chmod 755 -R /opt/splunk/etc/apps/itsi/local
 
 # start splunk
 /opt/splunk/bin/splunk start
+
+# install ITSI NFR license
+curl -k -u admin:$PASSWORD https://localhost:8089/services/licenser/licenses -d "name=$LICENSE_FILE"
+sudo /opt/splunk/bin/splunk restart
+
 
 # Add Modular Input
 sudo cat /tmp/inputs.conf >> /opt/splunk/etc/apps/itsi/local/inputs.conf

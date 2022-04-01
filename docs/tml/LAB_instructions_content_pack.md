@@ -98,44 +98,104 @@ data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 
 | timechart max(VolumeReadOps) max(VolumeWriteOps)
 ```
 
-Let's create our EBS service 
 
-Service -> new service EBS volumes
+###  Let's create our EBS service <br />
 
-KPI new generic KPI 
+Make sure to go into Splunk IT Service Intelligence. <br />
+Configuration -> Service -> Create services -> Create service <br />
+Enter Title: EBS volumes <br />
+Select Manually add service content <br />
 
-past the SIM command we just created
+<img width="589" alt="Screenshot 2022-01-14 at 10 16 37" src="docs/images/custom_service/create_service.png">
 
-click next 
+KPI -> new -> Generic KPI <br />
+Click Next <br />
+Paste the command we just created in the textbox <br />
 
-add threshold manually
+```
+| sim flow query="data('VolumeReadOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 'sum'), rollup='rate', extrapolation='zero').publish()"
+| rename _value as VolumeReadOps
+```
+ <br />
+	In the treshold field enter VolumeReadOps (you can keep everything default for the rest of the configuration)  <br />
+	click next <br />
+	click next <br />
+	click next <br />
+	add threshold manually (if nothing is happening on the Disk it might show close to 0 as a number) <br />
+	save on the bottom of the page !!! <br />
+	Let's attach our standalone to the AWS service <br />
+	go to Service open AWS service <br />
+	go to Service Dependencies tab <br />
+	Add Dependencies <br />
+	Use the filter to select EBS volumes <br />
+	Select the service health score  <br />
+	go to Service Analyzer -> Default Analyzer <br />
+	review what you built <br />
 
-save on the bottom of the page
-
-Let's attach our standalone to the AWS service
-
-go to Service open AWS service
-
-go to dependencies 
-
-add EBS volumes
-
-go to Service Analyzer -> Default Analyzer 
-
-review what you built
-
-<br>
 
 ## Task 4: Get to know Entity types
 
-Splunk APM Entity type
+### Splunk APM Entity type
 
-Enable Modular Input for APM error rate and APM thruput
+### Enable Modular Input for APM error rate and APM thruput
 
-Enable APM Service 4 service to enable.
+### Enable the Splunk APM Services
 
-Enable Cloud Entity Search for APM 
+Enable APM Service (4 service to enable) <br />
 
-Add a Dashboards Navigation
+1. Application Duration 
+2. Application Error Rate 
+3. Application Performance Monitoring 
+4. Application Rate (Throughput) 
 
-Add Key Vital metrics for Splunk APM.
+###  Enable Cloud Entity Search for APM  <br />
+
+Go to Settings -> Searches, Reports, and Alerts  <br />
+
+Select App Splunk Observability Cloud | Owner All  <br />
+Find the line ITSI Import Objects - Splunk-APM Application Entity Search -> (Actions) Edit -> Enable  <br />
+NOTE those searches are called Cloud Entity Searches  <br />
+Open ITSI ->  Infrastructure Overview  <br />
+Verify that you have your entities are showing up <br />
+Note: there isn't any out of the box Key vital metrics so the visualisation will look like this <br />
+
+<img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="docs/images/custom_service/navigation_suggestion.png"> <br />
+
+
+###  Add a dashboard Navigation <br />
+
+Configuration -> Entity management -> Entity Types <br />
+Find SplunkAPM -> Edit <br />
+Open Navigations type <br />
+Navigation Name: Traces View <br />
+URL : https://app.${sf_realm}.signalfx.com/#/apm/traces<br />
+Save navigation !! <br />
+Save Entity type <br />
+        
+In Service Analyzer open a Splunk APM entity and test your new navigation suggestion <br />
+
+<img width="809" alt="Screenshot 2022-01-13 at 15 54 49" src="docs/images/custom_service/SplunkAPM.png">
+
+###  Add Key Vital metrics for Splunk APM. <br />
+
+Configuration -> Entity management -> Entity Types <br />
+          Find SplunkAPM -> Edit <br />
+          Open Vital Metrics <br />
+          Enter a name  <br />
+          Add a metric  <br />
+	  Enter the search below and click run search <br />
+
+```
+| mstats avg(*) span=5m WHERE "index"="sim_metrics" AND sf_streamLabel="thruput_avg_rate" GROUPBY sf_service sf_environment | rename avg(service.request.count) as "val"
+```
+
+Entity matching field sf_service  <br />
+(note: verify that you are matching entities 10 entities matched in last hour)  <br />
+Unit of Display Percent (%)  <br />
+Choose a Key Metric Select Application Rate Thruput  <br />
+Save Application Rate  <br />
+Save Entity Type  <br />
+
+your UI should look like this should look like this <br />
+
+<img width="246" alt="Screenshot 2022-01-13 at 15 50 46" src="docs/images/custom_service/vital_metric.png">

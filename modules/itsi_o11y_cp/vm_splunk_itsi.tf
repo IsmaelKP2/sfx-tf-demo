@@ -24,7 +24,7 @@ resource "aws_instance" "splunk_itsi" {
 
   provisioner "file" {
     source      = join("/",[var.splunk_itsi_files_local_path, var.splunk_itsi_license_filename])
-    destination = "/tmp/${var.splunk_itsi_license_filename}}"
+    destination = "/tmp/${var.splunk_itsi_license_filename}"
   }
 
   provisioner "file" {

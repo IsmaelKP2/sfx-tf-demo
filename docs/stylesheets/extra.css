@@ -121,6 +121,67 @@ strong.label-button, mark.critic {
     background-color: #00bce4;
 }
 
+.label-button.observability {
+    background-color: #4a0072;
+}
+
+.label-button.CLOUD {
+    background-color: #e6194b ;
+}
+
+.label-button.K8s {
+    background-color: #3cb44b  ;
+}
+
+.label-button.On-prem {
+    background-color: #ffe119  ;
+}
+
+.label-button.On-prem {
+    background-color: #4363d8  ;
+}
+
+.label-button.IM {
+    background-color: #f58231  ;
+}
+
+.label-button.APM {
+    background-color: #46f0f0  ;
+}
+
+.label-button.LogO {
+    background-color:  #911eb4   ;
+}
+
+.label-button.SYNT {
+    background-color:  #bcf60c  ;
+}
+
+.label-button.SplunkPlatform {
+    background-color:  #fabebe   ;
+}
+
+.label-button.java {
+    background-color:  #008080    ;
+}
+
+.label-button.dotnet {
+    background-color:  #e6beff    ;
+}
+
+.label-button.python {
+    background-color:  #9a6324    ;
+}
+
+.label-button.nodejs {
+    background-color:  #dcbeff    ;
+}
+
+.label-button.NA {
+    background-color:  #800000     ;
+}
+
+
 header.md-header {
     background-color: #000;
 }
