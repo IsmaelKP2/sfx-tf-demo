@@ -99,7 +99,7 @@ data('VolumeWriteOps', filter=filter('namespace', 'AWS/EBS') and filter('stat', 
 ```
 
 
-###  Let's create our EBS service <br />
+### Task 3.1: Let's create our EBS service <br />
 
 Make sure to go into Splunk IT Service Intelligence. <br />
 Configuration -> Service -> Create services -> Create service <br />
@@ -135,11 +135,11 @@ Paste the command we just created in the textbox <br />
 
 ## Task 4: Get to know Entity types
 
-### Splunk APM Entity type
+### Task 4.1: Splunk APM Entity type
+tbc
+### Task 4.2: Enable Modular Input for APM error rate and APM thruput
 
-### Enable Modular Input for APM error rate and APM thruput
-
-### Enable the Splunk APM Services
+### Task 4.3: Enable the Splunk APM Services
 
 Enable APM Service (4 service to enable) <br />
 
@@ -148,7 +148,7 @@ Enable APM Service (4 service to enable) <br />
 3. Application Performance Monitoring 
 4. Application Rate (Throughput) 
 
-###  Enable Cloud Entity Search for APM  <br />
+### Task 4.4: Enable Cloud Entity Search for APM  <br />
 
 Go to Settings -> Searches, Reports, and Alerts  <br />
 
@@ -162,7 +162,7 @@ Note: there isn't any out of the box Key vital metrics so the visualisation will
 <img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="docs/images/custom_service/navigation_suggestion.png"> <br />
 
 
-###  Add a dashboard Navigation <br />
+###  Task 4.5: Add a dashboard Navigation <br />
 
 Configuration -> Entity management -> Entity Types <br />
 Find SplunkAPM -> Edit <br />
@@ -176,7 +176,7 @@ In Service Analyzer open a Splunk APM entity and test your new navigation sugges
 
 <img width="809" alt="Screenshot 2022-01-13 at 15 54 49" src="docs/images/custom_service/SplunkAPM.png">
 
-###  Add Key Vital metrics for Splunk APM. <br />
+###  Task 4.6: Add Key Vital metrics for Splunk APM. <br />
 
 Configuration -> Entity management -> Entity Types <br />
           Find SplunkAPM -> Edit <br />
