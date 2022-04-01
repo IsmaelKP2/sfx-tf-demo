@@ -48,18 +48,8 @@ Copy and paste the Realm into the input field of of the dialogue in the IM Add-O
 
 *Watch this video introducing the content pack concepts.
 
-<!-- The script tag should live in the head of your page if at all possible -->
-<script type="text/javascript" async src="https://play.vidyard.com/embed/v4.js"></script>
+<iframe class="vidyard_iframe" src="//play.vidyard.com/cB6Wq1dEy7hZGm7CjdSZm6.html?" width="640" height="360" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen></iframe>
 
-<!-- Put this wherever you would like your player to appear -->
-<img
-  style="width: 100%; margin: auto; display: block;"
-  class="vidyard-player-embed"
-  src="https://play.vidyard.com/cB6Wq1dEy7hZGm7CjdSZm6.jpg"
-  data-uuid="cB6Wq1dEy7hZGm7CjdSZm6"
-  data-v="4"
-  data-type="inline"
-/>
 
 ### Task 2.2: Configure the Content Pack for Observability
 
