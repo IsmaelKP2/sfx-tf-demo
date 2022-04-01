@@ -106,7 +106,7 @@ Configuration -> Service -> Create services -> Create service <br />
 Enter Title: EBS volumes <br />
 Select Manually add service content <br />
 
-<img width="589" alt="Screenshot 2022-01-14 at 10 16 37" src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/custom_service/SplunkAPM.png">
+(screenshot to be added)
 
 KPI -> new -> Generic KPI <br />
 Click Next <br />
@@ -159,7 +159,7 @@ Open ITSI ->  Infrastructure Overview  <br />
 Verify that you have your entities are showing up <br />
 Note: there isn't any out of the box Key vital metrics so the visualisation will look like this <br />
 
-<img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/custom_service/navigation_suggestion.png"> <br />
+<img width="247" alt="Screenshot 2022-01-13 at 15 50 57" src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/custom_service/SplunkAPM.png"> <br />
 
 
 ###  Task 4.5: Add a dashboard Navigation <br />
@@ -174,7 +174,7 @@ Save Entity type <br />
         
 In Service Analyzer open a Splunk APM entity and test your new navigation suggestion <br />
 
-<img width="809" alt="Screenshot 2022-01-13 at 15 54 49" src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/custom_service/SplunkAPM.png">
+<img width="809" alt="Screenshot 2022-01-13 at 15 54 49" src="https://raw.githubusercontent.com/IsmaelKP2/sfx-tf-demo/standalone/docs/images/custom_service/navigation_suggestion.png"">
 
 ###  Task 4.6: Add Key Vital metrics for Splunk APM. <br />
 
